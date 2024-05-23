@@ -1,8 +1,9 @@
 "use client";
-import { FC, PropsWithChildren } from "react"
+import { FC, HTMLAttributes, PropsWithChildren } from "react"
 import { Footer, NavHeader, SideNav } from "../navigation"
 import { useValidRoute } from "@/hooks/useValidRoute"
 import { Routes } from "@/core/routing";
+import { cn } from "@/lib/utils";
 
 export const Layout:FC<PropsWithChildren> = ({ children }) => {
       const { isValidRoute } = useValidRoute([Routes.signIn, Routes.signUp]);
@@ -15,13 +16,13 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                               </div>
                         )
                   }
-                  <div className="border flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8">
+                  <div className="bg-white-200 flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8">
                         {
                               isValidRoute? null: (
                                     <NavHeader />
                               )
                         }
-                        <main className="border w-full flex-1 flex flex-col items-center justify-between p-24">
+                        <main className="border w-full flex-1 p-4">
                               {children}
                         </main>
                         <Footer />
@@ -29,3 +30,6 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
             </div>
       )
 }
+
+export const Row:FC<HTMLAttributes<HTMLDivElement>> = ({...rest}) => <div {...rest} className={cn("flex gap-2", rest.className)} />
+export const Column:FC<HTMLAttributes<HTMLDivElement>> = ({...rest}) => <div {...rest} className={cn("flex flex-col gap-2", rest.className)} />
