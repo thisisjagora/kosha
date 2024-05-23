@@ -1,6 +1,6 @@
 const Page = () => {
       return (
-            <div>
+            <div className="border flex-1">
                   <p>Sign Up Page</p>
             </div>
       )

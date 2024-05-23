@@ -2,9 +2,11 @@ import { FC, PropsWithChildren } from "react";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
       return (
-            <div className="flex">
+            <div className="flex h-full">
                   {children}
-                  <p>Auth pages</p>
+                  <div className="flex-1">
+
+                  </div>
             </div>
       )
 }
