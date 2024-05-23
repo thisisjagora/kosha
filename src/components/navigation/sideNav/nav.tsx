@@ -33,7 +33,7 @@ export const SideNav = () => {
             },
       ]
       return (
-            <aside className="bg-blue-100 h-full flex flex-col gap-6">
+            <aside className="bg-primary h-full flex flex-col gap-6">
                   <div className="px-4 pt-8 pb-12">
                         <Picture 
                               container={{

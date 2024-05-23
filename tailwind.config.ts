@@ -21,6 +21,7 @@ const config = {
       fontFamily:{
         "dm-sans": ['var(--font-dm-sans)'],
         "source-sans": ['var(--font-source-sans)'],
+        "poppins": ['var(--font-poppins)']
       },
       colors: {
         border: "hsl(var(--border))",
@@ -56,6 +57,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        white: {
+          100: "#FFFFFF",
+          200: "#FAFBFC"
+        },
         blue: {
           100: "#27446E",
           200: "#2B3674",
@@ -84,6 +89,10 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        'yellow-gradient': 'linear-gradient(180deg, #FFFFFF 10%, #F6DF9C 100%)',
+        'virtual-card': "url('/images/virtual-card-pg.png')"
       },
     },
   },
