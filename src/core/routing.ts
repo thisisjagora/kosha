@@ -2,6 +2,7 @@ export const Routes = {
       root: "/",
       signIn: "/auth/sign-in",
       signUp: "/auth/sign-up",
+      forgotPassword: "/auth/forgot-password",
       profile: "/profile",
       messages: "/messages",
       bookings: "/bookings",
