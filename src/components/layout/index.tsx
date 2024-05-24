@@ -16,18 +16,20 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                               </div>
                         )
                   }
-                  <div className={cn("bg-white-200 flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8", {
-                        "bg-white-100": isValidRoute
-                  })}>
-                        {
-                              isValidRoute? null: (
-                                    <NavHeader />
-                              )
-                        }
-                        <main className="w-full flex-1 p-4">
-                              {children}
-                        </main>
-                        <Footer />
+                  <div className="flex-1 flex items-center justify-center">
+                        <div className={cn("max-w-[1600px] bg-white-200 w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8", {
+                              "bg-white-100": isValidRoute
+                        })}>
+                              {
+                                    isValidRoute? null: (
+                                          <NavHeader />
+                                    )
+                              }
+                              <main className="w-full flex-1 p-4">
+                                    {children}
+                              </main>
+                              <Footer />
+                        </div>
                   </div>
             </div>
       )
