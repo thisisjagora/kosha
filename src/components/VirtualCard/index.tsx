@@ -31,9 +31,9 @@ import { Column, Row } from "../layout";
  * Note: Rows and Columns just for organization, you could always switch that depending on your card layout.
  */
 
-const Background: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...rest }) => <div {...rest} className={cn("text-white-100 font-poppins font-bold bg-virtual-card bg-cover p-8 rounded-3xl shadow-md flex-1 flex items-center justify-center", className)} />
+const Background: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...rest }) => <div {...rest} className={cn("text-white-100 font-dm-sans font-bold bg-virtual-card bg-cover p-8 rounded-3xl shadow-md flex-1 flex items-center justify-center", className)} />
 const Details: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...rest}) => <div {...rest} className={cn("w-full h-full", className)} />
-const Name = ({ name }: {name: string}) => <p className="text-2xl">{name}</p>
+const Name = ({ name }: {name: string}) => <p className="text-xl">{name}</p>
 const Number = ({ value }: {value: string}) => <p className="text-xl">{value}</p>
 const ValidDate = ({ date }: {date: string}) => {
       return (
