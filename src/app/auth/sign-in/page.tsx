@@ -1,7 +1,7 @@
 import { Caret, Google } from "@/components/Icons";
 import { Button, H, P } from "@/components/atoms";
+import { SignInForm } from "@/components/forms";
 import { Column, Row } from "@/components/layout";
-import { ArrowBigLeft } from "lucide-react";
 import Link from "next/link";
 
 const Page = () => {
@@ -27,9 +27,9 @@ const Page = () => {
                                     <Column className="gap-12">
                                           <div className="relative">
                                                 <div className="border" />
-                                                <P className="font-dm-sans text-grey-100 p-2 bg-white-200 max-w-max absolute left-[50%] -bottom-4 translate-x-[-50%]">or</P>
+                                                <P className="font-dm-sans text-grey-100 p-2 bg-white-100 max-w-max absolute left-[50%] -bottom-4 translate-x-[-50%]">or</P>
                                           </div>
-                                          <div className="border"></div>
+                                          <SignInForm />
                                     </Column>
                               </Column>
                         </Row>
