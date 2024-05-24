@@ -1,6 +1,7 @@
 import { VirtualCard } from "@/components/VirtualCard";
 import { Button, H, P } from "@/components/atoms";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
+import { DeleteAccount } from "@/components/dialogs";
 import { Column, Row } from "@/components/layout";
 import { UserProfileItem } from "@/components/userProfile";
 
@@ -67,7 +68,7 @@ const Page = () => {
                   <Row className="gap-4 flex-wrap">
                         <Column className="mt-6 flex-1 gap-4">
                               <Button variant="secondary" size="lg">Sign Out</Button>
-                              <Button variant="destructive" size="lg">Delete Account</Button>
+                              <DeleteAccount trigger={<Button variant="destructive" size="lg">Delete Account</Button>} />
                         </Column>
                         <div className="flex-1"></div>
                   </Row>

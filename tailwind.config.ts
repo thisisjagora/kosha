@@ -68,7 +68,8 @@ const config = {
         },
         grey: {
           100: "#A3AED0",
-          200: "#A6A6A6"
+          200: "#A6A6A6",
+          300: "#7D7D7D"
         }
       },
       borderRadius: {
