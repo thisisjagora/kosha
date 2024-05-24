@@ -4,12 +4,9 @@ import { useToast } from "@/components/toast/use-toast";
 export default function Home() {
   const { toast } = useToast()
   return (
-    <div>
-      <div className="border py-3 px-6 rounded-lg">
-        Kosha Moves
-      </div>
+    <div> 
       <div 
-        className="border py-2 px-8 rounded-lg hover:cursor-pointer"
+        className="border py-2 px-8 rounded-lg hover:cursor-pointer max-w-max"
         onClick={() => {
           toast({
             title: "Your Move Request Has Been Sent",

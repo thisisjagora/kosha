@@ -12,7 +12,7 @@ export const DeleteAccount: FC<CustomDialogProp> = ({ trigger }) => {
             <Dialog>
                   <DialogTrigger asChild>{trigger}</DialogTrigger>
                   <DialogContent className="sm:max-w-[600px]">
-                        <Column className="items-center justify-center gap-8 px-24">
+                        <Column className="items-center justify-center gap-8 md:px-24">
                               <Column className="items-center">
                                     <Trash className="w-[80px] h-[100px]"/>
                                     <P className="text-center font-semibold text-2xl text-grey-300">Delete Your Account</P>
