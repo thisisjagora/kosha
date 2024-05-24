@@ -16,10 +16,10 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                               </div>
                         )
                   }
-                  <div className="flex-1 flex items-center justify-center">
-                        <div className={cn("max-w-[1600px] bg-white-200 w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8", {
-                              "bg-white-100": isValidRoute
-                        })}>
+                  <div className={cn("flex-1 flex items-center justify-center bg-white-200", {
+                        "bg-white-100": isValidRoute
+                  })}>
+                        <div className={cn("max-w-[1600px]  w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8")}>
                               {
                                     isValidRoute? null: (
                                           <NavHeader />
