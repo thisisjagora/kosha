@@ -2,7 +2,6 @@ import { VirtualCard } from "@/components/VirtualCard";
 import { Button, H, P } from "@/components/atoms";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { Column, Row } from "@/components/layout";
-import { Tooltip } from "@/components/tooltip";
 import { UserProfileItem } from "@/components/userProfile";
 
 const Page = () => {
@@ -23,7 +22,7 @@ const Page = () => {
                                           /> */}
                                           <Avatar className="w-[70px] h-[70px] bg-[#F6DF9C]">
                                                 <AvatarImage src="https://images.unsplash.com/photo-1715005881129-266ccdd75e43?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Nelson Michael"/>
-                                                <AvatarFallback>NM</AvatarFallback>
+                                                <AvatarFallback>WC</AvatarFallback>
                                           </Avatar>
                                     </span>
                               </Column>
