@@ -37,11 +37,11 @@ export const SideNav = () => {
                   <div className="px-4 pt-8 pb-12">
                         <Picture 
                               container={{
-                                    className: "w-full max-w-[220px] h-[34px]"
+                                    className: "w-full max-w-[130px] h-[34px]"
                               }}
                               image={{
                                     alt: "",
-                                    src: "/images/Logo.webp"
+                                    src: "/images/Logo.png"
                               }}
                         />
                   </div>
