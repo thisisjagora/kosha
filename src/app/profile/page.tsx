@@ -44,10 +44,10 @@ const Page = () => {
                               <VirtualCard />
                               <Column className="gap-8 max-w-[200px] p-4">
                                     <Column className="gap-1">
-                                          <H>Payment Methods</H>
-                                          <P>Change /Update your payment methods here</P>
+                                          <H className="m-0 text-primary">Payment Methods</H>
+                                          <P className="m-0 text-primary-foreground">Change /Update your payment methods here</P>
                                     </Column>
-                                    <Button className="max-w-max">Update</Button>
+                                    <Button className="max-w-[140px]">Update</Button>
                               </Column>
                         </Row>
                   </Row>
@@ -70,7 +70,8 @@ const Page = () => {
                               <Button variant="secondary" size="lg">Sign Out</Button>
                               <DeleteAccount trigger={<Button variant="destructive" size="lg">Delete Account</Button>} />
                         </Column>
-                        <div className="flex-1"></div>
+                        {/* empty by design */}
+                        <div className="flex-1" />
                   </Row>
             </Column>
       )

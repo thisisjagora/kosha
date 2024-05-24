@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export const Layout:FC<PropsWithChildren> = ({ children }) => {
       const { isValidRoute } = useValidRoute([Routes.signIn, Routes.signUp, Routes.forgotPassword]);
       return (
-            <div className="min-h-screen flex">
+            <div className="min-h-screen h-screen overflow-clip flex">
                   {
                         isValidRoute? null : (
                               <div className="flex-1 max-w-[250px]">
@@ -16,7 +16,7 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                               </div>
                         )
                   }
-                  <div className={cn("flex-1 flex items-center justify-center bg-white-200", {
+                  <div className={cn("flex-1 flex items-center justify-center bg-white-200 overflow-y-auto", {
                         "bg-white-100": isValidRoute
                   })}>
                         <div className={cn("max-w-[1600px]  w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8")}>
