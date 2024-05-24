@@ -6,7 +6,7 @@ import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 
 export const Layout:FC<PropsWithChildren> = ({ children }) => {
-      const { isValidRoute } = useValidRoute([Routes.signIn, Routes.signUp]);
+      const { isValidRoute } = useValidRoute([Routes.signIn, Routes.signUp, Routes.forgotPassword]);
       return (
             <div className="min-h-screen flex">
                   {
@@ -16,13 +16,15 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                               </div>
                         )
                   }
-                  <div className="bg-white-200 flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8">
+                  <div className={cn("bg-white-200 flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8", {
+                        "bg-white-100": isValidRoute
+                  })}>
                         {
                               isValidRoute? null: (
                                     <NavHeader />
                               )
                         }
-                        <main className="border w-full flex-1 p-4">
+                        <main className="w-full flex-1 p-4">
                               {children}
                         </main>
                         <Footer />
