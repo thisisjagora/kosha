@@ -63,7 +63,7 @@ const Logo = ({ url }: { url: string }) => <Picture
       />
 export const VirtualCard =()=>{
       return (
-            <Background>
+            <Background className="max-w-[430px]">
                   <Details>
                         <Column className="justify-between h-full">
                               <Row className="justify-between items-center">
