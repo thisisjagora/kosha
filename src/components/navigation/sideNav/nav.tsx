@@ -3,17 +3,21 @@ import { NavItem } from "."
 import { useActiveRoute } from "@/hooks/useActiveRoute"
 import { Calendar, Chat, Home, User } from "@/components/Icons";
 import { Routes } from "@/core/routing";
+import { usePathname } from "next/navigation";
 
 export const SideNav = () => {
       const { isActiveRoute } = useActiveRoute();
+      const path = usePathname();
       const sizes = {
             width: 22,
             height: 22
       }
+      const sequenceRoutes = Object.values(Routes.sequence)
+
       const SIDE_NAV_MENU_DATA = [
             {
                   title: "Dashboard",
-                  icon: <Home {...sizes} invertColor={isActiveRoute(Routes.root)} />,
+                  icon: <Home {...sizes} invertColor={isActiveRoute(Routes.root) || sequenceRoutes.includes(path) } />,
                   route: Routes.root
             },
             {
@@ -47,7 +51,7 @@ export const SideNav = () => {
                   </div>
                   <div className="py-6 flex flex-col gap-4">
                               {
-                                    SIDE_NAV_MENU_DATA.map((item, indx) => <NavItem key={item.title + indx} data={{...item, isActive: isActiveRoute(item.route)}} />)
+                                    SIDE_NAV_MENU_DATA.map((item, indx) => <NavItem key={item.title + indx} data={{...item, isActive: isActiveRoute(item.route) || (item.route === Routes.root && sequenceRoutes.includes(path))}} />)
                               }
                   </div>
             </aside>
