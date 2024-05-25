@@ -7,5 +7,10 @@ export const Routes = {
       messages: "/messages",
       bookings: "/bookings",
       license: "/license",
-      terms: "/terms"
+      terms: "/terms",
+      sequence: {
+            hireLabour: "/hire-labour",
+            bookDelivery: "/book-delivery",
+            bookMove: "/book-move"
+      }
 }
