@@ -1,4 +1,5 @@
 "use client";
+import { BookMoveSequence } from "@/components/forms/sequences";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
 import { useState } from "react";
 
@@ -26,16 +27,16 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dateAndTime">
-                              <p>Date and Time</p>
+                              <BookMoveSequence.step1 />
                         </TabsContent>
                         <TabsContent value="propertyDetail">
-                              <p>Property Detail</p>
+                              <BookMoveSequence.step2 />
                         </TabsContent>
                         <TabsContent value="generalInfo">
-                              <p>General Info</p>
+                              <BookMoveSequence.step3 />
                         </TabsContent>
                         <TabsContent value="serviceRequirement">
-                              <p>Service Requirement</p>
+                              <BookMoveSequence.step4 />
                         </TabsContent>
                   </Tabs>
             </div>

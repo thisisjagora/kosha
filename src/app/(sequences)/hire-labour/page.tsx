@@ -1,4 +1,5 @@
 "use client";
+import { HireLabourSequence } from "@/components/forms/sequences";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
 import { useState } from "react";
 
@@ -22,13 +23,13 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dlt">
-                              <p>Date, Location & Time</p>
+                              <HireLabourSequence.step1 />
                         </TabsContent>
                         <TabsContent value="itm">
-                              <p>Items to move</p>
+                              <HireLabourSequence.step2 />
                         </TabsContent>
                         <TabsContent value="generalInfo">
-                              <p>General Info</p>
+                              <HireLabourSequence.step3 />
                         </TabsContent>
                   </Tabs>
             </div>
