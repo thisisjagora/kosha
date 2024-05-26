@@ -4,6 +4,7 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
+import { P } from "../atoms"
 
 const Tabs = TabsPrimitive.Root
 
@@ -14,7 +15,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      "inline-flex items-center justify-between rounded-4xl bg-white-100 text-muted-foreground w-full shadow-sm",
       className
     )}
     {...props}
@@ -29,7 +30,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      "h-full inline-flex items-center justify-center whitespace-nowrap rounded-4xl px-5 py-3 text-grey-400 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=active]:bg-orange-100 data-[state=active]:text-white-100 data-[state=active]:shadow-lg",
       className
     )}
     {...props}
@@ -52,4 +53,22 @@ const TabsContent = React.forwardRef<
 ))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+
+interface TabsCountProps {
+  count: string;
+  isActive: boolean;
+}
+
+const TabsCount: React.FC<TabsCountProps> = ({count, isActive}) => {
+  return (
+    <div className={cn("flex items-center justify-center rounded-full w-[30px] h-[30px] bg-grey-500 shadow-sm", {
+      "bg-white-100": isActive
+    })}>
+      <P className={cn("text-grey-200", {
+        "text-orange-100": isActive
+      })}>{count}</P>
+    </div>
+  )
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsCount, TabsContent }
