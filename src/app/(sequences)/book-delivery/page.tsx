@@ -1,4 +1,5 @@
 "use client";
+import { BookDeliverySequence } from "@/components/forms/sequences";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
 import { useState } from "react";
 
@@ -22,13 +23,13 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dlt">
-                              <p>Date, Location & Time</p>
+                              <BookDeliverySequence.step1 />
                         </TabsContent>
                         <TabsContent value="pld">
-                              <p>Pickup Location Details</p>
+                              <BookDeliverySequence.step2 />
                         </TabsContent>
                         <TabsContent value="itu">
-                              <p>Items to Pick up</p>
+                              <BookDeliverySequence.step3 />
                         </TabsContent>
                   </Tabs>
             </div>
