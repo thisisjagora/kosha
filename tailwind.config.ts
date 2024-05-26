@@ -69,13 +69,19 @@ const config = {
         grey: {
           100: "#A3AED0",
           200: "#A6A6A6",
-          300: "#7D7D7D"
+          300: "#7D7D7D",
+          400: "#AAAAAA",
+          500: "#DFDFDF"
+        },
+        orange: {
+          100: "#C29C80"
         }
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "4xl": "calc(var(--radius) + 120px)"
       },
       keyframes: {
         "accordion-down": {

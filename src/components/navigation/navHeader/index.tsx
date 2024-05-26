@@ -32,6 +32,21 @@ const switchHeaderContent = (route: string) => {
                         title: "Home",
                         description: "Schedule a Move"
                   }
+            case Routes.sequence.bookMove:
+                  return {
+                        title: "Home",
+                        description: "Schedule a Move"
+                  }
+            case Routes.sequence.hireLabour:
+                  return {
+                        title: "Home",
+                        description: "Hire Labour only"
+                  }
+            case Routes.sequence.bookDelivery:
+                  return {
+                        title: "Home",
+                        description: "Schedule your Delivery "
+                  }
             case Routes.bookings:
                   return {
                         title: "Bookings",
