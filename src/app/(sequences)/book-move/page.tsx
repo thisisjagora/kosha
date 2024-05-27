@@ -27,16 +27,16 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dateAndTime">
-                              <BookMoveSequence.step1 />
+                              <BookMoveSequence.Step1 onChangeStep={() => setActiveTab("propertyDetail")} />
                         </TabsContent>
                         <TabsContent value="propertyDetail">
-                              <BookMoveSequence.step2 />
+                              <BookMoveSequence.Step2 onChangeStep={() => setActiveTab("generalInfo")} />
                         </TabsContent>
                         <TabsContent value="generalInfo">
-                              <BookMoveSequence.step3 />
+                              <BookMoveSequence.Step3 onChangeStep={() => setActiveTab("serviceRequirement")} />
                         </TabsContent>
                         <TabsContent value="serviceRequirement">
-                              <BookMoveSequence.step4 />
+                              <BookMoveSequence.Step4 onChangeStep={() => null} />
                         </TabsContent>
                   </Tabs>
             </div>
