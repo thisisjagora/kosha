@@ -27,13 +27,13 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dateAndTime">
-                              <BookMoveSequence.Step1 onChangeStep={() => setActiveTab("propertyDetail")} />
+                              <BookMoveSequence.Step1 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                         <TabsContent value="propertyDetail">
-                              <BookMoveSequence.Step2 onChangeStep={() => setActiveTab("generalInfo")} />
+                              <BookMoveSequence.Step2 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                         <TabsContent value="generalInfo">
-                              <BookMoveSequence.Step3 onChangeStep={() => setActiveTab("serviceRequirement")} />
+                              <BookMoveSequence.Step3 onChangeStep={(next) => setActiveTab("serviceRequirement")} />
                         </TabsContent>
                         <TabsContent value="serviceRequirement">
                               <BookMoveSequence.Step4 onChangeStep={() => null} />
