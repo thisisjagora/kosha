@@ -35,5 +35,5 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
       )
 }
 
-export const Row:FC<HTMLAttributes<HTMLDivElement>> = ({...rest}) => <div {...rest} className={cn("flex gap-2 flex-wrap", rest.className)} />
+export const Row:FC<HTMLAttributes<HTMLDivElement>> = ({...rest}) => <div {...rest} className={cn("flex gap-2", rest.className)} />
 export const Column:FC<HTMLAttributes<HTMLDivElement>> = ({...rest}) => <div {...rest} className={cn("flex flex-col gap-2", rest.className)} />
