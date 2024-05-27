@@ -23,11 +23,27 @@ export const signUpSchema = z.object({
   keepMeLoggedIn: z.boolean().default(false).optional(),
 })
 
-export const bookMoveSequenceSchema = z.object({
+const locationSchema = z.object({
+  location: z.string().min(1, {message: "Location is required"}),
+  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+});
+
+export const bookMoveSequenceStep1Schema = z.object({
   moveDate: z.date({message: "Move date is required"}),
   time: z.string().min(1, {message: "Time is required"}),
-  pickUpLocation: z.string().min(1, {message: "Pick-up location is required"}),
-  pickUpApartmentUnit: z.string().min(1, { message: "Pick-up apartment number is required"}),
-  finalDestination: z.string().min(1, {message: "Final destination is required"}),
-  finalDestinationApartmentUnit: z.string().min(1, {message: "Final destination apartment number is required"})
+  pickUpLocation: locationSchema,
+  stops: z.array(locationSchema),
+  finalDestination: locationSchema
+})
+
+const pickUpDetailShema = z.object({
+  buildingType: z.string().min(1, {message: "Building type is required"}),
+  elevatorAccess: z.string().min(1, {message: "Elevator access is required"}),
+  flightOfStairs: z.string().min(1, {message: "Flight of stairs is required"})
+});
+
+export const bookMoveSequenceStep2Schema = z.object({
+  PUDPickUpLocation: pickUpDetailShema,
+  PUDStops: z.array(pickUpDetailShema),
+  PUDFinalDestination: pickUpDetailShema
 })
