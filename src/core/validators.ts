@@ -22,3 +22,12 @@ export const signUpSchema = z.object({
   password: z.string().min(1, {message: "Password is required"}),
   keepMeLoggedIn: z.boolean().default(false).optional(),
 })
+
+export const bookMoveSequenceSchema = z.object({
+  moveDate: z.date({message: "Move date is required"}),
+  time: z.string().min(1, {message: "Time is required"}),
+  pickUpLocation: z.string().min(1, {message: "Pick-up location is required"}),
+  pickUpApartmentUnit: z.string().min(1, { message: "Pick-up apartment number is required"}),
+  finalDestination: z.string().min(1, {message: "Final destination is required"}),
+  finalDestinationApartmentUnit: z.string().min(1, {message: "Final destination apartment number is required"})
+})
