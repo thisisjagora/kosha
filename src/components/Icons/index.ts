@@ -1,4 +1,5 @@
 export { default as Calendar } from "./Calendar";
+export { default as Add } from "./Add";
 export { default as Caret } from "./Caret";
 export { default as Chat } from "./Chat";
 export { default as Edit } from "./Edit";
