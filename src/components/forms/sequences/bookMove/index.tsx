@@ -17,8 +17,10 @@ import { InputDirectives } from "@/lib/helpers/inputDirectives";
 import { Add } from "@/components/Icons";
 import { toast } from "@/components/toast/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
+import useBookMoveStore from "@/stores/book-move.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
+      const {update} = useBookMoveStore((state) => state)
       const form = useForm<z.infer<typeof bookMoveSequenceStep1Schema>>({
             resolver: zodResolver(bookMoveSequenceStep1Schema),
             defaultValues: {
@@ -34,14 +36,13 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                   }
             }
       })
-      
       const { fields, append, remove } = useFieldArray({
             name: "stops",
             control: form.control
       })
-
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep1Schema>) => {
             onChangeStep("propertyDetail")
+            update(data);
             toast({
                   title: "You submitted the following values:",
                   description: (
@@ -263,6 +264,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 };
 
 const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
+      const { formData, update } = useBookMoveStore((state) => state )
       const form = useForm<z.infer<typeof bookMoveSequenceStep2Schema>>({
             resolver: zodResolver(bookMoveSequenceStep2Schema),
             defaultValues: {
@@ -271,13 +273,6 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                         elevatorAccess: "",
                         flightOfStairs: ""
                   },
-                  PUDStops: [
-                        {
-                              buildingType: "",
-                              elevatorAccess: "",
-                              flightOfStairs: ""
-                        }
-                  ],
                   PUDFinalDestination: {
                         buildingType: "",
                         elevatorAccess: "",
@@ -286,8 +281,22 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
             }
       })
 
-      const onSubmit = () => {
-            onChangeStep()
+      // const { fields } = useFieldArray({
+      //       name: "PUDStops",
+      //       control: form.control
+      // })
+
+      const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
+            onChangeStep("generalInfo")
+            update(data)
+            toast({
+                  title: "You submitted the following values:",
+                  description: (
+                    <pre className="mt-2 w-[340px] rounded-md p-4">
+                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+                    </pre>
+                  ),
+                })
       }
       return (
             <Form {...form}>
@@ -296,7 +305,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                               <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
                                     <Column>
                                           <P className="font-semibold text-lg">Pickup Location</P>
-                                          <P className="font-bold text-primary text-xl">1720 Pembina Highway</P>
+                                          <P className="font-bold text-primary text-xl">{formData.pickUpLocation.location}</P>
                                     </Column>
                                     <Row className="gap-4">
                                           <div className="flex items-center">
@@ -366,85 +375,89 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     <div className="relative h-[40px] max-w-max border-l-2 border-dotted border-primary" />
                               </div>
                         </div>
-                        <div>
-                              <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
-                                    <Column>
-                                          <P className="font-semibold text-lg">Stop 1</P>
-                                          <P className="font-bold text-primary text-xl">New Hamshire Furnitures</P>
-                                    </Column>
-                                    <Row className="gap-4">
-                                          <div className="flex items-center">
-                                                <div className="mt-8 w-[80px] border border-dotted"/>
-                                          </div>
-                                          <Row className="gap-4">
-                                                <FormField
-                                                      control={form.control} 
-                                                      name="PUDStops.1.buildingType"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Building Type</FormLabel>
-                                                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                  <FormControl>
-                                                                        <SelectTrigger>
-                                                                        <SelectValue placeholder="Condo" />
-                                                                        </SelectTrigger>
-                                                                  </FormControl>
-                                                                  <SelectContent>
-                                                                        <SelectItem value="Condo">Condo</SelectItem>
-                                                                        <SelectItem value="Apartment">Apartment</SelectItem>
-                                                                        <SelectItem value="Penthouse">Penthouse</SelectItem>
-                                                                  </SelectContent>
-                                                                  </Select>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
-                                                <FormField
-                                                      control={form.control} 
-                                                      name="PUDStops.1.elevatorAccess"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Elevator Access</FormLabel>
-                                                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                  <FormControl>
-                                                                        <SelectTrigger>
-                                                                        <SelectValue placeholder="Yes" />
-                                                                        </SelectTrigger>
-                                                                  </FormControl>
-                                                                  <SelectContent>
-                                                                        <SelectItem value="Yes">Yes</SelectItem>
-                                                                        <SelectItem value="No">No</SelectItem>
-                                                                  </SelectContent>
-                                                                  </Select>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
-                                                <FormField 
-                                                      control={form.control}
-                                                      name="PUDStops.1.flightOfStairs"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
-                                                                  <FormControl>
-                                                                        <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
-                                                                  </FormControl>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
+                        {
+                              formData.stops.map((stop, index) => (
+                                    <div key={stop.location + index}>
+                                          <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
+                                                <Column>
+                                                      <P className="font-semibold text-lg">Stop {index + 1}</P>
+                                                      <P className="font-bold text-primary text-xl">{stop.location}</P>
+                                                </Column>
+                                                <Row className="gap-4">
+                                                      <div className="flex items-center">
+                                                            <div className="mt-8 w-[80px] border border-dotted"/>
+                                                      </div>
+                                                      <Row className="gap-4">
+                                                            <FormField
+                                                                  control={form.control} 
+                                                                  name={`PUDStops.${index}.buildingType`}
+                                                                  render={({ field }) => (
+                                                                        <FormItem className="flex-1">
+                                                                              <FormLabel className="text-grey-300">Building Type</FormLabel>
+                                                                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                              <FormControl>
+                                                                                    <SelectTrigger>
+                                                                                    <SelectValue placeholder="Condo" />
+                                                                                    </SelectTrigger>
+                                                                              </FormControl>
+                                                                              <SelectContent>
+                                                                                    <SelectItem value="Condo">Condo</SelectItem>
+                                                                                    <SelectItem value="Apartment">Apartment</SelectItem>
+                                                                                    <SelectItem value="Penthouse">Penthouse</SelectItem>
+                                                                              </SelectContent>
+                                                                              </Select>
+                                                                              <FormMessage className="text-destructive"/>
+                                                                        </FormItem>
+                                                                  )}
+                                                            />
+                                                            <FormField
+                                                                  control={form.control} 
+                                                                  name={`PUDStops.${index}.elevatorAccess`}
+                                                                  render={({ field }) => (
+                                                                        <FormItem className="flex-1">
+                                                                              <FormLabel className="text-grey-300">Elevator Access</FormLabel>
+                                                                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                              <FormControl>
+                                                                                    <SelectTrigger>
+                                                                                    <SelectValue placeholder="Yes" />
+                                                                                    </SelectTrigger>
+                                                                              </FormControl>
+                                                                              <SelectContent>
+                                                                                    <SelectItem value="Yes">Yes</SelectItem>
+                                                                                    <SelectItem value="No">No</SelectItem>
+                                                                              </SelectContent>
+                                                                              </Select>
+                                                                              <FormMessage className="text-destructive"/>
+                                                                        </FormItem>
+                                                                  )}
+                                                            />
+                                                            <FormField 
+                                                                  control={form.control}
+                                                                  name={`PUDStops.${index}.flightOfStairs`}
+                                                                  render={({ field }) => (
+                                                                        <FormItem className="flex-1">
+                                                                              <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
+                                                                              <FormControl>
+                                                                                    <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
+                                                                              </FormControl>
+                                                                              <FormMessage className="text-destructive"/>
+                                                                        </FormItem>
+                                                                  )}
+                                                            />
+                                                      </Row>
+                                                </Row>
                                           </Row>
-                                    </Row>
-                              </Row>
-                              <div className="px-6">
-                                    <div className="relative h-[40px] max-w-max border-l-2 border-dotted border-primary" />
-                              </div>
-                        </div>
+                                          <div className="px-6">
+                                                <div className="relative h-[40px] max-w-max border-l-2 border-dotted border-primary" />
+                                          </div>
+                                    </div>
+                              ))
+                        }
                         <div>
                               <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
                                     <Column>
                                           <P className="font-semibold text-lg">Final Destination</P>
-                                          <P className="font-bold text-primary text-xl">Shader Apartments</P>
+                                          <P className="font-bold text-primary text-xl">{formData.finalDestination.location}</P>
                                     </Column>
                                     <Row className="gap-4">
                                           <div className="flex items-center">
@@ -453,7 +466,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           <Row className="gap-4">
                                                 <FormField
                                                       control={form.control} 
-                                                      name="PUDStops.1.buildingType"
+                                                      name="PUDFinalDestination.buildingType"
                                                       render={({ field }) => (
                                                             <FormItem className="flex-1">
                                                                   <FormLabel className="text-grey-300">Building Type</FormLabel>
@@ -475,7 +488,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                 />
                                                 <FormField
                                                       control={form.control} 
-                                                      name="PUDStops.1.elevatorAccess"
+                                                      name="PUDFinalDestination.elevatorAccess"
                                                       render={({ field }) => (
                                                             <FormItem className="flex-1">
                                                                   <FormLabel className="text-grey-300">Elevator Access</FormLabel>
@@ -496,7 +509,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                 />
                                                 <FormField 
                                                       control={form.control}
-                                                      name="PUDStops.1.flightOfStairs"
+                                                      name="PUDFinalDestination.flightOfStairs"
                                                       render={({ field }) => (
                                                             <FormItem className="flex-1">
                                                                   <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
