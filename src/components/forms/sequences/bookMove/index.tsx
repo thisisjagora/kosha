@@ -5,35 +5,32 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema } from "@/core/validators";
+import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema } from "@/core/validators";
 import { DateInput } from "@/components/dateInput";
-import { Button, P } from "@/components/atoms";
+import { Button, P, Picture } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Column, Row } from "@/components/layout";
 import { Input } from "@/components/input";
 import { InputDirectives } from "@/lib/helpers/inputDirectives";
-import { Add } from "@/components/Icons";
+import { Add, Camera, Cancel } from "@/components/Icons";
 import { toast } from "@/components/toast/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
 import useBookMoveStore from "@/stores/book-move.store";
+import { Textarea } from "@/components/textarea";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
-      const {update} = useBookMoveStore((state) => state)
+      const {update, formData, removeStop} = useBookMoveStore((state) => state)
+      const {moveDate, time, stops, pickUpLocation, finalDestination} = formData
       const form = useForm<z.infer<typeof bookMoveSequenceStep1Schema>>({
             resolver: zodResolver(bookMoveSequenceStep1Schema),
             defaultValues: {
-                  moveDate: new Date(),
-                  time: "",
-                  pickUpLocation:{
-                        location: "",
-                        apartment: ""
-                  },
-                  finalDestination: {
-                        location: "",
-                        apartment: ""
-                  }
+                  moveDate,
+                  time,
+                  pickUpLocation,
+                  stops,
+                  finalDestination
             }
       })
       const { fields, append, remove } = useFieldArray({
@@ -162,7 +159,10 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                         type="button" 
                                                                         variant="ghost" 
                                                                         className="bg-transparent hover:bg-transparent px-0 max-w-max hidden group-hover:inline"
-                                                                        onClick={() => remove(index)}
+                                                                        onClick={() => {
+                                                                              remove(index)
+                                                                              removeStop(index)
+                                                                        }}
                                                                   >
                                                                         <span className="bg-primary w-[27px] h-[27px] rounded-full flex items-center justify-center">
                                                                               <div className="border w-3"/>
@@ -265,26 +265,15 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 
 const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const { formData, update } = useBookMoveStore((state) => state )
+      const {PUDFinalDestination, PUDPickUpLocation, PUDStops} = formData
       const form = useForm<z.infer<typeof bookMoveSequenceStep2Schema>>({
             resolver: zodResolver(bookMoveSequenceStep2Schema),
             defaultValues: {
-                  PUDPickUpLocation: {
-                        buildingType: "",
-                        elevatorAccess: "",
-                        flightOfStairs: ""
-                  },
-                  PUDFinalDestination: {
-                        buildingType: "",
-                        elevatorAccess: "",
-                        flightOfStairs: ""
-                  }
+                  PUDPickUpLocation,
+                  PUDFinalDestination,
+                  PUDStops
             }
       })
-
-      // const { fields } = useFieldArray({
-      //       name: "PUDStops",
-      //       control: form.control
-      // })
 
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
             onChangeStep("generalInfo")
@@ -538,18 +527,284 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 };
 
 const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
+      const { update, updateField, removeImage, formData } = useBookMoveStore((state) => state)
+      const {majorAppliances, workOutEquipment, pianos, hotTubs, poolTables, numberOfBoxes, instructions, images } = formData
+      const form = useForm<z.infer<typeof bookMoveSequenceStep3Schema>>({
+            resolver: zodResolver(bookMoveSequenceStep3Schema),
+            defaultValues: {
+                  majorAppliances,
+                  workOutEquipment,
+                  pianos,
+                  hotTubs,
+                  poolTables,
+                  numberOfBoxes,
+                  instructions,
+                  images
+            }
+      })
+
+      const handleRemoveImage = (index: number) => {
+        removeImage(index);
+        form.setValue("images", formData.images.filter((_, i) => i !== index)); // Update the form state
+      };
+      const onSubmit = (data: z.infer<typeof bookMoveSequenceStep3Schema>) => {
+            onChangeStep("serviceRequirement")
+            update(data);
+            toast({
+                  title: "You submitted the following values:",
+                  description: (
+                    <pre className="mt-2 w-[340px] rounded-md p-4">
+                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+                    </pre>
+                  ),
+                })
+      }
       return (
-            <div>
-                  step 3
-            </div>
+            <Form {...form}>
+                  <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
+                        <Row className="flex-wrap gap-6">
+                              <FormField 
+                                    name="majorAppliances"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Major Appliances</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                              <FormField 
+                                    name="workOutEquipment"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Workout Equipment</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                        </Row>
+                        <Row className="flex-wrap gap-6">
+                              <FormField 
+                                    name="pianos"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Pianos</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                              <FormField 
+                                    name="hotTubs"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Hot Tubs</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                        </Row>
+                        <Row className="flex-wrap gap-6">
+                              <FormField 
+                                    name="poolTables"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Pool Tables</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                              <FormField 
+                                    name="numberOfBoxes"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                          <FormItem className="flex-1">
+                                                <FormLabel className="text-grey-300">Number of Boxes</FormLabel>
+                                                <FormControl>
+                                                      <Input 
+                                                            {...field}
+                                                            {...InputDirectives.numbersOnly}
+                                                      />
+                                                </FormControl>
+                                                <FormMessage className="text-destructive" />
+                                          </FormItem>
+                                    )}
+                              />
+                        </Row>
+                        <FormField 
+                              name="instructions"
+                              control={form.control}
+                              render={({ field }) => (
+                                    <FormItem>
+                                          <FormLabel className="text-grey-300">Instructions</FormLabel>
+                                          <FormControl>
+                                                <Textarea
+                                                      placeholder="Leave a note for any special instructions or requests you have for the movers" 
+                                                      className="resize-none"
+                                                      {...field}
+                                                      rows={6}
+                                                />
+                                          </FormControl>
+                                          <FormMessage className="text-destructive"/>
+                                    </FormItem>
+                              )}
+                        />
+                        <div>
+                              <Row className="items-center flex-wrap gap-4">
+                                    {
+                                          images.map((image, index) => (
+                                                <div key={image + index} className="relative flex-1 min-w-[120px] max-w-[150px] h-[99px] group">
+                                                      <Picture 
+                                                            container={{
+                                                                  className: "w-full h-full rounded-lg"
+                                                            }}
+                                                            image={{
+                                                                  alt: "",
+                                                                  src: image,
+                                                                  className: "object-cover rounded-lg"
+                                                            }}
+                                                      />
+                                                      <Button 
+                                                            type="button" 
+                                                            variant="ghost" 
+                                                            className="bg-transparent hover:bg-transparent p-0 max-w-max absolute -top-4 -right-2 hidden group-hover:inline"
+                                                            onClick={() => handleRemoveImage(index)}
+                                                      >
+                                                            <Cancel className="w-[24px] h-[24px]"/>
+                                                      </Button>
+                                                </div>
+                                          ))
+                                    }
+                                    {
+                                          images.length > 0 && (
+                                                <FormField 
+                                                      name="images"
+                                                      control={form.control}
+                                                      render={({ field }) => (
+                                                            <FormItem className="flex-1 max-w-[150px]">
+                                                                  <FormLabel htmlFor="images">
+                                                                        <div className="border h-[99px] flex items-center justify-center rounded-lg">
+                                                                              <span className="flex items-center justify-center bg-grey-300 w-[40px] h-[40px] rounded-full group-hover:scale-[1.05] group-hover:shadow-xl transition duration-300 ease-in-out">
+                                                                                    <Camera className="w-[32px] h-[29px]"/>
+                                                                              </span>
+                                                                        </div>
+                                                                  </FormLabel>
+                                                                  <FormControl>
+                                                                              <Input 
+                                                                                    type="file" 
+                                                                                    id="images" 
+                                                                                    className="hidden" 
+                                                                                    multiple
+                                                                                    onChange={(e) => {
+                                                                                          if(e.target.files) {
+                                                                                                updateField("images", [...images, URL.createObjectURL(e.target.files[0])])
+                                                                                                field.onChange([...images, URL.createObjectURL(e.target.files[0])]);
+                                                                                          }
+                                                                                    }}
+                                                                              />
+                                                                  </FormControl>
+                                                            </FormItem>
+                                                      )}
+                                                />
+                                          )
+                                    }
+                              </Row>
+                              {
+                                    images?.length <= 0 && (
+                                          <FormField 
+                                                name="images"
+                                                control={form.control}
+                                                render={({ field }) => (
+                                                      <FormItem>
+                                                            <FormLabel htmlFor="images">
+                                                                  <Row className="items-center gap-4 group hover:cursor-pointer">
+                                                                        <span className="flex items-center justify-center bg-primary w-[80px] h-[80px] rounded-full group-hover:scale-[1.05] group-hover:shadow-xl transition duration-300 ease-in-out">
+                                                                              <Camera className="w-[32px] h-[29px]"/>
+                                                                        </span>
+                                                                        <P>Add Photo</P>
+                                                                  </Row>
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                  <Input 
+                                                                        type="file" 
+                                                                        id="images" 
+                                                                        className="hidden" 
+                                                                        multiple
+                                                                        onChange={(e) => {
+                                                                              if(e.target.files) {
+                                                                                    updateField("images", [...images, URL.createObjectURL(e.target.files[0])])
+                                                                                    field.onChange([...images, URL.createObjectURL(e.target.files[0])]);
+                                                                              }
+                                                                        }}
+                                                                  />
+                                                            </FormControl>
+                                                      </FormItem>
+                                                )}
+                                          />
+                                    )
+                              }
+                        </div>
+                        <Row className="items-center justify-center my-8">
+                              <Button 
+                                    type="button" 
+                                    className="flex-1 max-w-[180px] rounded-3xl"
+                                    onClick={() => onChangeStep("propertyDetail")}
+                              >Previous</Button>
+                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
+                        </Row>
+                  </form>
+            </Form>
       )
 };
 
 const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
+      const form = useForm();
       return (
-            <div>
-                  step 4
-            </div>
+            <Form {...form}>
+                  <form>
+                        <Row className="items-center justify-center my-8">
+                              <Button 
+                                    type="button" 
+                                    className="flex-1 max-w-[180px] rounded-3xl"
+                                    onClick={() => onChangeStep("generalInfo")}
+                              >Previous</Button>
+                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+                        </Row>
+                  </form>
+            </Form>
       )
 };
 
