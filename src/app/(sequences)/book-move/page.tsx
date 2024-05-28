@@ -36,7 +36,7 @@ const Page = () => {
                               <BookMoveSequence.Step3 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                         <TabsContent value="serviceRequirement">
-                              <BookMoveSequence.Step4 onChangeStep={() => null} />
+                              <BookMoveSequence.Step4 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                   </Tabs>
             </div>
