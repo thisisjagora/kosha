@@ -1,11 +1,11 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { SequenceStepsProps } from "..";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Label } from "@/components/form";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema } from "@/core/validators";
+import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema, bookMoveSequenceStep4Schema } from "@/core/validators";
 import { DateInput } from "@/components/dateInput";
 import { Button, P, Picture } from "@/components/atoms";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,8 @@ import { toast } from "@/components/toast/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
 import useBookMoveStore from "@/stores/book-move.store";
 import { Textarea } from "@/components/textarea";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { Checkbox } from "@/components/checkbox";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -52,7 +54,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       return (
             <Form {...form}>
                   <form className="text-grey-300" onSubmit={form.handleSubmit(onSubmit)}>
-                        <Column className="bg-white-100 rounded-xl gap-6 p-12">
+                        <Column className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
                               <Row className="gap-6">
                                     <FormField 
                                           control={form.control}
@@ -169,7 +171,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                         </span>
                                                                   </Button>
                                                       </Row>
-                                                      <Row className="bg-white-100 rounded-xl gap-6 p-12">
+                                                      <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
                                                                   <FormField 
                                                                         control={form.control}
                                                                         name={`stops.${index}.location`}
@@ -222,7 +224,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           </Button>
                                     </div>
                               </div>
-                              <Row className="bg-white-100 rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
                                     <FormField 
                                           control={form.control}
                                           name="finalDestination.location"
@@ -291,7 +293,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
             <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
                         <div>
-                              <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
                                     <Column>
                                           <P className="font-semibold text-lg">Pickup Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.pickUpLocation.location}</P>
@@ -367,7 +369,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                         {
                               formData.stops.map((stop, index) => (
                                     <div key={stop.location + index}>
-                                          <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
+                                          <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
                                                 <Column>
                                                       <P className="font-semibold text-lg">Stop {index + 1}</P>
                                                       <P className="font-bold text-primary text-xl">{stop.location}</P>
@@ -443,7 +445,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                               ))
                         }
                         <div>
-                              <Row className="bg-white-100 justify-between rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
                                     <Column>
                                           <P className="font-semibold text-lg">Final Destination</P>
                                           <P className="font-bold text-primary text-xl">{formData.finalDestination.location}</P>
@@ -561,7 +563,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       }
       return (
             <Form {...form}>
-                  <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
+                  <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 shadow-sm rounded-xl" onSubmit={form.handleSubmit(onSubmit)}>
                         <Row className="flex-wrap gap-6">
                               <FormField 
                                     name="majorAppliances"
@@ -791,10 +793,153 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 };
 
 const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
-      const form = useForm();
+      const { update, formData } = useBookMoveStore((state) => state)
+      const [selectAll, setSelectAll] = useState<boolean>(false);
+      const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
+            resolver: zodResolver(bookMoveSequenceStep4Schema),
+            defaultValues: {
+                  services: []
+            }
+      });
+
+      const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
+            update(data)
+            toast({
+              title: "You submitted the following values:",
+              description: (
+                  <pre className="mt-2 w-[340px] rounded-md p-4">
+                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
+                  </pre>
+              ),
+            })
+      }
+
+      const services  = [
+            {
+                  id: "reassembly",
+                  label: "Reassembly",
+                  description: "Reassembling of any equipment, furniture, new or old when at the final destination of the move" 
+            },
+            {
+                  id: "disassembly",
+                  label: "Disassembly",
+                  description: "Disassembling of any equipment, furniture, new or old when at the at pick up locations" 
+            },
+            {
+                  id: "furniture wrapping",
+                  label: "Furniture Wrapping",
+                  description: "Wrapping furniture with protective wraps like nylon, bubble, tarp etc" 
+            },
+            {
+                  id: "dollies",
+                  label: "Dollies",
+                  description: "To help you transport large heavy-based items" 
+            },
+            {
+                  id: "moving pads",
+                  label: "Moving Pads",
+                  description: "Heavy duty moving blankets to prevent scratches when moving furniture" 
+            },
+            {
+                  id: "straps",
+                  label: "Straps",
+                  description: "Industrial grade straps to secure all equipment, boxes etc" 
+            },
+            {
+                  id: "floor runners",
+                  label: "Floor Runners",
+                  description: "To help you transport large heavy-based items" 
+            },
+            {
+                  id: "tape",
+                  label: "Tape",
+                  description: "Industrial grade straps to secure all equipment, boxes etc" 
+            },
+            {
+                  id: "move garage items",
+                  label: "Move Garage Items",
+                  description: "Move Garage Items" 
+            },
+            {
+                  id: "move patio items",
+                  label: "Move Patio Items",
+                  description: "Move Patio Items" 
+            }
+      ]
+
+      const handleSelectAllChange = (checked: boolean) => {
+            setSelectAll(checked);
+            form.setValue(
+              "services",
+              checked ? services.map((service) => service.id) : []
+            );
+          };
+
       return (
             <Form {...form}>
-                  <form>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm">
+                        <Table>
+                              <TableHeader>
+                                    <Row className="mb-4 items-center">
+                                          <FormControl>
+                                                <Checkbox
+                                                id="select-all"
+                                                checked={selectAll}
+                                                onCheckedChange={handleSelectAllChange}
+                                                />
+                                          </FormControl>
+                                          <FormLabel htmlFor="select-all" className="font-medium text-base ml-2 hover:cursor-pointer">
+                                                Select All
+                                          </FormLabel>
+                                    </Row>
+                                    <TableRow>
+                                          <TableHead className="w-[300px] text-grey-100">Services</TableHead>
+                                          <TableHead className="text-grey-100">Description</TableHead>
+                                    </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                    {services.map((service, index) => (
+                                    <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
+                                          <TableCell>
+                                                <FormField
+                                                      control={form.control}
+                                                      name="services"
+                                                      render={({ field }) => {
+                                                      const checkboxId = `services-${service.id}`;
+                                                      const isChecked = field.value?.includes(service.id)
+                                                      return (
+                                                            <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                  <Checkbox
+                                                                        className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                                                                        id={checkboxId}
+                                                                        checked={isChecked}
+                                                                        onCheckedChange={(checked) => {
+                                                                        return checked
+                                                                        ? field.onChange([...field.value || [], service.id])
+                                                                        : field.onChange(field.value?.filter((value) => value !== service.id));
+                                                                        }}
+                                                                  />
+                                                            </FormControl>
+                                                            <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
+                                                                  "text-primary font-medium": isChecked
+                                                            })}>
+                                                                  {service.label}
+                                                            </FormLabel>
+                                                            </FormItem>
+                                                      );
+                                                      }}
+                                                />
+                                          </TableCell>
+                                          <TableCell>
+                                                <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
+                                                      {service.description}
+                                                </FormLabel>
+                                          </TableCell>
+                                    </TableRow>
+                                    ))}
+                              </TableBody>
+                        </Table>
                         <Row className="items-center justify-center my-8">
                               <Button 
                                     type="button" 
