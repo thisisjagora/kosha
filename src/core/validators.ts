@@ -58,3 +58,10 @@ export const bookMoveSequenceStep3Schema = z.object({
   instructions: z.string().min(1, {message: "Required"}),
   images: z.array(z.string())
 });
+
+
+export const bookMoveSequenceStep4Schema = z.object({
+  services: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one item.",
+  }),
+})
