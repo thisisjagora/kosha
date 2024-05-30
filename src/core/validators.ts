@@ -37,13 +37,31 @@ export const bookMoveSequenceStep1Schema = z.object({
 })
 
 const pickUpDetailShema = z.object({
-  buildingType: z.string().min(1, {message: "Building type is required"}),
-  elevatorAccess: z.string().min(1, {message: "Elevator access is required"}),
-  flightOfStairs: z.string().min(1, {message: "Flight of stairs is required"})
+  buildingType: z.string().min(1, {message: "Required"}),
+  elevatorAccess: z.string().min(1, {message: "Required"}),
+  flightOfStairs: z.string().min(1, {message: "Required"})
 });
 
 export const bookMoveSequenceStep2Schema = z.object({
   PUDPickUpLocation: pickUpDetailShema,
-  PUDStops: z.array(pickUpDetailShema),
+  PUDStops: z.array(pickUpDetailShema).optional(),
   PUDFinalDestination: pickUpDetailShema
+})
+
+export const bookMoveSequenceStep3Schema = z.object({
+  majorAppliances: z.string().min(1, {message: "Required"}),
+  workOutEquipment: z.string().min(1, {message: "Required"}),
+  pianos: z.string().min(1, {message: "Required"}),
+  hotTubs: z.string().min(1, {message: "Required"}),
+  poolTables: z.string().min(1, {message: "Required"}),
+  numberOfBoxes: z.string().min(1, {message: "Required"}),
+  instructions: z.string().min(1, {message: "Required"}),
+  images: z.array(z.string())
+});
+
+
+export const bookMoveSequenceStep4Schema = z.object({
+  services: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one item.",
+  }),
 })
