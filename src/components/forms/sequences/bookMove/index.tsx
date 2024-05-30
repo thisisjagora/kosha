@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { SequenceStepsProps } from "..";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Label } from "@/components/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,8 +19,10 @@ import { toast } from "@/components/toast/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
 import useBookMoveStore from "@/stores/book-move.store";
 import { Textarea } from "@/components/textarea";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
+import { AlertDialog } from "@/components/dialogs";
+import { Routes } from "@/core/routing";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -289,6 +291,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                   ),
                 })
       }
+
       return (
             <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
@@ -946,7 +949,14 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                     className="flex-1 max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("generalInfo")}
                               >Previous</Button>
-                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+                              <AlertDialog 
+                                    trigger={
+                                          <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+                                    }
+                                    title="Move Request Sent!"
+                                    route={Routes.profile}
+                                    routeLabel="View Vendor Quotes"
+                              />
                         </Row>
                   </form>
             </Form>
