@@ -11,6 +11,7 @@ export const Picture: FC<Props> = ({image, container}) => {
       return (
             <div {...container} className={cn("relative w-[50px] h-[50px] flex justify-center items-center",container.className)}>
                   <Image {...image} fill className={cn("w-[100%] h-[100%] object-contain object-center", image.className)}  />
+                  {/* <div className="border bg-[#7D7D7D40] p-2 z-10 w-full h-full"/> */}
             </div>
       )
 }
