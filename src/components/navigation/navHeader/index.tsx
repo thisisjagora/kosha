@@ -30,7 +30,7 @@ const switchHeaderContent = (route: string) => {
             case Routes.root:
                   return {
                         title: "Home",
-                        description: "Schedule a Move"
+                        description: "Dashboard"
                   }
             case Routes.sequence.bookMove:
                   return {
