@@ -46,7 +46,7 @@ export const bookMoveSequenceStep2Schema = z.object({
   PUDPickUpLocation: pickUpDetailShema,
   PUDStops: z.array(pickUpDetailShema).optional(),
   PUDFinalDestination: pickUpDetailShema
-})
+});
 
 export const bookMoveSequenceStep3Schema = z.object({
   majorAppliances: z.string().min(1, {message: "Required"}),
@@ -65,3 +65,14 @@ export const bookMoveSequenceStep4Schema = z.object({
     message: "You have to select at least one item.",
   }),
 })
+
+export const hireLabourSequenceStep1Schema = z.object({
+  date: z.date({message: "Move date is required"}),
+  time: z.string().min(1, {message: "Time is required"}),
+  serviceLocation: z.string().min(1, {message: "Location is required"}),
+  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+}).extend(pickUpDetailShema.shape);
+
+export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
+
+export const hireLabourSequenceStep3Schema = bookMoveSequenceStep4Schema;
