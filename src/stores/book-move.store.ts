@@ -39,7 +39,8 @@ const initialState: BookMove = {
       poolTables: "",
       numberOfBoxes: "",
       instructions: "",
-      images: []
+      images: [],
+      services: []
 }
 
 const useBookMoveStore = create<Store>((set) => ({
