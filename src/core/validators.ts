@@ -23,11 +23,56 @@ export const signUpSchema = z.object({
   keepMeLoggedIn: z.boolean().default(false).optional(),
 })
 
-export const bookMoveSequenceSchema = z.object({
+const locationSchema = z.object({
+  location: z.string().min(1, {message: "Location is required"}),
+  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+});
+
+export const bookMoveSequenceStep1Schema = z.object({
   moveDate: z.date({message: "Move date is required"}),
   time: z.string().min(1, {message: "Time is required"}),
-  pickUpLocation: z.string().min(1, {message: "Pick-up location is required"}),
-  pickUpApartmentUnit: z.string().min(1, { message: "Pick-up apartment number is required"}),
-  finalDestination: z.string().min(1, {message: "Final destination is required"}),
-  finalDestinationApartmentUnit: z.string().min(1, {message: "Final destination apartment number is required"})
+  pickUpLocation: locationSchema,
+  stops: z.array(locationSchema),
+  finalDestination: locationSchema
 })
+
+const pickUpDetailShema = z.object({
+  buildingType: z.string().min(1, {message: "Required"}),
+  elevatorAccess: z.string().min(1, {message: "Required"}),
+  flightOfStairs: z.string().min(1, {message: "Required"})
+});
+
+export const bookMoveSequenceStep2Schema = z.object({
+  PUDPickUpLocation: pickUpDetailShema,
+  PUDStops: z.array(pickUpDetailShema).optional(),
+  PUDFinalDestination: pickUpDetailShema
+});
+
+export const bookMoveSequenceStep3Schema = z.object({
+  majorAppliances: z.string().min(1, {message: "Required"}),
+  workOutEquipment: z.string().min(1, {message: "Required"}),
+  pianos: z.string().min(1, {message: "Required"}),
+  hotTubs: z.string().min(1, {message: "Required"}),
+  poolTables: z.string().min(1, {message: "Required"}),
+  numberOfBoxes: z.string().min(1, {message: "Required"}),
+  instructions: z.string().min(1, {message: "Required"}),
+  images: z.array(z.string())
+});
+
+
+export const bookMoveSequenceStep4Schema = z.object({
+  services: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one item.",
+  }),
+})
+
+export const hireLabourSequenceStep1Schema = z.object({
+  date: z.date({message: "Move date is required"}),
+  time: z.string().min(1, {message: "Time is required"}),
+  serviceLocation: z.string().min(1, {message: "Location is required"}),
+  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+}).extend(pickUpDetailShema.shape);
+
+export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
+
+export const hireLabourSequenceStep3Schema = bookMoveSequenceStep4Schema;
