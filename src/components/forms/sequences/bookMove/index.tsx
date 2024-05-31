@@ -44,14 +44,6 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep1Schema>) => {
             onChangeStep("propertyDetail")
             update(data);
-            toast({
-                  title: "You submitted the following values:",
-                  description: (
-                    <pre className="mt-2 w-[340px] rounded-md p-4">
-                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                  ),
-                })
       }
       return (
             <Form {...form}>
@@ -282,14 +274,6 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
             onChangeStep("generalInfo")
             update(data)
-            toast({
-                  title: "You submitted the following values:",
-                  description: (
-                    <pre className="mt-2 w-[340px] rounded-md p-4">
-                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                  ),
-                })
       }
 
       return (
@@ -555,14 +539,6 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep3Schema>) => {
             onChangeStep("serviceRequirement")
             update(data);
-            toast({
-                  title: "You submitted the following values:",
-                  description: (
-                    <pre className="mt-2 w-[340px] rounded-md p-4">
-                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                  ),
-                })
       }
       return (
             <Form {...form}>

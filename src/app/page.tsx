@@ -55,7 +55,7 @@ export default function Home() {
           <Row>
             {
               SERVICES.map((item, index) => (
-                <Link href={item.route} className="flex-1 group">
+                <Link key={item.label + index} href={item.route} className="flex-1 group">
                     <div key={item.label + index} className="relative w-full h-[120px] bg-primary rounded-xl group-hover:scale-[1.01] transition-transform ease-linear duration-200">
                       <div className="h-full relative">
                         <Picture 
@@ -78,7 +78,7 @@ export default function Home() {
           </Row>
         </Column>
       </Column>
-      <Column className="flex-1 max-w-[400px] gap-8">
+      <Column className="flex-1 max-w-[370px] gap-8">
         <Calendar
             mode="single"
             captionLayout="dropdown-buttons"
