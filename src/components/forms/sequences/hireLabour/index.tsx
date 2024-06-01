@@ -626,9 +626,10 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     trigger={
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
-                                    title="Move Request Sent!"
-                                    route={Routes.profile}
-                                    routeLabel="View Vendor Quotes"
+                                    title="Labour Request Sent!"
+                                    description="Tiyende Movers Will Process Your Request Within 24 Hours"
+                                    route={Routes.root}
+                                    routeLabel="Back to Dashboard"
                               />
                         </Row>
                   </form>
@@ -638,7 +639,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
 
 
 export const HireLabourSequence = {
-      step1: Step1,
-      step2: Step2,
-      step3: Step3,
+      Step1,
+      Step2,
+      Step3,
 }

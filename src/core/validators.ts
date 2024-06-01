@@ -76,3 +76,19 @@ export const hireLabourSequenceStep1Schema = z.object({
 export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
 
 export const hireLabourSequenceStep3Schema = bookMoveSequenceStep4Schema;
+
+export const bookDeliverySequenceStep1Schema = z.object({
+  deliveryDate: z.date({message: "Move date is required"}),
+  time: z.string().min(1, {message: "Time is required"}),
+  pickUpLocation: locationSchema,
+  deliveryLocation: locationSchema
+})
+
+export const bookDeliverySequenceStep2Schema = bookMoveSequenceStep2Schema.omit({
+  PUDStops: true
+})
+
+export const bookDeliverySequenceStep3Schema = bookMoveSequenceStep3Schema.pick({
+  images: true,
+  instructions: true
+}) 
