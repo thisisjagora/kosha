@@ -4,6 +4,7 @@ import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
+import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -77,8 +78,61 @@ export default function Home() {
             }
           </Row>
         </Column>
+        <Column className="gap-4">
+          <H level={3} className="text-primary text-2xl">Todays Activities</H>
+          <Row className="flex-wrap gap-4">
+            <Quotes>
+              <QuotesImage src="" type="Hire labor" />
+              <QuotesContent>
+                <Row className="items-start justify-between gap-6 flex-wrap">
+                  <Column>
+                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
+                    <QuotesMovers>3 Movers</QuotesMovers>
+                  </Column>
+                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
+                </Row>
+                <Row className="justify-between items-center">
+                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
+                  <QuotesAmount amount="80"/>
+                </Row>
+              </QuotesContent>
+            </Quotes>
+            <Quotes>
+              <QuotesImage src="" type="Hire labor" />
+              <QuotesContent>
+                <Row className="items-start justify-between gap-6 flex-wrap">
+                  <Column>
+                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
+                    <QuotesMovers>3 Movers</QuotesMovers>
+                  </Column>
+                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
+                </Row>
+                <Row className="justify-between items-center">
+                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
+                  <QuotesAmount amount="80"/>
+                </Row>
+              </QuotesContent>
+            </Quotes>
+            <Quotes>
+              <QuotesImage src="" type="Hire labor" />
+              <QuotesContent>
+                <Row className="items-start justify-between gap-6 flex-wrap">
+                  <Column>
+                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
+                    <QuotesMovers>3 Movers</QuotesMovers>
+                  </Column>
+                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
+                </Row>
+                <Row className="justify-between items-center">
+                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
+                  <QuotesAmount amount="80"/>
+                </Row>
+              </QuotesContent>
+            </Quotes>
+          </Row>
+        </Column>
       </Column>
-      <Column className="flex-1 max-w-[370px] gap-8">
+      <Column className="flex-1 max-w-[350px] gap-8">
         <Calendar
             mode="single"
             captionLayout="dropdown-buttons"
