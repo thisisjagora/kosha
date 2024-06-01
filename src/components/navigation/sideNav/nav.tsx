@@ -13,6 +13,7 @@ export const SideNav = () => {
             height: 22
       }
       const sequenceRoutes = Object.values(Routes.sequence)
+      const messagesRouteMatch = path.match(/^\/messages\/([^/]+)$/);
 
       const SIDE_NAV_MENU_DATA = [
             {
@@ -27,7 +28,7 @@ export const SideNav = () => {
             },
             {
                   title: "Messages",
-                  icon: <Chat {...sizes} invertColor={isActiveRoute(Routes.messages)} />,
+                  icon: <Chat {...sizes} invertColor={isActiveRoute(Routes.messages) || !!messagesRouteMatch} />,
                   route: Routes.messages
             },
             {
@@ -51,7 +52,7 @@ export const SideNav = () => {
                   </div>
                   <div className="py-6 flex flex-col gap-4">
                               {
-                                    SIDE_NAV_MENU_DATA.map((item, indx) => <NavItem key={item.title + indx} data={{...item, isActive: isActiveRoute(item.route) || (item.route === Routes.root && sequenceRoutes.includes(path))}} />)
+                                    SIDE_NAV_MENU_DATA.map((item, indx) => <NavItem key={item.title + indx} data={{...item, isActive: isActiveRoute(item.route) || (item.route === Routes.root && sequenceRoutes.includes(path)) || (item.route === Routes.messages && !!messagesRouteMatch)}} />)
                               }
                   </div>
             </aside>
