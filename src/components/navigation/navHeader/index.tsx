@@ -26,46 +26,56 @@ export const NavHeader = () => {
 }
 
 const switchHeaderContent = (route: string) => {
-      switch (route) {
-            case Routes.root:
-                  return {
-                        title: "Home",
-                        description: "Dashboard"
-                  }
-            case Routes.sequence.bookMove:
-                  return {
-                        title: "Home",
-                        description: "Schedule a Move"
-                  }
-            case Routes.sequence.hireLabour:
-                  return {
-                        title: "Home",
-                        description: "Hire Labour only"
-                  }
-            case Routes.sequence.bookDelivery:
-                  return {
-                        title: "Home",
-                        description: "Schedule your Delivery "
-                  }
-            case Routes.bookings:
-                  return {
-                        title: "Bookings",
-                        description: "Bookings Summary"
-                  }
-            case Routes.messages: 
-                  return {
-                        title: "",
-                        description: "Messages"
-                  }
-            case Routes.profile:
-                  return {
-                        title: "",
-                        description: "Profile"
-                  }
-            default: 
-                  return {
-                        title: "",
-                        description: ""
-                  }
+      const messagesRouteMatch = route.match(/^\/messages\/([^/]+)$/);
+    
+      if (messagesRouteMatch) {
+        return {
+            title: "",
+            description: "Messages"
+        };
       }
-}
+    
+      switch (route) {
+        case Routes.root:
+          return {
+            title: "Home",
+            description: "Dashboard"
+          };
+        case Routes.sequence.bookMove:
+          return {
+            title: "Home",
+            description: "Schedule a Move"
+          };
+        case Routes.sequence.hireLabour:
+          return {
+            title: "Home",
+            description: "Hire Labour only"
+          };
+        case Routes.sequence.bookDelivery:
+          return {
+            title: "Home",
+            description: "Schedule your Delivery"
+          };
+        case Routes.bookings:
+          return {
+            title: "Bookings",
+            description: "Bookings Summary"
+          };
+        case Routes.messages:
+          return {
+            title: "",
+            description: "Messages"
+          };
+        case Routes.profile:
+          return {
+            title: "",
+            description: "Profile"
+          };
+        default:
+          return {
+            title: "",
+            description: ""
+          };
+      }
+    };
+    
