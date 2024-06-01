@@ -23,13 +23,13 @@ const Page = () => {
                               </TabsTrigger>
                         </TabsList>
                         <TabsContent value="dlt">
-                              <HireLabourSequence.step1 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                              <HireLabourSequence.Step1 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                         <TabsContent value="itm">
-                              <HireLabourSequence.step2 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                              <HireLabourSequence.Step2 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                         <TabsContent value="generalInfo">
-                              <HireLabourSequence.step3 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                              <HireLabourSequence.Step3 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                   </Tabs>
             </div>
