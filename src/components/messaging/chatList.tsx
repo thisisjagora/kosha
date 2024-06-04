@@ -27,7 +27,7 @@ export const ChatList = () => {
       )
 }
 
-interface ChatListItemProps {
+export interface ChatListItemProps {
       type: "Book a move" | "Hire labor" | "Book a delivery",
       id: string,
       name: string
@@ -37,7 +37,7 @@ const ChatListItem:FC<ChatListItemProps> = ({type, id, name }) => {
       return (
             <Link href={`${Routes.messages}/${id}`}>
                   <Row className={cn("items-center justify-between p-4 bg-transparent", {
-                        "bg-white-100 shadow-md rounded-l-xl": params.slug === id
+                        "bg-white-100 shadow-sm rounded-l-xl": params.slug === id
                   })}>
                         <Row className="items-center flex-1">
                               <div className="max-w-[50px] h-[50px] flex-1 relative">
