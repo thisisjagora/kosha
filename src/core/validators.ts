@@ -92,3 +92,8 @@ export const bookDeliverySequenceStep3Schema = bookMoveSequenceStep3Schema.pick(
   images: true,
   instructions: true
 }) 
+
+export const sendMessageSchema = z.object({
+  message: z.string().optional(),
+  file: typeof window === 'undefined' ? z.any().optional() : z.instanceof(File).optional(),
+})
