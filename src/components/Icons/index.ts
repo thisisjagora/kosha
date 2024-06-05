@@ -10,6 +10,7 @@ export { default as Google } from "./Google";
 export { default as Home } from "./Home";
 export { default as NotificationsNone } from "./NotificationsNone";
 export { default as Send } from "./Send";
+export { default as Smiley } from "./Smiley";
 export { default as Stars } from "./Stars";
 export { default as Trash } from "./Trash";
 export { default as User } from "./User";

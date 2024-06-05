@@ -4,7 +4,7 @@ import { P, Picture } from "../atoms"
 import { ChatListItemProps } from "."
 import { cn } from "@/lib/utils"
 
-const DM:FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => <Column {...props} className={cn("w-full h-full p-4", props.className)} />
+const DM:FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => <Column {...props} className={cn("w-full h-full p-4 relative overflow-hidden", props.className)} />
 
 type DMHeaderProps = Partial<ChatListItemProps>;
 

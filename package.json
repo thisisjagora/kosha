@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "emoji-picker-react": "^4.9.4",
     "framer-motion": "^11.2.6",
     "immer": "^10.1.1",
     "lucide-react": "^0.378.0",
