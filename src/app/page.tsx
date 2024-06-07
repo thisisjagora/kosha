@@ -4,7 +4,7 @@ import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
-import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotes";
+import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
