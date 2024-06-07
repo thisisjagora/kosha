@@ -1,10 +1,13 @@
+import { ChatList } from "@/components/messaging";
 import { FC, PropsWithChildren } from "react"
 
 const Layout:FC<PropsWithChildren> = ({ children }) => {
       return (
-            <div className="flex gap-6">
-                  <p>Chat list</p>
-                  <div className="border flex-1">
+            <div className="flex h-full">
+                  <div className="flex-1 max-w-[320px]">
+                        <ChatList />
+                  </div>
+                  <div className="flex-1 bg-white-100">
                         {children}
                   </div>
             </div>
