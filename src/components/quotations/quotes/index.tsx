@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils"
 import { FC, HTMLAttributes } from "react"
-import { H, HeadingProps, P, Picture } from "../atoms";
-import { Column, Row } from "../layout";
-import { Stars } from "../Icons";
+import { H, HeadingProps, P, Picture } from "../../atoms";
+import { Column, Row } from "../../layout";
+import { Stars } from "../../Icons";
 
 const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl", props.className)} />
 
