@@ -39,6 +39,7 @@ const Page = () => {
                               <BookMoveSequence.Step4 onChangeStep={(next) => setActiveTab(next ?? "")} />
                         </TabsContent>
                   </Tabs>
+                  <p>Quotes</p>
             </div>
       )
 }
