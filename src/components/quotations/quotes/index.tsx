@@ -3,6 +3,7 @@ import { FC, HTMLAttributes } from "react"
 import { H, HeadingProps, P, Picture } from "../../atoms";
 import { Column, Row } from "../../layout";
 import { Stars } from "../../Icons";
+import { generateDoodles } from "@/lib/helpers/generateDoodle";
 
 const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl", props.className)} />
 
@@ -50,9 +51,29 @@ const QuotesRatings = ({ rating }: {rating: string}) => {
             </Row>
       )
 }
-const QuotesMoversDoodles = () => {
+const QuotesMoversDoodles = ({length}: {length: number}) => {
+      const doodles = generateDoodles({length})
       return (
-            <div></div>
+            <Row className="relative">
+                  {
+                        doodles.map((item, index) => (
+                              <div key={item + index} className={cn("w-[30px] h-[30px] p-[2px] rounded-full bg-white-100 border", {
+                                    "relative mr-[-15px]" : index !== length - 1,
+                              }, `z-${index}`)}>
+                                    <Picture 
+                                          container={{
+                                                className: "w-full h-full rounded-full"
+                                          }}
+                                          image={{
+                                                alt: "movers doodle",
+                                                src: item,
+                                                className: "rounded-full "
+                                          }}
+                                    />
+                              </div>
+                        ))
+                  }
+            </Row>
       )
 }
 
@@ -65,5 +86,6 @@ export {
             QuotesVehicle, 
             QuotesTime, 
             QuotesAmount,
-            QuotesRatings 
+            QuotesRatings ,
+            QuotesMoversDoodles
       }
