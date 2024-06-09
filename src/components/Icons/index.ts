@@ -13,4 +13,5 @@ export { default as Send } from "./Send";
 export { default as Smiley } from "./Smiley";
 export { default as Stars } from "./Stars";
 export { default as Trash } from "./Trash";
+export { default as TruckFront } from "./TruckFront";
 export { default as User } from "./User";

@@ -4,3 +4,21 @@ import { z } from "zod";
 export type BookMove = z.infer<typeof bookMoveSequenceStep1Schema> & z.infer<typeof bookMoveSequenceStep2Schema> & z.infer<typeof bookMoveSequenceStep3Schema> & z.infer<typeof bookMoveSequenceStep4Schema>;
 export type HireLabour = z.infer<typeof hireLabourSequenceStep1Schema> & z.infer<typeof hireLabourSequenceStep2Schema> & z.infer<typeof hireLabourSequenceStep3Schema>
 export type BookDelivery = z.infer<typeof bookDeliverySequenceStep1Schema> & z.infer<typeof bookDeliverySequenceStep2Schema> & z.infer<typeof bookDeliverySequenceStep3Schema>
+
+interface Quote  {
+      name: string,
+      movers: number,
+      rating: string,
+      amount: string,
+}
+
+export interface MoveQuote extends Quote{
+      vehicle: string
+}
+export interface LabourQuote extends Quote{
+      activity: Array<string>
+}
+export interface DeliveryQuote extends Omit<Quote, "movers">{
+      time: string,
+      distance: string
+}

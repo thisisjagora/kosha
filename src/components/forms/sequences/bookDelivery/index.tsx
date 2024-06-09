@@ -20,6 +20,7 @@ import { Routes } from "@/core/routing";
 import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
 import { Camera, Cancel } from "@/components/Icons";
+import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const { update, formData } = useBookDeliveryStore((state) => state)
@@ -338,6 +339,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
 };
 
 const Step3:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
+      const setShowQuote = useShowQuotes((state) => state.setShowQuote) 
       const { update, updateField, removeImage, formData } = useBookDeliveryStore((state) => state);
       const {images, instructions} = formData
       const form = useForm<z.infer<typeof bookDeliverySequenceStep3Schema>>({
@@ -491,8 +493,8 @@ const Step3:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
                                     title="Your Delivery Request has been Sent!"
-                                    route={Routes.root}
-                                    routeLabel="Go to Dashboard"
+                                    buttonLabel="View Delivery Quotes"
+                                    onClick={() => setShowQuote(true)}
                               />
                         </Row>
                   </form>

@@ -23,6 +23,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
 import { Routes } from "@/core/routing";
+import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -772,6 +773,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 };
 
 const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
+      const setShowQuote = useShowQuotes((state) => state.setShowQuote)
       const { update, formData } = useBookMoveStore((state) => state)
       const [selectAll, setSelectAll] = useState<boolean>(false);
       const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
@@ -930,8 +932,12 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
                                     title="Move Request Sent!"
-                                    route={Routes.profile}
-                                    routeLabel="View Vendor Quotes"
+                                    buttonLabel="View Vendor Quotes"
+                                    onClick={() => {
+                                          setTimeout(() => {
+                                                setShowQuote(true)
+                                          }, 2000)
+                                    }}
                               />
                         </Row>
                   </form>
