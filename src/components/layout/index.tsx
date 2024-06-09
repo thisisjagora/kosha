@@ -19,13 +19,13 @@ export const Layout:FC<PropsWithChildren> = ({ children }) => {
                   <div className={cn("flex-1 h-full flex items-center justify-center bg-white-200", {
                         "bg-white-100": isValidRoute
                   })}>
-                        <div className={cn("max-w-[1300px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6 pt-8")}>
+                        <div className={cn("max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6")}>
                               {
                                     isValidRoute? null: (
                                           <NavHeader />
                                     )
                               }
-                              <main className="w-full flex-1 p-4">
+                              <main className="w-full flex-1">
                                     {children}
                               </main>
                               <Footer />

@@ -1,9 +1,9 @@
-const Page = () => {
-      return (
-            <div>
-                  <p>Messages Page</p>
-            </div>
-      )
-}
+import React from 'react';
 
-export default Page;
+export default function MessagesDefaultPage() {
+  return (
+    <div className='h-full'>
+      <p>Start a chat</p>
+    </div>
+  );
+}

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React, { FC, HTMLAttributes } from "react";
 
-interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
+export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 

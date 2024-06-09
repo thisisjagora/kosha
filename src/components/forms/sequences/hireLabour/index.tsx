@@ -22,6 +22,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
 import { Routes } from "@/core/routing";
+import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const { update, formData } = useHireLabourStore((state) => state)
@@ -469,6 +470,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
 };
 
 const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
+      const { setShowQuote } = useShowQuotes((state) => state)
       const { update, formData } = useHireLabourStore((state) => state)
       const [selectAll, setSelectAll] = useState<boolean>(false);
       const form = useForm<z.infer<typeof hireLabourSequenceStep3Schema>>({
@@ -626,9 +628,13 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     trigger={
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
-                                    title="Move Request Sent!"
-                                    route={Routes.profile}
-                                    routeLabel="View Vendor Quotes"
+                                    title="Labour Request Sent!"
+                                    buttonLabel="View Labour Vendor Quotes"
+                                    onClick={() => {
+                                          setTimeout(() => {
+                                                setShowQuote(true)
+                                          }, 2000)
+                                    }}
                               />
                         </Row>
                   </form>
@@ -638,7 +644,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
 
 
 export const HireLabourSequence = {
-      step1: Step1,
-      step2: Step2,
-      step3: Step3,
+      Step1,
+      Step2,
+      Step3,
 }
