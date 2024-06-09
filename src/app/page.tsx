@@ -4,7 +4,7 @@ import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
-import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotes";
+import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -80,7 +80,7 @@ export default function Home() {
         </Column>
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">Todays Activities</H>
-          <Row className="flex-wrap gap-4">
+          {/* <Row className="flex-wrap gap-4">
             <Quotes>
               <QuotesImage src="" type="Hire labor" />
               <QuotesContent>
@@ -129,7 +129,7 @@ export default function Home() {
                 </Row>
               </QuotesContent>
             </Quotes>
-          </Row>
+          </Row> */}
         </Column>
       </Column>
       <Column className="flex-1 max-w-[350px] gap-8">
