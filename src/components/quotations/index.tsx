@@ -1,7 +1,8 @@
+import useShowQuotes from "@/stores/show-quotes.store";
 import { Row } from "../layout"
+import { useEffect } from "react";
 
 interface Props<T>{
-      showQuotes: boolean,
 	list: Array<T>;
 	renderItem: (params: {
 		index: number;
@@ -9,8 +10,14 @@ interface Props<T>{
 	}) => React.JSX.Element | null;
 }
 export const Quotations = <T,>(props: Props<T>) => {
-      const {showQuotes, list, renderItem} = props
-      if(!showQuotes) return null;
+      const {list, renderItem} = props
+      const { showQuote, setShowQuote } = useShowQuotes((state) => state)
+      useEffect(() => {
+            return () => {
+              setShowQuote(false);
+            };
+          }, [setShowQuote]);
+      if(!showQuote) return null;
       return (
             <Row className="flex-wrap gap-4 w-full">
                   {

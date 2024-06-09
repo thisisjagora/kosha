@@ -9,8 +9,8 @@ import Link from "next/link";
 interface Props extends CustomDialogProp {
       title: string,
       description?: string,
-      route: string,
-      routeLabel: string
+      buttonLabel: string,
+      onClick: () => void;
 }
 
 export const AlertDialog: FC<Props> = (props) => {
@@ -24,7 +24,7 @@ export const AlertDialog: FC<Props> = (props) => {
                                     <P className="text-center font-semibold text-2xl text-grey-300">{props.title}</P>
                                     <P className="text-center text-grey-300">{props.description}</P>
                               </Column>
-                              <Link className="w-full p-3 bg-primary text-white-100 text-center rounded-2xl" href={props.route}>{props.routeLabel}</Link>
+                              <Button className="w-full" onClick={props.onClick}>{props.buttonLabel}</Button>
                         </Column>
                   </DialogContent>
             </Dialog>
