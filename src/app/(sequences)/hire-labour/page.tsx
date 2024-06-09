@@ -1,38 +1,77 @@
 "use client";
 import { HireLabourSequence } from "@/components/forms/sequences";
+import { Column, Row } from "@/components/layout";
+import { SequencesLayout } from "@/components/layout/sequences";
+import { Quotations } from "@/components/quotations";
+import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesLabourActivity, QuotesMovers, QuotesMoversDoodles, QuotesRatings, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
+import { HireLabourMock } from "@/mocks";
+import useShowQuotes from "@/stores/show-quotes.store";
+import { LabourQuote } from "@/types/structs";
 import { useState } from "react";
 
 const Page = () => {
+      const { showQuote } = useShowQuotes((state) => state)
       const [activeTab, setActiveTab] = useState<string>("dlt");
       return (
-            <div>
-                  <Tabs value={activeTab} onValueChange={setActiveTab}>
-                        <TabsList>
-                              <TabsTrigger className="flex gap-2" value="dlt">
-                                    <TabsCount count="1" isActive={activeTab === "dlt"} />
-                                    Date, Location & Time
-                              </TabsTrigger>
-                              <TabsTrigger className="flex gap-2" value="itm" >
-                                    <TabsCount count="2" isActive={activeTab === "itm"} />
-                                    Items to Move
-                              </TabsTrigger>
-                              <TabsTrigger className="flex gap-2" value="generalInfo">
-                                    <TabsCount count="3" isActive={activeTab === "generalInfo"} />
-                                    General Info
-                              </TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="dlt">
-                              <HireLabourSequence.Step1 onChangeStep={(next) => setActiveTab(next ?? "")} />
-                        </TabsContent>
-                        <TabsContent value="itm">
-                              <HireLabourSequence.Step2 onChangeStep={(next) => setActiveTab(next ?? "")} />
-                        </TabsContent>
-                        <TabsContent value="generalInfo">
-                              <HireLabourSequence.Step3 onChangeStep={(next) => setActiveTab(next ?? "")} />
-                        </TabsContent>
-                  </Tabs>
-            </div>
+            <>
+                  {
+                        !showQuote && (
+                              <SequencesLayout>
+                                    <Tabs value={activeTab} onValueChange={setActiveTab}>
+                                          <TabsList>
+                                                <TabsTrigger className="flex gap-2" value="dlt">
+                                                      <TabsCount count="1" isActive={activeTab === "dlt"} />
+                                                      Date, Location & Time
+                                                </TabsTrigger>
+                                                <TabsTrigger className="flex gap-2" value="itm" >
+                                                      <TabsCount count="2" isActive={activeTab === "itm"} />
+                                                      Items to Move
+                                                </TabsTrigger>
+                                                <TabsTrigger className="flex gap-2" value="generalInfo">
+                                                      <TabsCount count="3" isActive={activeTab === "generalInfo"} />
+                                                      General Info
+                                                </TabsTrigger>
+                                          </TabsList>
+                                          <TabsContent value="dlt">
+                                                <HireLabourSequence.Step1 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                                          </TabsContent>
+                                          <TabsContent value="itm">
+                                                <HireLabourSequence.Step2 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                                          </TabsContent>
+                                          <TabsContent value="generalInfo">
+                                                <HireLabourSequence.Step3 onChangeStep={(next) => setActiveTab(next ?? "")} />
+                                          </TabsContent>
+                                    </Tabs>
+                              </SequencesLayout>
+                        )
+                  }
+                  <Quotations<LabourQuote> 
+                        list={HireLabourMock}
+                        renderItem={({index, item}) => (
+                              <Quotes key={item.name + index}>
+                                    <QuotesImage src="" type="Hire labor" />
+                                    <QuotesContent>
+                                          <Row className="items-start justify-between gap-6 flex-wrap">
+                                                <Column>
+                                                <QuotesTitle title={item.name} />
+                                                <QuotesMovers>{item.movers} Movers</QuotesMovers>
+                                                </Column>
+                                                <QuotesMoversDoodles length={item.movers}/>
+                                                {/* <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime> */}
+                                          </Row>
+                                          <Row className="justify-between items-center">
+                                                <Column className="gap-1">
+                                                      <QuotesLabourActivity activity={item.activity} />
+                                                      <QuotesRatings rating={item.rating}/>
+                                                </Column>
+                                                <QuotesAmount amount={item.amount}/>
+                                          </Row>
+                                    </QuotesContent>
+                              </Quotes>
+                        )}
+                  />
+            </>
       )
 }
 

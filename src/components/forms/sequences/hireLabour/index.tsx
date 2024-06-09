@@ -22,6 +22,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
 import { Routes } from "@/core/routing";
+import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const { update, formData } = useHireLabourStore((state) => state)
@@ -469,6 +470,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
 };
 
 const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
+      const { setShowQuote } = useShowQuotes((state) => state)
       const { update, formData } = useHireLabourStore((state) => state)
       const [selectAll, setSelectAll] = useState<boolean>(false);
       const form = useForm<z.infer<typeof hireLabourSequenceStep3Schema>>({
@@ -627,9 +629,12 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
                                     title="Labour Request Sent!"
-                                    description="Tiyende Movers Will Process Your Request Within 24 Hours"
-                                    route={Routes.root}
-                                    routeLabel="Back to Dashboard"
+                                    buttonLabel="View Labour Vendor Quotes"
+                                    onClick={() => {
+                                          setTimeout(() => {
+                                                setShowQuote(true)
+                                          }, 2000)
+                                    }}
                               />
                         </Row>
                   </form>
