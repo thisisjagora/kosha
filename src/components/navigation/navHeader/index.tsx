@@ -1,13 +1,21 @@
-import { Button, H, P } from "@/components/atoms"
+import { H, P } from "@/components/atoms"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { Column, Row } from "@/components/layout";
 import { Notification } from "@/components/notification";
 import { Routes } from "@/core/routing"
+import useShowQuotes from "@/stores/show-quotes.store";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const NavHeader = () => {
       const path = usePathname();
-      const headerContent = switchHeaderContent(path)
+      const showQuote = useShowQuotes((state) => state.showQuote);
+      const [headerContent, setHeaderContent] = useState({ title: "", description: "" });
+
+      useEffect(() => {
+        setHeaderContent(switchHeaderContent(path, showQuote));
+      }, [path, showQuote]);
+
       return (
             <Row className="justify-between items-center gap-4 w-full py-2">
                   <Column className="flex-1">
@@ -25,7 +33,8 @@ export const NavHeader = () => {
       )
 }
 
-const switchHeaderContent = (route: string) => {
+const switchHeaderContent = (route: string, isQuotesVisible: boolean) => {
+  console.log(isQuotesVisible)
       const messagesRouteMatch = route.match(/^\/messages\/([^/]+)$/);
     
       if (messagesRouteMatch) {
@@ -43,18 +52,18 @@ const switchHeaderContent = (route: string) => {
           };
         case Routes.sequence.bookMove:
           return {
-            title: "Home",
-            description: "Schedule a Move"
+            title: isQuotesVisible? "Home/Best Moving Options" : "Home",
+            description: isQuotesVisible? "Quotes from Moving Vendors" : "Schedule a Move"
           };
         case Routes.sequence.hireLabour:
           return {
-            title: "Home",
-            description: "Hire Labour only"
+            title: isQuotesVisible? "Home/Best Labour Options" : "Home",
+            description: isQuotesVisible? "Quotes from Labour Vendors" : "Hire Labour only"
           };
         case Routes.sequence.bookDelivery:
           return {
-            title: "Home",
-            description: "Schedule your Delivery"
+            title: isQuotesVisible? "Home/Best Delivery Options" : "Home",
+            description: isQuotesVisible? "Quotes from Delivery Vendors" : "Schedule your Delivery"
           };
         case Routes.bookings:
           return {
