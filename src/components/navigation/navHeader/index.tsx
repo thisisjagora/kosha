@@ -34,7 +34,6 @@ export const NavHeader = () => {
 }
 
 const switchHeaderContent = (route: string, isQuotesVisible: boolean) => {
-  console.log(isQuotesVisible)
       const messagesRouteMatch = route.match(/^\/messages\/([^/]+)$/);
     
       if (messagesRouteMatch) {
