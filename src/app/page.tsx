@@ -2,10 +2,8 @@
 import { Activity, LeftColumn, RightColumn } from "@/components/activity";
 import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
-import { SERVICES } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
-import { QuoteDetails, QuoteDetailsCharge, QuoteDetailsEDT, QuoteDetailsMap, QuoteDetailsNotesImages, QuoteDetailsRates, QuoteDetailsServiceRequirement, QuoteDetailsVehicle, QuoteDetailsWorkers } from "@/components/quotations/quote-details";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
@@ -156,21 +154,5 @@ export default function Home() {
         </Column>
       </Column>
     </Row>
-  //   <QuoteDetails>
-  //     <Column className="gap-4 flex-1">
-  //       <Row className="gap-4">
-  //           <QuoteDetailsMap className="flex-1 max-w-[400px] xl:max-w-[600px]" data={{name: "Tiyende Movers", charge: "59", reviews: 70, movesCompleted: 274}} />
-  //           <QuoteDetailsWorkers className="flex-1 max-w-[400px]" movers={3} />
-  //       </Row>
-  //       <QuoteDetailsRates rates={QuoteDetailsRatesMock} />
-  //       <QuoteDetailsNotesImages />
-  //     </Column>
-  //     <Column className="flex-1 gap-4 max-w-[400px]">
-  //       <QuoteDetailsEDT />
-  //       <QuoteDetailsServiceRequirement services={SERVICES} />
-  //       <QuoteDetailsVehicle />
-  //       <QuoteDetailsCharge amount="556.90" />
-  //     </Column>
-  // </QuoteDetails>
   );
 }
