@@ -1,4 +1,5 @@
-import { DeliveryQuote, LabourQuote, MoveQuote } from "@/types/structs";
+import { AdditionalStops, Alarm, Appliances, FlightOfStairs, Piano, TruckFrontGrey } from "@/components/Icons";
+import { DeliveryQuote, LabourQuote, MoveQuote, QuoteDetailsRate } from "@/types/structs";
 
 export const BookMoveMock:Array<MoveQuote> = [
       {
@@ -195,5 +196,42 @@ export const BookDeliveryMock:Array<DeliveryQuote> = [
             time: "12:00pm-4:00pm",
             amount: "114",
             distance:"4.2"
+      }
+]
+
+const iconSizes = {
+      width: 21,
+      height: 21
+}
+export const QuoteDetailsRatesMock:Array<QuoteDetailsRate> = [
+      {
+            icon: <TruckFrontGrey {...iconSizes} />,
+            label: "Truck Fee",
+            rate: "49"
+      },
+      {
+            icon: <Appliances {...iconSizes} />,
+            label: "Appliances",
+            rate: "279.95"
+      },
+      {
+            icon: <FlightOfStairs {...iconSizes} />,
+            label: "Flight of Stairs",
+            rate: "95"
+      },
+      {
+            icon: <Piano {...iconSizes} />,
+            label: "Piano",
+            rate: "79.50"
+      },
+      {
+            icon: <AdditionalStops {...iconSizes} />,
+            label: "Additional Stops",
+            rate: "27.50"
+      },
+      {
+            icon: <Alarm {...iconSizes} />,
+            label: "Minimum Hours",
+            rate: "356"
       }
 ]

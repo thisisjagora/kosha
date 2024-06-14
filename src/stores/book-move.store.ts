@@ -1,4 +1,4 @@
-import { BookMove } from '@/types/structs';
+import { BookMove, Services } from '@/types/structs';
 import { create } from 'zustand';
 
 interface Store {
@@ -40,7 +40,7 @@ const initialState: BookMove = {
       numberOfBoxes: "",
       instructions: "",
       images: [],
-      services: []
+      services:[]
 }
 
 const useBookMoveStore = create<Store>((set) => ({
