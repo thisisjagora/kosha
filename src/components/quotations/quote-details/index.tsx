@@ -267,12 +267,42 @@ const QuoteDetailsServiceRequirement:FC<QuoteDetailsServiceRequirementProps> = (
             </Column>
       )
 }
-const QuoteDetailsNotesImages = () => {
+
+interface QuoteDetailsNotesImagesProps extends HTMLAttributes<HTMLDivElement> {
+      images: Array<string>,
+      notes: string
+}
+const QuoteDetailsNotesImages:FC<QuoteDetailsNotesImagesProps> = ({images, notes}) => {
       return (
             <Column className="gap-12 h-full w-full p-6 bg-white-100 shadow-custom rounded-lg">
                   <H level={2} className="text-grey-300 font-dm-sans text-lg">Notes & Images</H>
-                  <Row className="border"></Row>
-                  <P className="text-grey-400"><i>Please place all my items behind in the garden. Thank you</i></P>
+                  <Row className="flex-wrap gap-4">
+                  {
+                                          images.map((image, index) => (
+                                                <div key={image + index} className="relative flex-1 min-w-[250px] max-w-[300px] h-[180px] group">
+                                                      <Picture 
+                                                            container={{
+                                                                  className: "w-full h-full rounded-lg"
+                                                            }}
+                                                            image={{
+                                                                  alt: "",
+                                                                  src: image,
+                                                                  className: "object-cover rounded-lg"
+                                                            }}
+                                                      />
+                                                      {/* <Button 
+                                                            type="button" 
+                                                            variant="ghost" 
+                                                            className="bg-transparent hover:bg-transparent p-0 max-w-max absolute -top-4 -right-2 hidden group-hover:inline"
+                                                            onClick={() => handleRemoveImage(index)}
+                                                      >
+                                                            <Cancel className="w-[24px] h-[24px]"/>
+                                                      </Button> */}
+                                                </div>
+                                          ))
+                                    }
+                  </Row>
+                  <P className="text-grey-400"><i>{notes}</i></P>
             </Column>
       )
 }
