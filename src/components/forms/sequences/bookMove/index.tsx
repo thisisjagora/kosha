@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { SequenceStepsProps } from "..";
+import { SERVICES, SequenceStepsProps } from "..";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -24,6 +24,7 @@ import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
 import { Routes } from "@/core/routing";
 import useShowQuotes from "@/stores/show-quotes.store";
+import { Services } from "@/types/structs";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -795,64 +796,11 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
             })
       }
 
-      const services  = [
-            {
-                  id: "reassembly",
-                  label: "Reassembly",
-                  description: "Reassembling of any equipment, furniture, new or old when at the final destination of the move" 
-            },
-            {
-                  id: "disassembly",
-                  label: "Disassembly",
-                  description: "Disassembling of any equipment, furniture, new or old when at the at pick up locations" 
-            },
-            {
-                  id: "furniture wrapping",
-                  label: "Furniture Wrapping",
-                  description: "Wrapping furniture with protective wraps like nylon, bubble, tarp etc" 
-            },
-            {
-                  id: "dollies",
-                  label: "Dollies",
-                  description: "To help you transport large heavy-based items" 
-            },
-            {
-                  id: "moving pads",
-                  label: "Moving Pads",
-                  description: "Heavy duty moving blankets to prevent scratches when moving furniture" 
-            },
-            {
-                  id: "straps",
-                  label: "Straps",
-                  description: "Industrial grade straps to secure all equipment, boxes etc" 
-            },
-            {
-                  id: "floor runners",
-                  label: "Floor Runners",
-                  description: "To help you transport large heavy-based items" 
-            },
-            {
-                  id: "tape",
-                  label: "Tape",
-                  description: "Industrial grade straps to secure all equipment, boxes etc" 
-            },
-            {
-                  id: "move garage items",
-                  label: "Move Garage Items",
-                  description: "Move Garage Items" 
-            },
-            {
-                  id: "move patio items",
-                  label: "Move Patio Items",
-                  description: "Move Patio Items" 
-            }
-      ]
-
       const handleSelectAllChange = (checked: boolean) => {
             setSelectAll(checked);
             form.setValue(
               "services",
-              checked ? services.map((service) => service.id) : []
+              checked ? SERVICES.map((service) => service.id) : []
             );
           };
 
@@ -879,7 +827,7 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                     </TableRow>
                               </TableHeader>
                               <TableBody>
-                                    {services.map((service, index) => (
+                                    {SERVICES.map((service, index) => (
                                     <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
                                           <TableCell>
                                                 <FormField
@@ -890,23 +838,23 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                                       const isChecked = field.value?.includes(service.id)
                                                       return (
                                                             <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                  <Checkbox
-                                                                        className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
-                                                                        id={checkboxId}
-                                                                        checked={isChecked}
-                                                                        onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                        ? field.onChange([...field.value || [], service.id])
-                                                                        : field.onChange(field.value?.filter((value) => value !== service.id));
-                                                                        }}
-                                                                  />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
-                                                                  "text-primary font-medium": isChecked
-                                                            })}>
-                                                                  {service.label}
-                                                            </FormLabel>
+                                                                  <FormControl>
+                                                                        <Checkbox
+                                                                              className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                                                                              id={checkboxId}
+                                                                              checked={isChecked}
+                                                                              onCheckedChange={(checked) => {
+                                                                              return checked
+                                                                              ? field.onChange([...field.value || [], service.id])
+                                                                              : field.onChange(field.value?.filter((value) => value !== service.id));
+                                                                              }}
+                                                                        />
+                                                                  </FormControl>
+                                                                  <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
+                                                                        "text-primary font-medium": isChecked
+                                                                  })}>
+                                                                        {service.label}
+                                                                  </FormLabel>
                                                             </FormItem>
                                                       );
                                                       }}
