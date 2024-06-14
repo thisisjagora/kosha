@@ -7,10 +7,11 @@ import { MoveHistory } from "@/components/moveHistory";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
+import { QuoteDetailsRatesMock } from "@/mocks";
 import Link from "next/link";
 import { useState } from "react";
 
-const SERVICES = [
+const SEQUENCES = [
   {
     label: "Book a Move",
     route: Routes.sequence.bookMove,
@@ -55,7 +56,7 @@ export default function Home() {
           <H level={3} className="text-primary text-2xl">Select a Service</H>
           <Row>
             {
-              SERVICES.map((item, index) => (
+              SEQUENCES.map((item, index) => (
                 <Link key={item.label + index} href={item.route} className="flex-1 group">
                     <div key={item.label + index} className="relative w-full h-[120px] bg-primary rounded-xl group-hover:scale-[1.01] transition-transform ease-linear duration-200">
                       <div className="h-full relative">
@@ -140,9 +141,9 @@ export default function Home() {
             onSelect={setDate}
             disabled={(date: Date) => date < new Date("1900-01-01")}
             initialFocus
-            className="rounded-xl shadow-sm w-full border"
+            className="rounded-xl shadow-custom bg-white-100 w-full"
         />
-        <Column className="bg-white-100 shadow-sm rounded-xl p-4 gap-8">
+        <Column className="bg-white-100 shadow-custom rounded-xl p-4 gap-8">
             <Column className="gap-2">
               <H level={3} className="m-0 p-0 text-primary font-bold text-2xl">Move History</H>
               <P className="m-0 p-0 text-primary-foreground">Here you can find all your transactions on this account and you can print them out as .pdf or .csv file</P>
