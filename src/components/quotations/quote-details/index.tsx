@@ -7,6 +7,7 @@ import { Column, Row } from "@/components/layout";
 import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn } from "@/lib/utils";
 import { QuoteDetailsRate, Services } from "@/types/structs";
+import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -322,6 +323,32 @@ const QuoteDetailsEDT = () => {
             </Column>
       )
 }
+interface QuoteDetailsStatusProps extends HTMLAttributes<HTMLDivElement> {
+      status: "Pending" | "Accepted"
+}
+const QuoteDetailsStatus:FC<QuoteDetailsStatusProps> = ({ status }) => {
+      return (
+            <Column className="bg-white-100 p-4 shadow-custom rounded-lg">
+                  <P className="text-sm text-primary-foreground">Status</P>
+                  <P
+                        className={cn("font-bold text-lg", {
+                              "text-grey-300": status === "Pending",
+                              "text-green-200": status === "Accepted"
+                        })}
+                  >{status}</P>
+            </Column>
+      )
+}
+
+const QuoteDetailsEdit = () => {
+      return (
+            <Column className="bg-grey-300 p-6 justify-center">
+                  <CircleAlert className="w-[24px] h-[24px]"/>
+                  <P className="text-white-100">Do you wish to make any changes to your request?</P>
+                  <Button className="text-grey-300 bg-white-100">Edit request Details</Button>
+            </Column>
+      )
+}
 export {
       QuoteDetails,
       QuoteDetailsLocation,
@@ -332,5 +359,7 @@ export {
       QuoteDetailsCharge,
       QuoteDetailsServiceRequirement,
       QuoteDetailsNotesImages,
-      QuoteDetailsEDT
+      QuoteDetailsEDT,
+      QuoteDetailsStatus,
+      QuoteDetailsEdit
 }
