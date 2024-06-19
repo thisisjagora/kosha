@@ -36,8 +36,8 @@ export default function Home() {
       <Column className="flex-1 gap-8">
         <Activity>
           <LeftColumn>
-            <H level={3} className="text-2xl">Delivery Quote received!</H>
-            <P className="font-dm-sans">You have received an estimate for your delivery request</P>
+            <H level={3} className="text-3xl">Delivery Quote received!</H>
+            <P className="font-dm-sans text-sm">You have received an estimate for your delivery request</P>
             <Button className="bg-white-100 max-w-[120px] text-primary">View</Button>
           </LeftColumn>  
           <RightColumn >
