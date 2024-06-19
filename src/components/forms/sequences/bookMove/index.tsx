@@ -558,7 +558,8 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                             {...InputDirectives.numbersOnly}
                                                       />
                                                 </FormControl>
-                                                <FormMessage className="text-destructive" />
+                                                
+                                                
                                           </FormItem>
                                     )}
                               />
