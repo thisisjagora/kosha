@@ -1,25 +1,25 @@
-import { toast } from "@/components/toast/use-toast";
-import { Routes } from "@/core/routing";
-import { signIn } from "@/firebase/auth"
-import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
-import useUserStore from "@/stores/user.store";
-import { useRouter } from "next/navigation";
+import { signUp } from "@/firebase/auth"
 import { useState } from "react";
+import { toast } from "@/components/toast/use-toast";
+import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
+import { SUCCESS_MESSAGE } from "@/constants/constants";
+import { wait } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/core/routing";
 
-export const useSignIn = () => {
-      const {updateUser} =  useUserStore((state) => state);
-      const router = useRouter();
+export const useSignUp = () => {
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState(null);
+      const router = useRouter();
 
-      const signInWithEmail = (payload: SignInDto) => {
+      const signUpWithEmail = (payload: SignUpDto) => {
             setLoading(true);
             setError(null);
 
-            signIn(payload)
-            .then((res) => {
-                  updateUser(res);
-                  router.push(Routes.root)
+            signUp(payload)
+            .then(() => {
+                  toast({description: SUCCESS_MESSAGE.user_signup, variant: "success"})
+                  wait(2000).then(() => router.push(Routes.signIn))
             })
             .catch((err) => {
                   setError(err);
@@ -28,14 +28,14 @@ export const useSignIn = () => {
                         description: getErrorMessage(err),
                         variant:"destructive"
                   })
-            })            
+            })
             .finally(() => {
                   setLoading(false);
             })
       }
       return {
-            signInWithEmail,
+            signUpWithEmail,
             loading,
             error
       }
-} 
+}
