@@ -13,8 +13,10 @@ import { Routes } from "@/core/routing";
 import { Row } from "../layout";
 import { Checkbox } from "../checkbox";
 import { InputDirectives } from "@/lib/helpers/inputDirectives";
+import { useSignUp } from "@/hooks/auth/useSignUp";
 
 export const SignUpForm = () => {
+      const { signUpWithEmail, loading} = useSignUp();
       const form = useForm<z.infer<typeof signUpSchema>>({
             resolver: zodResolver(signUpSchema),
             defaultValues: {
@@ -22,15 +24,11 @@ export const SignUpForm = () => {
               phone: "",
               email: "",
               password: "",
-              keepMeLoggedIn: false
             },
           })
 
           function onSubmit(data: z.infer<typeof signUpSchema>) {
-            toast({
-              title: "You submitted the following values:",
-              description: `${data.name}, ${data.phone}, ${data.email}, ${data.password}, ${data.keepMeLoggedIn}`
-            })
+            signUpWithEmail({...data})
           }
       return (
             <Form {...form}>
@@ -93,33 +91,32 @@ export const SignUpForm = () => {
                         />
                         <FormField 
                               control={form.control}
-                              name="keepMeLoggedIn"
+                              name="acceptTerms"
                               render={({ field }) => (
                                     <FormItem>
                                           <FormControl>
                                                 <Row className="justify-between">
                                                       <Row className="flex items-center space-x-2">
                                                             <Checkbox 
-                                                                  id="keepMeLoggedIn" 
+                                                                  id="acceptTerms" 
                                                                   checked={field.value}
                                                                   onCheckedChange={field.onChange}
                                                             />
                                                             <Label
-                                                                  htmlFor="keepMeLoggedIn"
+                                                                  htmlFor="acceptTerms"
                                                                   className="text-sm text-primary leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 hover:cursor-pointer"
                                                             >
-                                                            Keep me logged in
+                                                            Accept terms and conditions
                                                             </Label>
                                                       </Row>
-
-                                                      {/* <Link href={Routes.forgotPassword} className="text-primary text-sm">Forgot password?</Link> */}
                                                 </Row>
                                           </FormControl>
+                                          <FormMessage />
                                     </FormItem>
                               )}
                         />
                         <div className="mt-8">
-                              <Button type="submit" size="lg" className="w-full">Sign Up</Button>
+                              <Button loading={loading} type="submit" size="lg" className="w-full">Sign Up</Button>
                         </div>
                   </form>
                   <Link href={Routes.signIn}><p className="font-dm-sans font-sm font-[400] text-primary">Already have an account? <span className="font-bold">Sign in</span></p></Link>
