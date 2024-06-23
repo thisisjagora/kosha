@@ -6,11 +6,13 @@ import { DeleteAccount } from "@/components/dialogs";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
 import { UserProfileItem } from "@/components/userProfile";
+import { useSignOut } from "@/hooks/auth/useSignOut";
 import { generateAcronym } from "@/lib/helpers/generateAcronym";
 import useUserStore from "@/stores/user.store";
 
 const Page = () => {
       const {user} =  useUserStore((state) => state);
+      const {loading, signOut} = useSignOut();
       return (
             <Column className="gap-4">
                   <Row className="gap-4">
@@ -77,7 +79,12 @@ const Page = () => {
                   </Row>
                   <Row className="gap-4 flex-wrap">
                         <Column className="mt-6 flex-1 gap-4">
-                              <Button variant="secondary" size="lg">Sign Out</Button>
+                              <Button 
+                                    loading={loading} 
+                                    onClick={() => signOut()} 
+                                    variant="secondary" 
+                                    size="lg"
+                              >Sign Out</Button>
                               <DeleteAccount trigger={<Button variant="destructive" size="lg">Delete Account</Button>} />
                         </Column>
                         {/* empty by design */}

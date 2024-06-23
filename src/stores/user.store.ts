@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 interface Store {
       user: IUser | null;
-      updateUser: (newData: Partial<IUser>) => void;
+      updateUser: (newData: Partial<IUser> | null) => void;
     }
 
 
