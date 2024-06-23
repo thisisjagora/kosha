@@ -1,7 +1,8 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, deleteUser, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, deleteUser, signOut, User } from "firebase/auth";
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import firebaseApp from "./config";
 import { db } from "./firestore";
+import { FIREBASE_COLLECTIONS } from "@/constants/constants";
 
 export const auth = getAuth(firebaseApp);
 
@@ -9,7 +10,7 @@ const signIn = async (payload: SignInDto) => {
       const { email, password } = payload;
       try {
         const res = await signInWithEmailAndPassword(auth, email, password);
-        const userDoc = await getDoc(doc(db, "users", res.user.uid));
+        const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid));
         if (userDoc.exists()) {
           return { ...res.user, ...userDoc.data() };
         } else {
@@ -28,7 +29,7 @@ const signUp = async (payload: SignUpDto) => {
         const res = await createUserWithEmailAndPassword(auth, email, password);
     
         try {
-          await setDoc(doc(db, "users", res.user.uid), {
+          await setDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid), {
             fullName: name,
             email,
             phoneNumber: phone
@@ -52,9 +53,19 @@ const signUp = async (payload: SignUpDto) => {
       }
     };
 
+    const deleteUserAccount = async (user: User) => {
+      try {
+        await deleteDoc(doc(db, FIREBASE_COLLECTIONS.users, user.uid));
+        await deleteUser(user);
+      } catch (err) {
+        throw err;
+      }
+    };
+
 
 export {
       signIn,
       signUp,
-      signOutUser
+      signOutUser,
+      deleteUserAccount
 }
