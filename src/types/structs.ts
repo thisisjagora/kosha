@@ -1,4 +1,5 @@
 import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema, bookMoveSequenceStep4Schema, hireLabourSequenceStep1Schema, hireLabourSequenceStep2Schema, hireLabourSequenceStep3Schema, bookDeliverySequenceStep1Schema, bookDeliverySequenceStep2Schema, bookDeliverySequenceStep3Schema } from "@/core/validators";
+import { User } from "firebase/auth";
 import { ReactNode } from "react";
 import { z } from "zod";
 
@@ -33,4 +34,8 @@ export interface QuoteDetailsRate {
       icon: ReactNode, 
       label: string,
       rate: string
+}
+
+export interface IUser extends User {
+      fullName: string
 }
