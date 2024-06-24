@@ -19,7 +19,7 @@ export const useSignUp = () => {
             signUp(payload)
             .then(() => {
                   toast({description: SUCCESS_MESSAGE.user_signup, variant: "success"})
-                  wait(2000).then(() => router.push(Routes.signIn))
+                  wait(2000).then(() => router.push(Routes.root))
             })
             .catch((err) => {
                   setError(err);
