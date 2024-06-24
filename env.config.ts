@@ -14,7 +14,7 @@ const appConfig = (): EnvValues => {
 				BASE_URL: ``,
 				env: "DEV",
 			};
-		case EnvModes.PROD: {
+		case EnvModes.PROD:
 			return {
 				FIREBASE_API_KEY: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
 				FIREBASE_AUTH_DOMAIN: `${process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}`,
@@ -25,8 +25,7 @@ const appConfig = (): EnvValues => {
 				BASE_URL: ``,
 				env: "PROD",
 			};
-		}
-		default: {
+		default:
 			return {
 				FIREBASE_API_KEY: "",
 				FIREBASE_AUTH_DOMAIN: "",
@@ -37,7 +36,6 @@ const appConfig = (): EnvValues => {
 				BASE_URL: "",
 				env: "DEV",
 			};
-		}
 	}
 };
 
