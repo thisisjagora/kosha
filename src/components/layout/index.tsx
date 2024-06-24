@@ -3,7 +3,7 @@ import { FC, HTMLAttributes, PropsWithChildren, useEffect, useState } from "reac
 import { Footer, NavHeader, SideNav } from "../navigation";
 import { useValidRoute } from "@/hooks/useValidRoute";
 import { Routes } from "@/core/routing";
-import { cn, wait } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { auth } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
@@ -29,17 +29,14 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
             updateUser({...user, ...userDoc.data()});
           } else {
             await deleteUser(user);
-            wait(2000).then(()=>  router.push(Routes.signIn))
-           ;
+            router.push(Routes.signIn);
           }
-          setIsLoading(false);
         } catch (err) {
           await deleteUser(user);
-          wait(2000).then(()=>  router.push(Routes.signIn))
+          router.push(Routes.signIn);
         }
-      } else {
-            setIsLoading(false);
       }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -51,7 +48,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [isLoading, user, isValidRoute, router]);
 
-  if (isLoading) {
+  if (isLoading || (!user && !isValidRoute)) {
     return (
       <div className="min-h-screen h-screen flex items-center justify-center">
         <Loader className="animate-spin w-[40px] h-[40px] text-primary" />
@@ -73,7 +70,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
       >
         <div className={cn("max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6")}>
           {!isValidRoute && user && <NavHeader />}
-          <main className="w-full flex-1">{children}</main>
+          <main className="w-full flex-1">{isLoading? null : children}</main>
           <Footer />
         </div>
       </div>
