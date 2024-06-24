@@ -1,10 +1,13 @@
+"use client"
 import { Caret, Google } from "@/components/Icons";
 import { Button, H, P } from "@/components/atoms";
 import { SignInForm } from "@/components/forms";
 import { Column, Row } from "@/components/layout";
+import { useSignInWithGoogle } from "@/hooks/auth/useSignIn";
 import Link from "next/link";
 
 const Page = () => {
+      const {signInWithGoogle, loading} = useSignInWithGoogle()
       return (
             <div className="flex-1 flex items-center justify-center h-full">
                   <Column className="justify-between gap-10 h-full w-full max-w-[420px]">
@@ -20,7 +23,12 @@ const Page = () => {
                                           <H level={1} className="text-primary m-0 text-4xl">Sign In</H>
                                           <P className="text-primary-foreground m-0 text-base font-dm-sans">Enter your email and password to sign in!</P>
                                     </Column>
-                                    <Button variant="ghost" size="lg">
+                                    <Button
+                                          onClick={signInWithGoogle} 
+                                          loading={loading}   
+                                          variant="ghost" 
+                                          size="lg"
+                                    >
                                           <Google className="mr-2 h-[20px] w-[19px]" />
                                           <p className="text-primary text-base">Sign in with Google</p>
                                     </Button>
