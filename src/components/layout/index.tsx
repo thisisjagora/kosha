@@ -32,7 +32,6 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
             router.push(Routes.signIn);
           }
         } catch (err) {
-          await deleteUser(user);
           router.push(Routes.signIn);
         }
       }
