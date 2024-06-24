@@ -1,15 +1,31 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, deleteUser, signOut, User } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, deleteUser, signOut, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "firebase/auth";
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import firebaseApp from "./config";
 import { db } from "./firestore";
 import { FIREBASE_COLLECTIONS } from "@/constants/constants";
+import { IUser } from "@/types/structs";
 
 export const auth = getAuth(firebaseApp);
 
-const signIn = async (payload: SignInDto) => {
-      const { email, password } = payload;
-      try {
-        const res = await signInWithEmailAndPassword(auth, email, password);
+    const signIn = async (payload: SignInDto) => {
+          const { email, password } = payload;
+          try {
+            const res = await signInWithEmailAndPassword(auth, email, password);
+            const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid));
+            if (userDoc.exists()) {
+              return { ...res.user, ...userDoc.data() };
+            } else {
+              await deleteUser(res.user);
+              throw new Error("Firebase: Error (auth/user-not-found).");
+            }
+          } catch (err) {
+            throw err;
+          }
+    };
+
+    const signInWithGoogle = async () => {
+      try{
+        const res = await signInWithPopup(auth, new GoogleAuthProvider())
         const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid));
         if (userDoc.exists()) {
           return { ...res.user, ...userDoc.data() };
@@ -17,12 +33,12 @@ const signIn = async (payload: SignInDto) => {
           await deleteUser(res.user);
           throw new Error("Firebase: Error (auth/user-not-found).");
         }
-      } catch (err) {
-        throw err;
+      }catch(err) {
+        throw err
       }
-    };
+    }
 
-const signUp = async (payload: SignUpDto) => {
+    const signUp = async (payload: SignUpDto) => {
       const { name, phone, email, password } = payload;
     
       try {
@@ -53,19 +69,34 @@ const signUp = async (payload: SignUpDto) => {
       }
     };
 
-    const deleteUserAccount = async (user: User) => {
+    /**
+     * 
+     * @param user 
+     * Deleting a user document would also delete the user account once the app is refreshed at any point. 
+     * This is because in the auth state listener in the layout component, if a the logged in user doc doesn't exist it automatically deletes that users account.
+     */
+    const deleteUserAccount = async (user: IUser) => {
       try {
         await deleteDoc(doc(db, FIREBASE_COLLECTIONS.users, user.uid));
-        await deleteUser(user);
       } catch (err) {
         throw err;
       }
     };
 
+    const resetPassword = async (payload: ResetPasswordDto) => {
+      try{
+        await sendPasswordResetEmail(auth, payload.email)
+      }catch (err) {
+        throw err;
+      }
+    }
+
 
 export {
       signIn,
+      signInWithGoogle, 
       signUp,
       signOutUser,
-      deleteUserAccount
+      deleteUserAccount,
+      resetPassword
 }
