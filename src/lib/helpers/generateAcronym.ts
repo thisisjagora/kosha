@@ -15,5 +15,5 @@ export const generateAcronym = (fullName: string): string => {
         }
       }
     
-      return acronym;
+      return acronym.toUpperCase();
     };
