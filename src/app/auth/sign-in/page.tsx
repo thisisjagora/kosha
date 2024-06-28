@@ -25,7 +25,7 @@ const Page = () => {
                                     </Column>
                                     <Button
                                           onClick={signInWithGoogle} 
-                                          loading={loading}   
+                                          disabled={loading}   
                                           variant="ghost" 
                                           size="lg"
                                     >
