@@ -47,25 +47,25 @@ export const useSignInWithGoogle = () => {
       const [error, setError] = useState(null);
 
       const signInWithGoogle = () => {
-            setLoading(true);
-            setError(null);
+                  setLoading(true);
+                  setError(null);
 
-            signInWithPopup()
-            .then((res) => {
-                  updateUser(res);
-                  router.push(Routes.root)
-            })
-            .catch((err) => {
-                  setError(err);
-                  toast({
-                        title:"Oops!",
-                        description: getErrorMessage(err),
-                        variant:"destructive"
+                  signInWithPopup()
+                  .then((res) => {
+                        updateUser(res);
+                        router.push(Routes.root)
                   })
-            })            
-            .finally(() => {
-                  setLoading(false);
-            })
+                  .catch((err) => {
+                        setError(err);
+                        toast({
+                              title:"Oops!",
+                              description: getErrorMessage(err),
+                              variant:"destructive"
+                        })
+                  })            
+                  .finally(() => {
+                        setLoading(false);
+                  })
       }
       return {
             signInWithGoogle,
