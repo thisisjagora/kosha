@@ -58,7 +58,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="min-h-screen h-screen flex">
       {!isValidRoute && user && (
-        <div className="flex-1 max-w-[250px]">
+        <div className="flex-1 max-w-[250px] hidden lg:block">
           <SideNav />
         </div>
       )}
@@ -67,7 +67,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           "bg-white-100": isValidRoute,
         })}
       >
-        <div className={cn("max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-6")}>
+        <div className={cn("max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-4 sm:p-6")}>
           {!isValidRoute && user && <NavHeader />}
           <main className="w-full flex-1">{isLoading? null : children}</main>
           <Footer />

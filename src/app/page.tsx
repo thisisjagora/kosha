@@ -32,13 +32,13 @@ const SEQUENCES = [
 export default function Home() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   return (
-    <Row className="gap-8">
+    <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
         <Activity>
           <LeftColumn>
-            <H level={3} className="text-3xl">Delivery Quote received!</H>
-            <P className="font-dm-sans text-sm">You have received an estimate for your delivery request</P>
-            <Button className="bg-white-100 max-w-[120px] text-primary">View</Button>
+            <H level={3} className="text-2xl md:text-3xl text-center md:text-left">Delivery Quote received!</H>
+            <P className="font-dm-sans text-sm text-center md:text-left">You have received an estimate for your delivery request</P>
+            <Button className="bg-white-100 w-full md:max-w-[120px] text-primary">View</Button>
           </LeftColumn>  
           <RightColumn >
             <Picture 
@@ -54,10 +54,10 @@ export default function Home() {
         </Activity>        
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">Select a Service</H>
-          <Row>
+          <Row className="flex-wrap">
             {
               SEQUENCES.map((item, index) => (
-                <Link key={item.label + index} href={item.route} className="flex-1 group">
+                <Link key={item.label + index} href={item.route} className="flex-1 group max-h-[120px] min-w-[200px] custom-496:max-w-[120px] sm:max-w-[250px]">
                     <div key={item.label + index} className="relative w-full h-[120px] bg-primary rounded-xl group-hover:scale-[1.01] transition-transform ease-linear duration-200">
                       <div className="h-full relative">
                         <Picture 
@@ -133,7 +133,7 @@ export default function Home() {
           </Row> */}
         </Column>
       </Column>
-      <Column className="flex-1 max-w-[350px] gap-8">
+      <Column className="flex-1 sm:max-w-[500px] md:max-w-[350px] gap-8">
         <Calendar
             mode="single"
             captionLayout="dropdown-buttons"
