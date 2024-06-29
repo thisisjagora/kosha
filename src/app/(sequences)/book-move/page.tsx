@@ -1,4 +1,5 @@
 "use client";
+import { P } from "@/components/atoms";
 import { BookMoveSequence } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { SequencesLayout } from "@/components/layout/sequences";
@@ -31,19 +32,19 @@ const Page = () => {
                                           <TabsList>
                                                 <TabsTrigger className="flex gap-2" value="dateAndTime">
                                                       <TabsCount count="1" isActive={activeTab === "dateAndTime"} />
-                                                      Date & Time
+                                                      <P className="hidden md:block">Date & Time</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="propertyDetail" >
                                                       <TabsCount count="2" isActive={activeTab === "propertyDetail"} />
-                                                      Property Detail
+                                                      <P className="hidden md:block">Property Detail</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="generalInfo">
                                                       <TabsCount count="3" isActive={activeTab === "generalInfo"} />
-                                                      General Info
+                                                      <P className="hidden md:block">General Info</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="serviceRequirement">
                                                       <TabsCount count="4" isActive={activeTab === "serviceRequirement"} />
-                                                      Service Requirement
+                                                      <P className="hidden md:block">Service Requirement</P>
                                                 </TabsTrigger>
                                           </TabsList>
                                           <TabsContent value="dateAndTime">
