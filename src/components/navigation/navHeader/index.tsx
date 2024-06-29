@@ -1,4 +1,4 @@
-import { H, P } from "@/components/atoms"
+import { Button, H, P } from "@/components/atoms"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import { Column, Row } from "@/components/layout";
 import { Notification } from "@/components/notification";
@@ -6,6 +6,7 @@ import { Routes } from "@/core/routing"
 import { generateAcronym } from "@/lib/helpers/generateAcronym";
 import useShowQuotes from "@/stores/show-quotes.store";
 import useUserStore from "@/stores/user.store";
+import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -21,6 +22,10 @@ export const NavHeader = () => {
 
       return (
             <Row className="justify-between items-center gap-4 w-full py-2">
+                  <Button variant="ghost" className="font-medium text-grey-300 text-lg">
+                      <MenuIcon className="w-[22px] h-[22px] text-primary block mr-1" />
+                      {headerContent.title}
+                  </Button>
                   <Column className="flex-1 hidden lg:block">
                         <P className="text-blue-300 text-sm">{headerContent.title}</P>
                         <H className="text-blue-200 text-4xl">{headerContent.description}</H>
