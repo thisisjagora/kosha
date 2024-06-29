@@ -23,6 +23,9 @@ const config = {
         "source-sans": ['var(--font-source-sans)'],
         "poppins": ['var(--font-poppins)']
       },
+      screens: {
+        'custom-496': '496px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
