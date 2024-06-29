@@ -22,7 +22,7 @@ export const NavHeader = () => {
 
       return (
             <Row className="justify-between items-center gap-4 w-full py-2">
-                  <Button variant="ghost" className="font-medium text-grey-300 text-lg">
+                  <Button variant="ghost" className="font-medium text-grey-300 text-lg lg:hidden">
                       <MenuIcon className="w-[22px] h-[22px] text-primary block mr-1" />
                       {headerContent.title}
                   </Button>
