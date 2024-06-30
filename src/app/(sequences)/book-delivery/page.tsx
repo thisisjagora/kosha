@@ -1,4 +1,5 @@
 "use client";
+import { P } from "@/components/atoms";
 import { BookDeliverySequence } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { SequencesLayout } from "@/components/layout/sequences";
@@ -22,15 +23,15 @@ const Page = () => {
                                           <TabsList>
                                                 <TabsTrigger className="flex gap-2" value="dlt">
                                                       <TabsCount count="1" isActive={activeTab === "dlt"} />
-                                                      Date, Location & Time
+                                                      <P className="hidden sm:block">Date, Location & Time</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="pld" >
                                                       <TabsCount count="2" isActive={activeTab === "pld"} />
-                                                      Pickup Location Details
+                                                      <P className="hidden sm:block">Date, Location & Time</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="itu">
                                                       <TabsCount count="3" isActive={activeTab === "itu"} />
-                                                      Items to Pick up
+                                                      <P className="hidden sm:block">Items to Pick up</P>
                                                 </TabsTrigger>
                                           </TabsList>
                                           <TabsContent value="dlt">
