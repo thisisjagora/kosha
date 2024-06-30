@@ -16,7 +16,6 @@ import { SequenceStepsProps } from "..";
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
 import { AlertDialog } from "@/components/dialogs";
-import { Routes } from "@/core/routing";
 import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
 import { Camera, Cancel } from "@/components/Icons";
@@ -43,7 +42,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       return (
             <Form {...form}>
                   <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm" onSubmit={form.handleSubmit(onSubmit)}>
-                        <Row className="gap-6">
+                        <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="deliveryDate"
@@ -91,7 +90,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           )}
                                     />
                         </Row>
-                        <Row className="gap-6">
+                        <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="pickUpLocation.location"
@@ -122,7 +121,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           )}
                                     />
                         </Row>
-                        <Row className="gap-6">
+                        <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="deliveryLocation.location"
@@ -181,16 +180,16 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
             <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
                   <div>
-                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                     <Column>
                                           <P className="font-semibold text-lg">Pickup Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.pickUpLocation.location}</P>
                                     </Column>
-                                    <Row className="gap-4">
-                                          <div className="flex items-center">
+                                    <Row className="gap-4 w-full">
+                                          <div className="items-center hidden sm:flex">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
-                                          <Row className="gap-4">
+                                          <Row className="gap-4 flex-col sm:flex-row w-full">
                                                 <FormField
                                                       control={form.control} 
                                                       name="PUDPickUpLocation.buildingType"
@@ -255,16 +254,16 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                               </div>
                         </div>
                         <div>
-                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                     <Column>
                                           <P className="font-semibold text-lg">Delivery Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.deliveryLocation.location}</P>
                                     </Column>
                                     <Row className="gap-4">
-                                          <div className="flex items-center">
+                                          <div className="sm:flex items-center hidden ">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
-                                          <Row className="gap-4">
+                                          <Row className="gap-4 flex-col sm:flex-row w-full">
                                                 <FormField
                                                       control={form.control} 
                                                       name="PUDFinalDestination.buildingType"
