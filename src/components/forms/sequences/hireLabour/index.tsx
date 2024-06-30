@@ -21,7 +21,6 @@ import { Camera, Cancel } from "@/components/Icons";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
-import { Routes } from "@/core/routing";
 import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
@@ -56,7 +55,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
             <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 shadow-sm rounded-xl">
                         <Column className="gap-8">
-                              <Row className="gap-6">
+                              <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="date"
@@ -104,7 +103,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           )}
                                     />
                               </Row>
-                              <Row className="gap-6">
+                              <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="serviceLocation"
@@ -135,7 +134,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           )}
                                     />
                               </Row>
-                              <Row className="gap-4">
+                              <Row className="gap-4 flex-col sm:flex-row">
                                     <FormField
                                           control={form.control} 
                                           name="buildingType"
@@ -241,7 +240,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
       return (
             <Form {...form}>
                   <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 shadow-sm rounded-xl" onSubmit={form.handleSubmit(onSubmit)}>
-                        <Row className="flex-wrap gap-6">
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="majorAppliances"
                                     control={form.control}
@@ -275,7 +274,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     )}
                               />
                         </Row>
-                        <Row className="flex-wrap gap-6">
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="pianos"
                                     control={form.control}
@@ -309,7 +308,7 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     )}
                               />
                         </Row>
-                        <Row className="flex-wrap gap-6">
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="poolTables"
                                     control={form.control}
@@ -519,7 +518,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     </Row>
                                     <TableRow>
                                           <TableHead className="w-[300px] text-grey-100">Services</TableHead>
-                                          <TableHead className="text-grey-100">Description</TableHead>
+                                          <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
                                     </TableRow>
                               </TableHeader>
                               <TableBody>
@@ -556,7 +555,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                                       }}
                                                 />
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell className="hidden sm:block">
                                                 <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
                                                       {service.description}
                                                 </FormLabel>
