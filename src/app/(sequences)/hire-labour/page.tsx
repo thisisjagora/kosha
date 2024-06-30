@@ -1,4 +1,5 @@
 "use client";
+import { P } from "@/components/atoms";
 import { HireLabourSequence } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { SequencesLayout } from "@/components/layout/sequences";
@@ -20,17 +21,17 @@ const Page = () => {
                               <SequencesLayout>
                                     <Tabs value={activeTab} onValueChange={setActiveTab}>
                                           <TabsList>
-                                                <TabsTrigger className="flex gap-2" value="dlt">
+                                                <TabsTrigger className="flex gap-2 " value="dlt">
                                                       <TabsCount count="1" isActive={activeTab === "dlt"} />
-                                                      Date, Location & Time
+                                                      <P className="hidden md:block">Date, Location & Time</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="itm" >
                                                       <TabsCount count="2" isActive={activeTab === "itm"} />
-                                                      Items to Move
+                                                      <P className="hidden md:block"> Items to Move</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="generalInfo">
                                                       <TabsCount count="3" isActive={activeTab === "generalInfo"} />
-                                                      General Info
+                                                      <P className="hidden md:block"> General Info</P>
                                                 </TabsTrigger>
                                           </TabsList>
                                           <TabsContent value="dlt">
