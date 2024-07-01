@@ -27,7 +27,7 @@ export const NavHeader = () => {
                     trigger={(
                       <Button variant="ghost" className="font-medium text-grey-300 text-lg lg:hidden">
                         <MenuIcon className="w-[22px] h-[22px] text-primary block mr-2" />
-                        {/* <P>{headerContent.title}</P> */}
+                        <P>{headerContent.title}</P>
                       </Button>
                     )}
                   />
