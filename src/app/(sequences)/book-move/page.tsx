@@ -1,5 +1,5 @@
 "use client";
-import { P } from "@/components/atoms";
+import { H, P } from "@/components/atoms";
 import { BookMoveSequence } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { SequencesLayout } from "@/components/layout/sequences";
@@ -28,6 +28,7 @@ const Page = () => {
                   {
                         !showQuote && (
                               <SequencesLayout>
+                                     <H level={1} className="md:hidden text-center text-primary text-2xl my-6">{getMobileTitle(activeTab)}</H>
                                     <Tabs value={activeTab} onValueChange={setActiveTab}>
                                           <TabsList>
                                                 <TabsTrigger className="flex gap-2" value="dateAndTime">
@@ -89,6 +90,26 @@ const Page = () => {
                   />
             </>
       )
+}
+
+const getMobileTitle = (active: string): string => {
+      switch (active) {
+            case "dateAndTime":
+                        return "Schedule a Move"
+                  break;
+            case "propertyDetail":
+                        return "Pickup Details"
+                  break;
+            case "generalInfo":
+                        return "Additional Items"
+                  break;
+            case "serviceRequirement":
+                        return "Service Requirements"
+                  break;
+            default:
+                  return ""
+                  break;
+      }
 }
 
 export default Page;

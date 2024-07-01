@@ -1,5 +1,5 @@
 "use client";
-import { P } from "@/components/atoms";
+import { H, P } from "@/components/atoms";
 import { BookDeliverySequence } from "@/components/forms/sequences";
 import { Column, Row } from "@/components/layout";
 import { SequencesLayout } from "@/components/layout/sequences";
@@ -19,19 +19,20 @@ const Page = () => {
                   {
                         !showQuote && (
                               <SequencesLayout>
+                                    <H level={1} className="md:hidden text-center text-primary text-2xl my-6">{getMobileTitle(activeTab)}</H>
                                     <Tabs value={activeTab} onValueChange={setActiveTab}>
                                           <TabsList>
                                                 <TabsTrigger className="flex gap-2" value="dlt">
                                                       <TabsCount count="1" isActive={activeTab === "dlt"} />
-                                                      <P className="hidden sm:block">Date, Location & Time</P>
+                                                      <P className="hidden md:block">Date, Location & Time</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="pld" >
                                                       <TabsCount count="2" isActive={activeTab === "pld"} />
-                                                      <P className="hidden sm:block">Date, Location & Time</P>
+                                                      <P className="hidden md:block">Pickup Location Details</P>
                                                 </TabsTrigger>
                                                 <TabsTrigger className="flex gap-2" value="itu">
                                                       <TabsCount count="3" isActive={activeTab === "itu"} />
-                                                      <P className="hidden sm:block">Items to Pick up</P>
+                                                      <P className="hidden md:block">Items to Pick up</P>
                                                 </TabsTrigger>
                                           </TabsList>
                                           <TabsContent value="dlt">
@@ -70,6 +71,23 @@ const Page = () => {
                   />
             </>
       )
+}
+
+const getMobileTitle = (active: string): string => {
+      switch (active) {
+            case "dlt":
+                        return "Date, Location & Time"
+                  break;
+            case "pld":
+                        return "Pickup Location Details"
+                  break;
+            case "itu":
+                        return "Items to Pick up"
+                  break;
+            default:
+                  return ""
+                  break;
+      }
 }
 
 export default Page;
