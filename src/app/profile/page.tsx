@@ -15,8 +15,8 @@ const Page = () => {
       const {loading, signOut} = useSignOut();
       return (
             <Column className="gap-4">
-                  <Row className="gap-4">
-                        <Column className="gap-8 flex-1 p-4 shadow-xs bg-white-100 rounded-lg max-w-[400px]">
+                  <Row className="gap-6 flex-col md:flex-row">
+                        <Column className="gap-8 flex-1 p-4 shadow-xs bg-white-100 rounded-lg md:max-w-[400px]">
                               <Column className="items-center relative">
                                     <div className="bg-yellow-gradient w-full h-[130px] rounded-lg"></div>
                                     <span className="absolute -bottom-6">
@@ -47,18 +47,21 @@ const Page = () => {
                                     </UserProfileItem>
                               </Column>
                         </Column>
-                        <Row className="bg-white-100 shadow-xs flex-1 p-6 rounded-lg gap-4">
-                              <VirtualCard />
-                              <Column className="gap-8 max-w-[200px] p-4">
-                                    <Column className="gap-1">
-                                          <H className="m-0 text-primary">Payment Methods</H>
-                                          <P className="m-0 text-primary-foreground">Change /Update your payment methods here</P>
+                        <div className="flex-1">
+                              <H className="m-0 ml-6 text-primary text-xl md:hidden">Payment Methods</H>
+                              <Row className="bg-white-100 shadow-xs flex-1 p-6 rounded-lg gap-4 flex-col md:flex-row items-center w-full h-full">
+                                    <VirtualCard />
+                                    <Column className="gap-8 md:max-w-[200px] p-4">
+                                          <Column className="gap-1">
+                                                <H className="m-0 text-primary hidden md:block">Payment Methods</H>
+                                                <P className="m-0 text-primary-foreground">Change /Update your payment methods here</P>
+                                          </Column>
+                                          <Button className="w-full md:max-w-[140px]">Update</Button>
                                     </Column>
-                                    <Button className="max-w-[140px]">Update</Button>
-                              </Column>
-                        </Row>
+                              </Row>
+                        </div>
                   </Row>
-                  <Row className="gap-4 flex-wrap">
+                  <Row className="gap-4 flex-wrap flex-col md:flex-row">
                         <Column className="flex-1 gap-6 font-dm-sans p-4 bg-white-100 shadow-xs rounded-lg">
                               <Column>
                                     <H className="text-xl text-primary">Move History</H>
@@ -88,7 +91,7 @@ const Page = () => {
                               <DeleteAccount trigger={<Button variant="destructive" size="lg">Delete Account</Button>} />
                         </Column>
                         {/* empty by design */}
-                        <div className="flex-1" />
+                        <div className="flex-1 hidden md:block" />
                   </Row>
             </Column>
       )

@@ -12,7 +12,7 @@ const Page = () => {
               <Column className="flex-1 gap-8">
                 <Activity>
                   <LeftColumn className="gap-8">
-                    <H level={3} className="text-3xl">Delivery Quote received!</H>
+                    <H level={3} className="text-2xl md:text-3xl">Delivery Quote received!</H>
                     <P className="text-sm">You have received an estimate for your delivery request</P>
                     <Row className="gap-4">
                           <Button className="flex-1 bg-white-100 max-w-[120px] text-primary">View</Button>
