@@ -1,6 +1,5 @@
 import { toast } from "@/components/toast/use-toast";
-import { Routes } from "@/core/routing";
-import { signIn, signOutUser } from "@/firebase/auth"
+import { signOutUser } from "@/firebase/auth"
 import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
 import useUserStore from "@/stores/user.store";
@@ -20,7 +19,6 @@ export const useSignOut = () => {
             signOutUser()
             .then(() => {
                   updateUser(null);
-                  router.push(Routes.signIn)
                   wait(1000).then(() =>window.location.reload())
             })
             .catch((err) => {
