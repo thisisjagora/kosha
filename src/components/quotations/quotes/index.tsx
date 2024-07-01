@@ -13,7 +13,7 @@ interface QuotesImageProps {
 interface QuotesTitleProps extends HeadingProps {
       title: string
 }
-const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl max-w-[350px]", props.className)} />
+const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl flex-1 w-full max-w-[450px] sm:max-w-[300px] lg:max-w-[270px]", props.className)} />
 const QuotesImage:FC<QuotesImageProps> = ({ type }) => {
       return (
             <div className="w-full h-[160px] flex-1 relative">
