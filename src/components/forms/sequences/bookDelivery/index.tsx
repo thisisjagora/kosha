@@ -181,12 +181,12 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
                   <div>
                               <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                    <Column>
+                                    <Column className="flex-1 max-w-[238px]">
                                           <P className="font-semibold text-lg">Pickup Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.pickUpLocation.location}</P>
                                     </Column>
-                                    <Row className="gap-4 w-full">
-                                          <div className="items-center hidden sm:flex">
+                                    <Row className="gap-4 w-full flex-1">
+                                          <div className="sm:flex items-center hidden h-full">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
                                           <Row className="gap-4 flex-col sm:flex-row w-full">
@@ -194,7 +194,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control} 
                                                       name="PUDPickUpLocation.buildingType"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Building Type</FormLabel>
                                                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                                   <FormControl>
@@ -216,7 +216,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control} 
                                                       name="PUDPickUpLocation.elevatorAccess"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Elevator Access</FormLabel>
                                                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                                   <FormControl>
@@ -237,7 +237,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control}
                                                       name="PUDPickUpLocation.flightOfStairs"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
                                                                   <FormControl>
                                                                         <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
@@ -255,12 +255,12 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                         </div>
                         <div>
                               <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                    <Column>
+                                    <Column className="flex-1 max-w-[238px]">
                                           <P className="font-semibold text-lg">Delivery Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.deliveryLocation.location}</P>
                                     </Column>
-                                    <Row className="gap-4">
-                                          <div className="sm:flex items-center hidden ">
+                                    <Row className="gap-4 w-full flex-1">
+                                          <div className="sm:flex items-center hidden h-full">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
                                           <Row className="gap-4 flex-col sm:flex-row w-full">
@@ -268,7 +268,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control} 
                                                       name="PUDFinalDestination.buildingType"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Building Type</FormLabel>
                                                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                                   <FormControl>
@@ -290,7 +290,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control} 
                                                       name="PUDFinalDestination.elevatorAccess"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Elevator Access</FormLabel>
                                                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                                   <FormControl>
@@ -311,7 +311,7 @@ const Step2:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                       control={form.control}
                                                       name="PUDFinalDestination.flightOfStairs"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 min-w-[70px]">
                                                                   <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
                                                                   <FormControl>
                                                                         <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
@@ -452,7 +452,7 @@ const Step3:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                                 name="images"
                                                 control={form.control}
                                                 render={({ field }) => (
-                                                      <FormItem>
+                                                      <FormItem className="max-w-max">
                                                             <FormLabel htmlFor="images">
                                                                   <Row className="items-center gap-4 group hover:cursor-pointer">
                                                                         <span className="flex items-center justify-center bg-primary w-[80px] h-[80px] rounded-full group-hover:scale-[1.05] group-hover:shadow-xl transition duration-300 ease-in-out">
