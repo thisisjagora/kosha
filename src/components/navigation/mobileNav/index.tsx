@@ -4,7 +4,7 @@ import { useActiveRoute } from "@/hooks/useActiveRoute";
 import { usePathname } from "next/navigation";
 import { Calendar, Chat, Home, User } from "@/components/Icons";
 import { FC, ReactNode, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogTrigger } from "@/components/dialog";
 import { Column } from "@/components/layout";
 import { NavItem } from "..";
 import { Picture } from "@/components/atoms";
