@@ -23,6 +23,9 @@ const config = {
         "source-sans": ['var(--font-source-sans)'],
         "poppins": ['var(--font-poppins)']
       },
+      screens: {
+        'custom-496': '496px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -59,7 +62,10 @@ const config = {
         },
         white: {
           100: "#FFFFFF",
-          200: "#FAFBFC"
+          200: "#FAFBFC",
+          300: "#F0F0F2",
+          400: "#E0E5F2",
+          500: "#FAFCFE"
         },
         blue: {
           100: "#27446E",
@@ -73,10 +79,12 @@ const config = {
           400: "#AAAAAA",
           500: "#DFDFDF",
           600: "#858B94",
-          700: "#E9E9E9"
+          700: "#E9E9E9",
+          800: "#C4C4C4"
         },
         green: {
-          100: "#19B000"
+          100: "#19B000",
+          200: "#34A853"
         },
         orange: {
           100: "#C29C80"
@@ -105,6 +113,9 @@ const config = {
       backgroundImage: {
         'yellow-gradient': 'linear-gradient(180deg, #FFFFFF 10%, #F6DF9C 100%)',
         'virtual-card': "url('/images/virtual-card-pg.png')"
+      },
+      boxShadow: {
+        'custom': '14px 17px 40px 4px #7090B014',
       },
     },
   },

@@ -12,8 +12,10 @@ import Link from "next/link";
 import { Routes } from "@/core/routing";
 import { Row } from "../layout";
 import { Checkbox } from "../checkbox";
+import { useSignIn } from "@/hooks/auth/useSignIn";
 
 export const SignInForm = () => {
+      const {signInWithEmail, loading} = useSignIn();
       const form = useForm<z.infer<typeof signInSchema>>({
             resolver: zodResolver(signInSchema),
             defaultValues: {
@@ -24,10 +26,7 @@ export const SignInForm = () => {
           })
 
           function onSubmit(data: z.infer<typeof signInSchema>) {
-            toast({
-              title: "You submitted the following values:",
-              description: `${data.email}, ${data.password}, ${data.keepMeLoggedIn}`
-            })
+            signInWithEmail({...data})
           }
       return (
             <Form {...form}>
@@ -86,7 +85,7 @@ export const SignInForm = () => {
                               )}
                         />
                         <div className="mt-8">
-                              <Button type="submit" size="lg" className="w-full">Sign In</Button>
+                              <Button loading={loading} type="submit" size="lg" className="w-full">Sign In</Button>
                         </div>
                   </form>
                   <Link href={Routes.signUp}><p className="font-dm-sans font-sm font-[400] text-primary">Not registered yet? <span className="font-bold">Create an Account</span></p></Link>

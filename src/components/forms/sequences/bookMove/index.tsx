@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { SequenceStepsProps } from "..";
+import { SERVICES, SequenceStepsProps } from "..";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -22,7 +22,6 @@ import { Textarea } from "@/components/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
 import { AlertDialog } from "@/components/dialogs";
-import { Routes } from "@/core/routing";
 import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
@@ -49,8 +48,8 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       return (
             <Form {...form}>
                   <form className="text-grey-300" onSubmit={form.handleSubmit(onSubmit)}>
-                        <Column className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
-                              <Row className="gap-6">
+                        <Column className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12">
+                              <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="moveDate"
@@ -98,7 +97,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           )}
                                     />
                               </Row>
-                              <Row className="gap-6">
+                              <Row className="gap-6 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="pickUpLocation.location"
@@ -166,7 +165,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                         </span>
                                                                   </Button>
                                                       </Row>
-                                                      <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
+                                                      <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                                                   <FormField 
                                                                         control={form.control}
                                                                         name={`stops.${index}.location`}
@@ -219,7 +218,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                           </Button>
                                     </div>
                               </div>
-                              <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                     <FormField 
                                           control={form.control}
                                           name="finalDestination.location"
@@ -251,9 +250,9 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                               </Row>
                         </div>
-                        <Row className="items-center justify-center my-8">
-                              <Button type="button" className="flex-1 max-w-[180px] rounded-3xl">Cancel</Button>
-                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
+                        <Row className="items-center justify-center my-8 flex-wrap">
+                              <Button type="button" className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl">Cancel</Button>
+                              <Button type="submit" className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
                         </Row>
                   </form>
             </Form>
@@ -281,16 +280,16 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
             <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
                         <div>
-                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                     <Column>
                                           <P className="font-semibold text-lg">Pickup Location</P>
                                           <P className="font-bold text-primary text-xl">{formData.pickUpLocation.location}</P>
                                     </Column>
-                                    <Row className="gap-4">
-                                          <div className="flex items-center">
+                                    <Row className="gap-4 w-full">
+                                          <div className="md:flex items-center hidden">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
-                                          <Row className="gap-4">
+                                          <Row className="gap-4 flex-col sm:flex-row w-full">
                                                 <FormField
                                                       control={form.control} 
                                                       name="PUDPickUpLocation.buildingType"
@@ -357,16 +356,16 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                         {
                               formData.stops.map((stop, index) => (
                                     <div key={stop.location + index}>
-                                          <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
+                                          <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-wrap">
                                                 <Column>
                                                       <P className="font-semibold text-lg">Stop {index + 1}</P>
                                                       <P className="font-bold text-primary text-xl">{stop.location}</P>
                                                 </Column>
-                                                <Row className="gap-4">
-                                                      <div className="flex items-center">
+                                                <Row className="gap-4 w-full">
+                                                      <div className="hidden sm:flex items-center">
                                                             <div className="mt-8 w-[80px] border border-dotted"/>
                                                       </div>
-                                                      <Row className="gap-4">
+                                                      <Row className="gap-4 flex-col sm:flex-row w-full">
                                                             <FormField
                                                                   control={form.control} 
                                                                   name={`PUDStops.${index}.buildingType`}
@@ -433,33 +432,33 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                               ))
                         }
                         <div>
-                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-12">
+                              <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
                                     <Column>
                                           <P className="font-semibold text-lg">Final Destination</P>
                                           <P className="font-bold text-primary text-xl">{formData.finalDestination.location}</P>
                                     </Column>
                                     <Row className="gap-4">
-                                          <div className="flex items-center">
+                                          <div className="hidden sm:flex items-center">
                                                 <div className="mt-8 w-[80px] border border-dotted"/>
                                           </div>
-                                          <Row className="gap-4">
+                                          <Row className="gap-4 flex-col sm:flex-row w-full">
                                                 <FormField
                                                       control={form.control} 
                                                       name="PUDFinalDestination.buildingType"
                                                       render={({ field }) => (
-                                                            <FormItem className="flex-1">
+                                                            <FormItem className="flex-1 w-full">
                                                                   <FormLabel className="text-grey-300">Building Type</FormLabel>
                                                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                  <FormControl>
-                                                                        <SelectTrigger>
-                                                                        <SelectValue placeholder="Condo" />
-                                                                        </SelectTrigger>
-                                                                  </FormControl>
-                                                                  <SelectContent>
-                                                                        <SelectItem value="Condo">Condo</SelectItem>
-                                                                        <SelectItem value="Apartment">Apartment</SelectItem>
-                                                                        <SelectItem value="Penthouse">Penthouse</SelectItem>
-                                                                  </SelectContent>
+                                                                        <FormControl>
+                                                                              <SelectTrigger>
+                                                                              <SelectValue placeholder="Condo" />
+                                                                              </SelectTrigger>
+                                                                        </FormControl>
+                                                                        <SelectContent>
+                                                                              <SelectItem value="Condo">Condo</SelectItem>
+                                                                              <SelectItem value="Apartment">Apartment</SelectItem>
+                                                                              <SelectItem value="Penthouse">Penthouse</SelectItem>
+                                                                        </SelectContent>
                                                                   </Select>
                                                                   <FormMessage className="text-destructive"/>
                                                             </FormItem>
@@ -503,13 +502,13 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     </Row>
                               </Row>
                         </div>
-                        <Row className="items-center justify-center my-8">
+                        <Row className="items-center justify-center my-8 flex-wrap">
                               <Button 
                                     type="button" 
-                                    className="flex-1 max-w-[180px] rounded-3xl"
+                                    className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("dateAndTime")}
                               >Previous</Button>
-                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
+                              <Button type="submit" className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
                         </Row>
                   </form>
             </Form>
@@ -543,8 +542,8 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       }
       return (
             <Form {...form}>
-                  <form className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 shadow-sm rounded-xl" onSubmit={form.handleSubmit(onSubmit)}>
-                        <Row className="flex-wrap gap-6">
+                  <form className="text-grey-300 p-4 sm:p-6 bg-white-100 flex flex-col gap-6 shadow-sm rounded-xl" onSubmit={form.handleSubmit(onSubmit)}>
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="majorAppliances"
                                     control={form.control}
@@ -557,7 +556,8 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                             {...InputDirectives.numbersOnly}
                                                       />
                                                 </FormControl>
-                                                <FormMessage className="text-destructive" />
+                                                
+                                                
                                           </FormItem>
                                     )}
                               />
@@ -578,7 +578,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     )}
                               />
                         </Row>
-                        <Row className="flex-wrap gap-6">
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="pianos"
                                     control={form.control}
@@ -612,7 +612,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     )}
                               />
                         </Row>
-                        <Row className="flex-wrap gap-6">
+                        <Row className="flex-wrap gap-6 flex-col sm:flex-row">
                               <FormField 
                                     name="poolTables"
                                     control={form.control}
@@ -759,13 +759,13 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     )
                               }
                         </div>
-                        <Row className="items-center justify-center my-8">
+                        <Row className="items-center justify-center my-8 flex-wrap">
                               <Button 
                                     type="button" 
-                                    className="flex-1 max-w-[180px] rounded-3xl"
+                                    className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("propertyDetail")}
                               >Previous</Button>
-                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
+                              <Button type="submit" className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl">Save & Continue</Button>
                         </Row>
                   </form>
             </Form>
@@ -795,64 +795,11 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
             })
       }
 
-      const services  = [
-            {
-                  id: "reassembly",
-                  label: "Reassembly",
-                  description: "Reassembling of any equipment, furniture, new or old when at the final destination of the move" 
-            },
-            {
-                  id: "disassembly",
-                  label: "Disassembly",
-                  description: "Disassembling of any equipment, furniture, new or old when at the at pick up locations" 
-            },
-            {
-                  id: "furniture wrapping",
-                  label: "Furniture Wrapping",
-                  description: "Wrapping furniture with protective wraps like nylon, bubble, tarp etc" 
-            },
-            {
-                  id: "dollies",
-                  label: "Dollies",
-                  description: "To help you transport large heavy-based items" 
-            },
-            {
-                  id: "moving pads",
-                  label: "Moving Pads",
-                  description: "Heavy duty moving blankets to prevent scratches when moving furniture" 
-            },
-            {
-                  id: "straps",
-                  label: "Straps",
-                  description: "Industrial grade straps to secure all equipment, boxes etc" 
-            },
-            {
-                  id: "floor runners",
-                  label: "Floor Runners",
-                  description: "To help you transport large heavy-based items" 
-            },
-            {
-                  id: "tape",
-                  label: "Tape",
-                  description: "Industrial grade straps to secure all equipment, boxes etc" 
-            },
-            {
-                  id: "move garage items",
-                  label: "Move Garage Items",
-                  description: "Move Garage Items" 
-            },
-            {
-                  id: "move patio items",
-                  label: "Move Patio Items",
-                  description: "Move Patio Items" 
-            }
-      ]
-
       const handleSelectAllChange = (checked: boolean) => {
             setSelectAll(checked);
             form.setValue(
               "services",
-              checked ? services.map((service) => service.id) : []
+              checked ? SERVICES.map((service) => service.id) : []
             );
           };
 
@@ -875,11 +822,11 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                     </Row>
                                     <TableRow>
                                           <TableHead className="w-[300px] text-grey-100">Services</TableHead>
-                                          <TableHead className="text-grey-100">Description</TableHead>
+                                          <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
                                     </TableRow>
                               </TableHeader>
                               <TableBody>
-                                    {services.map((service, index) => (
+                                    {SERVICES.map((service, index) => (
                                     <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
                                           <TableCell>
                                                 <FormField
@@ -890,29 +837,29 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                                       const isChecked = field.value?.includes(service.id)
                                                       return (
                                                             <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                  <Checkbox
-                                                                        className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
-                                                                        id={checkboxId}
-                                                                        checked={isChecked}
-                                                                        onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                        ? field.onChange([...field.value || [], service.id])
-                                                                        : field.onChange(field.value?.filter((value) => value !== service.id));
-                                                                        }}
-                                                                  />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
-                                                                  "text-primary font-medium": isChecked
-                                                            })}>
-                                                                  {service.label}
-                                                            </FormLabel>
+                                                                  <FormControl>
+                                                                        <Checkbox
+                                                                              className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                                                                              id={checkboxId}
+                                                                              checked={isChecked}
+                                                                              onCheckedChange={(checked) => {
+                                                                              return checked
+                                                                              ? field.onChange([...field.value || [], service.id])
+                                                                              : field.onChange(field.value?.filter((value) => value !== service.id));
+                                                                              }}
+                                                                        />
+                                                                  </FormControl>
+                                                                  <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
+                                                                        "text-primary font-medium": isChecked
+                                                                  })}>
+                                                                        {service.label}
+                                                                  </FormLabel>
                                                             </FormItem>
                                                       );
                                                       }}
                                                 />
                                           </TableCell>
-                                          <TableCell>
+                                          <TableCell className="hidden sm:block">
                                                 <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
                                                       {service.description}
                                                 </FormLabel>
@@ -921,15 +868,15 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                     ))}
                               </TableBody>
                         </Table>
-                        <Row className="items-center justify-center my-8">
+                        <Row className="items-center justify-center my-8 flex-wrap">
                               <Button 
                                     type="button" 
-                                    className="flex-1 max-w-[180px] rounded-3xl"
+                                    className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("generalInfo")}
                               >Previous</Button>
                               <AlertDialog 
                                     trigger={
-                                          <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+                                          <Button type="submit" className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
                                     title="Move Request Sent!"
                                     buttonLabel="View Vendor Quotes"

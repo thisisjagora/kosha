@@ -10,7 +10,7 @@ interface Props{
 }
 export const MoveHistory:FC<Props> = ({status="Pending", type="Book a move"}) => {
       return(
-            <Row className="items-center justify-between p-4 shadow-md rounded-xl">
+            <Row className="items-center justify-between p-4 shadow-custom bg-white-100 rounded-xl">
                   <Row className="items-center flex-1">
                         <div className="max-w-[80px] h-[80px] flex-1 relative">
                               <Picture 
