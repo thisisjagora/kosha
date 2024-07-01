@@ -9,12 +9,16 @@ interface Props {
             route: string;
             icon: ReactNode;
             isActive?: boolean;
+            onClick?: () => void;
       }
 }
 export const NavItem: FC<Props> = ({ data }) => {
       const {isActive = false} = data
       return (
-            <Link href={data.route}>
+            <Link 
+                  href={data.route}
+                  onClick={data.onClick}
+            >
                   <div className={cn("group flex items-center gap-4 border-r-[3px] border-transparent py-2 px-6 transition duration-300 ease-in-out", {
                         "border-white": isActive
                   })}>

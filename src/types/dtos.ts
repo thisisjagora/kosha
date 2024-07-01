@@ -9,3 +9,7 @@ interface SignUpDto {
       email: string,
       password: string
 }
+
+interface ResetPasswordDto {
+      email: string
+}
