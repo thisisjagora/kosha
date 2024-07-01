@@ -19,7 +19,7 @@ export const Quotations = <T,>(props: Props<T>) => {
           }, [setShowQuote]);
       if(!showQuote) return null;
       return (
-            <Row className="flex-wrap gap-4 w-full">
+            <Row className="flex-wrap gap-4 w-full justify-center sm:justify-start">
                   {
                         list.map((item, index) => renderItem({ index, item }))
                   }
