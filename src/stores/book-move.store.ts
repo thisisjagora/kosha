@@ -14,21 +14,21 @@ const initialState: BookMove = {
       time: "",
       pickUpLocation: {
             location: "",
-            apartment: ""
+            apartmentNumber: ""
       },
       stops: [],
       finalDestination: {
             location: "",
-            apartment: ""
+            apartmentNumber: ""
       },
       PUDFinalDestination: {
             elevatorAccess: "",
-            flightOfStairs: "",
+            flightOfStairs: "0",
             buildingType: ""
       },
       PUDPickUpLocation: {
             elevatorAccess: "",
-            flightOfStairs: "",
+            flightOfStairs: "0",
             buildingType: ""
       },
       PUDStops: [],
