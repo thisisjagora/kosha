@@ -1,0 +1,23 @@
+export enum Endpoints {
+	BOOKINGS_HOUSE_KEEPING = "bookingsHouseKeeping",
+      CALCULATE_TOTAL_AMOUNT ="calculateTotalAmount",
+      CANCEL_PAYMENT_INTENT = "cancelPaymentIntent",
+      CHARGE_CARD_OFF_SESSION = "chargeCardOffSession",
+      CREATE_PAYMENT_INTENT = "createPaymentIntent",
+      CREATE_SETUP_INTENT = "createSetupIntent",
+      DEACTIVATE_ACCOUNT = "deactivateAccount",
+      DETACH_PAYMENT_METHOD = "detachPaymentMethod",
+      FIRST_FUNCTION_HTTP = "firstFunctionHttp",
+      GET_COMPANY_REVIEWS = "getCompanyReviews",
+      GET_COMPANY_REVIEWS_SUMMARY = "getCompanyReviewsSummary",
+      GET_GOOGLE_PLACE_AUTO_COMPLETE = "getGooglePlaceAutoComplete",
+      GET_QUOTE = "getQuote",
+      GET_QUOTES = "getQuotes",
+      PLACE_HOLD_ON_CARD = "placeHoldOnCard",
+      SEND_BOOKING_NOTIFICATION = "sendBookingNotification",
+      SEND_CHAT_NOTIFICATION = "sendChatNotification",
+      SEND_EDITED_BOOKING_NOTIFICATION = "sendEditedBookingNotification",
+      SEND_EMAIL = "sendEmail",
+      SEND_EMAIL_WITH_TEMPLATE = "sendEmailWithTemplate",
+      SEND_SIGN_UP_EMAIL = "sendSignUpEmail"
+}

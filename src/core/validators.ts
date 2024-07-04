@@ -25,7 +25,7 @@ export const signUpSchema = z.object({
 
 const locationSchema = z.object({
   location: z.string().min(1, {message: "Location is required"}),
-  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+  apartmentNumber: z.string().optional()
 });
 
 export const bookMoveSequenceStep1Schema = z.object({
@@ -36,26 +36,26 @@ export const bookMoveSequenceStep1Schema = z.object({
   finalDestination: locationSchema
 })
 
-const pickUpDetailShema = z.object({
+const pickUpDetailSchema = z.object({
   buildingType: z.string().min(1, {message: "Required"}),
   elevatorAccess: z.string().min(1, {message: "Required"}),
-  flightOfStairs: z.string().min(1, {message: "Required"})
+  flightOfStairs: z.string().optional()
 });
 
 export const bookMoveSequenceStep2Schema = z.object({
-  PUDPickUpLocation: pickUpDetailShema,
-  PUDStops: z.array(pickUpDetailShema).optional(),
-  PUDFinalDestination: pickUpDetailShema
+  PUDPickUpLocation: pickUpDetailSchema,
+  PUDStops: z.array(pickUpDetailSchema).optional(),
+  PUDFinalDestination: pickUpDetailSchema
 });
 
 export const bookMoveSequenceStep3Schema = z.object({
-  majorAppliances: z.string().min(1, {message: "Required"}),
-  workOutEquipment: z.string().min(1, {message: "Required"}),
-  pianos: z.string().min(1, {message: "Required"}),
-  hotTubs: z.string().min(1, {message: "Required"}),
-  poolTables: z.string().min(1, {message: "Required"}),
-  numberOfBoxes: z.string().min(1, {message: "Required"}),
-  instructions: z.string().min(1, {message: "Required"}),
+  majorAppliances: z.string().optional(),
+  workOutEquipment: z.string().optional(),
+  pianos: z.string().optional(),
+  hotTubs: z.string().optional(),
+  poolTables: z.string().optional(),
+  numberOfBoxes: z.string().optional(),
+  instructions: z.string().optional(),
   images: z.array(z.string())
 });
 
@@ -71,7 +71,7 @@ export const hireLabourSequenceStep1Schema = z.object({
   time: z.string().min(1, {message: "Time is required"}),
   serviceLocation: z.string().min(1, {message: "Location is required"}),
   apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
-}).extend(pickUpDetailShema.shape);
+}).extend(pickUpDetailSchema.shape);
 
 export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
 

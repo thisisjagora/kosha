@@ -6,13 +6,13 @@ import { SequencesLayout } from "@/components/layout/sequences";
 import { Quotations } from "@/components/quotations";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesMoversDoodles, QuotesRatings, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
-import { BookMoveMock } from "@/mocks";
+// import { BookMoveMock } from "@/mocks";
 import useShowQuotes from "@/stores/show-quotes.store";
 import { MoveQuote } from "@/types/structs";
 import { useEffect, useState } from "react";
 
 const Page = () => {
-      const { showQuote } = useShowQuotes((state) => state)
+      const { showQuote, quotesResult } = useShowQuotes((state) => state)
       const [activeTab, setActiveTab] = useState<string>("dateAndTime");
 
       const [isMounted, setIsMounted] = useState(false);
@@ -65,7 +65,7 @@ const Page = () => {
                         )
                   }
                   <Quotations<MoveQuote> 
-                        list={BookMoveMock}
+                        list={quotesResult}
                         renderItem={({index, item}) => (
                               <Quotes key={item.vehicle + index}>
                                     <QuotesImage src="" type="Book a move" />
