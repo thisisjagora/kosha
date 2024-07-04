@@ -11,7 +11,7 @@ const appConfig = (): EnvValues => {
 				FIREBASE_STORAGE_BUCKET: `${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET_DEV}`,
 				FIREBASE_MESSAGING_SENDER_ID: `${process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_DEV}`,
 				FIREBASE_APP_ID: `${process.env.NEXT_PUBLIC_FIREBASE_APP_ID_DEV}`,
-				BASE_URL: ``,
+				BASE_URL: `${process.env.NEXT_PUBLIC_BASE_URL_DEV}`,
 				env: "DEV",
 			};
 		case EnvModes.PROD:
@@ -22,7 +22,7 @@ const appConfig = (): EnvValues => {
 				FIREBASE_STORAGE_BUCKET: `${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`,
 				FIREBASE_MESSAGING_SENDER_ID: `${process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}`,
 				FIREBASE_APP_ID: `${process.env.NEXT_PUBLIC_FIREBASE_APP_ID}`,
-				BASE_URL: ``,
+				BASE_URL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
 				env: "PROD",
 			};
 		default:

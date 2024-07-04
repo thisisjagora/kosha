@@ -14,15 +14,16 @@ import { CalendarIcon } from "lucide-react";
 import { Column, Row } from "@/components/layout";
 import { Input } from "@/components/input";
 import { InputDirectives } from "@/lib/helpers/inputDirectives";
-import { Add, Camera, Cancel } from "@/components/Icons";
-import { toast } from "@/components/toast/use-toast";
+import { Add, Camera, Cancel, Check } from "@/components/Icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
 import useBookMoveStore from "@/stores/book-move.store";
 import { Textarea } from "@/components/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
-import { AlertDialog } from "@/components/dialogs";
 import useShowQuotes from "@/stores/show-quotes.store";
+import { bookMoveFactory } from "@/core/models/bookMoveFactory";
+import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
+import { Dialog, DialogContent } from "@/components/dialog";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -113,7 +114,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                                     <FormField 
                                           control={form.control}
-                                          name="pickUpLocation.apartment"
+                                          name="pickUpLocation.apartmentNumber"
                                           render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                       <FormLabel>Apartment/Unit</FormLabel>
@@ -181,7 +182,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                   />
                                                                   <FormField 
                                                                         control={form.control}
-                                                                        name={`stops.${index}.apartment`}
+                                                                        name={`stops.${index}.apartmentNumber`}
                                                                         render={({ field }) => (
                                                                               <FormItem className="flex-1">
                                                                                     <FormLabel>Apartment/Unit</FormLabel>
@@ -210,7 +211,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                 className="bg-transparent hover:bg-transparent px-0 max-w-max absolute top-[50%] -left-[14.5px] translate-y-[-50%]"
                                                 onClick={() => append({
                                                       location: "",
-                                                      apartment: ""
+                                                      apartmentNumber: ""
                                                 })}
                                           >
                                                 <Add className="w-[27px] h-[27px] mr-2" />
@@ -234,7 +235,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                                     <FormField 
                                           control={form.control}
-                                          name="finalDestination.apartment"
+                                          name="finalDestination.apartmentNumber"
                                           render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                       <FormLabel>Apartment/Unit</FormLabel>
@@ -775,7 +776,9 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
       const setShowQuote = useShowQuotes((state) => state.setShowQuote)
       const { update, formData } = useBookMoveStore((state) => state)
+      const {isPending, isSuccess, getQuotes} = useGetQuotes();
       const [selectAll, setSelectAll] = useState<boolean>(false);
+      const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess)
       const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
             resolver: zodResolver(bookMoveSequenceStep4Schema),
             defaultValues: {
@@ -785,14 +788,7 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
 
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
             update(data)
-            toast({
-              title: "You submitted the following values:",
-              description: (
-                  <pre className="mt-2 w-[340px] rounded-md p-4">
-                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
-                  </pre>
-              ),
-            })
+            getQuotes(bookMoveFactory(formData))
       }
 
       const handleSelectAllChange = (checked: boolean) => {
@@ -874,18 +870,26 @@ const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
                                     className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("generalInfo")}
                               >Previous</Button>
-                              <AlertDialog 
-                                    trigger={
-                                          <Button type="submit" className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
-                                    }
-                                    title="Move Request Sent!"
-                                    buttonLabel="View Vendor Quotes"
-                                    onClick={() => {
-                                          setTimeout(() => {
-                                                setShowQuote(true)
-                                          }, 2000)
-                                    }}
-                              />
+                              <Button
+                                    loading={isPending}
+                                    type="submit" 
+                                    className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
+                              >Send Request</Button>
+                              <Dialog
+                                    open={isDialogOpen}
+                                    onOpenChange={setIsDialogOpen}
+                              >
+                                    <DialogContent className="sm:max-w-[600px]">
+                                          <Column className="items-center justify-center gap-8 md:px-24">
+                                                <Check className="w-[80px] h-[100px]"/>
+                                                <Column className="items-center">
+                                                      <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
+                                                      {/* <P className="text-center text-grey-300"></P> */}
+                                                </Column>
+                                                <Button className="w-full" onClick={() => setShowQuote(true)}>View Vendor Quotes</Button>
+                                          </Column>
+                                    </DialogContent>
+                              </Dialog>
                         </Row>
                   </form>
             </Form>
