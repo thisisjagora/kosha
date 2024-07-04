@@ -20,7 +20,7 @@ import { Textarea } from "@/components/textarea";
 import { Camera, Cancel } from "@/components/Icons";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
-import { AlertDialog } from "@/components/dialogs";
+// import { AlertDialog } from "@/components/dialogs";
 import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
@@ -570,7 +570,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     className="flex-1 max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("itm")}
                               >Previous</Button>
-                              <AlertDialog 
+                              {/* <AlertDialog 
                                     trigger={
                                           <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                                     }
@@ -581,7 +581,7 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                                 setShowQuote(true)
                                           }, 2000)
                                     }}
-                              />
+                              /> */}
                         </Row>
                   </form>
             </Form>
