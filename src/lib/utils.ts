@@ -16,3 +16,14 @@ export const truncateWithEllipsis = (text: string, maxLength: number) => {
 export const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export function mergeArrays(...arrays: any[]){
+  const length = arrays.reduce((minLength, arr) => Math.min(minLength, arr.length), Infinity);
+
+  return Array.from({ length }, (_, index) =>
+      arrays.reduce((mergedObj, arr) => ({
+          ...mergedObj,
+          ...arr[index]
+      }), {})
+  );
+}
