@@ -77,6 +77,11 @@ const switchHeaderContent = (route: string, isQuotesVisible: boolean) => {
             title: isQuotesVisible? "Home/Best Delivery Options" : "Home",
             description: isQuotesVisible? "Quotes from Delivery Vendors" : "Schedule your Delivery"
           };
+        case Routes.bookMoveQuoteDetails: 
+          return {
+            title: "Home/Best Moving Options",
+            description: "Quote Details"
+          }
         case Routes.bookings:
           return {
             title: "Bookings",

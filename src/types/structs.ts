@@ -58,7 +58,8 @@ export interface DeliveryQuote extends Omit<Quote, "movers">{
 export interface QuoteDetailsRate {
       icon: ReactNode, 
       label: string,
-      rate: string
+      rate: number,
+      count?: number
 }
 
 export interface IUser extends User {

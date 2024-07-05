@@ -6,12 +6,17 @@ import { SequencesLayout } from "@/components/layout/sequences";
 import { Quotations } from "@/components/quotations";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesMoversDoodles, QuotesRatings, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
+import { useQuoteDetailsData } from "@/contexts/QuoteDetails.context";
+import { Routes } from "@/core/routing";
 // import { BookMoveMock } from "@/mocks";
 import useShowQuotes from "@/stores/show-quotes.store";
 import { Quote } from "@/types/structs";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Page = () => {
+      const router = useRouter();
+      const { setQuoteDetailsData } = useQuoteDetailsData();
       const { showQuote, quotesResult } = useShowQuotes((state) => state)
       const [activeTab, setActiveTab] = useState<string>("dateAndTime");
 
@@ -67,7 +72,13 @@ const Page = () => {
                   <Quotations<Quote> 
                         list={quotesResult}
                         renderItem={({index, item}) => (
-                              <Quotes key={item.companyName + index}>
+                              <Quotes
+                                    onClick={() => {
+                                          setQuoteDetailsData(item)
+                                          router.push(Routes.bookMoveQuoteDetails)
+                                    }} 
+                                    key={item.companyName + index}
+                              >
                                     <QuotesImage src="" type="Book a move" />
                                     <QuotesContent>
                                           <Row className="items-start justify-between gap-6 flex-wrap">
@@ -82,7 +93,7 @@ const Page = () => {
                                                       <QuotesVehicle>{item.movingTruck}</QuotesVehicle>
                                                       <QuotesRatings rating={item.averageRating}/>
                                                 </Column>
-                                                {/* <QuotesAmount amount={item.amount}/> */}
+                                                <QuotesAmount amount={item.minimumAmount}/>
                                           </Row>
                                     </QuotesContent>
                               </Quotes>
