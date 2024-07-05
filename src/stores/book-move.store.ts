@@ -7,6 +7,7 @@ interface Store {
   updateField: <K extends keyof BookMove>(fieldName: K, newValue: BookMove[K]) => void;
   removeStop: (index: number) => void;
   removeImage: (index: number) => void;
+  reset: () => void;
 }
 
 const initialState: BookMove = {
@@ -22,14 +23,14 @@ const initialState: BookMove = {
             apartmentNumber: ""
       },
       PUDFinalDestination: {
-            elevatorAccess: "",
+            elevatorAccess: "Yes",
             flightOfStairs: "0",
-            buildingType: ""
+            buildingType: "Condo"
       },
       PUDPickUpLocation: {
-            elevatorAccess: "",
+            elevatorAccess: "Yes",
             flightOfStairs: "0",
-            buildingType: ""
+            buildingType: "Condo"
       },
       PUDStops: [],
       majorAppliances: "",
@@ -63,7 +64,8 @@ const useBookMoveStore = create<Store>((set) => ({
       return {
         formData: { ...state.formData, images: newImages }
       };
-    })
+    }),
+    reset: () => set({ formData: initialState })
 }));
 
 export default useBookMoveStore;

@@ -13,7 +13,7 @@ interface QuotesImageProps {
 interface QuotesTitleProps extends HeadingProps {
       title: string
 }
-const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl flex-1 w-full max-w-[450px] sm:max-w-[300px] lg:max-w-[270px]", props.className)} />
+const Quotes:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <div {...props} className={cn("flex flex-col gap-2 justify-between p-4 bg-white-100 shadow-sm rounded-xl flex-1 w-full max-w-[400px] sm:max-w-[270px] sm:min-w-[270px] lg:max-w-[270px]", props.className)} />
 const QuotesImage:FC<QuotesImageProps> = ({ type }) => {
       return (
             <div className="w-full h-[160px] flex-1 relative">
@@ -46,7 +46,7 @@ const QuotesVehicle: FC<HTMLAttributes<HTMLParagraphElement>> = ({ ...props }) =
 const QuotesTime: FC<HTMLAttributes<HTMLParagraphElement>> = ({ ...props }) => <P {...props} className={cn("text-grey-600 font-dm-sans text-sm font-medium",props.className)}></P>
 
 const QuotesAmount = ({ amount }: {amount: string}) => <div className="p-1 min-w-[80px] max-w-max text-center bg-primary rounded-3xl"><P className="font-dm-sans text-sm text-white-100">${amount}</P></div>
-const QuotesRatings = ({ rating }: {rating: string}) => {
+const QuotesRatings = ({ rating }: {rating: number}) => {
       return (
             <Row className="items-center max-w-max">
                   <Stars className="w-[43px] h-[11px]"/>

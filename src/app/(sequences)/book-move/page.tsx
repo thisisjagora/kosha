@@ -8,7 +8,7 @@ import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesM
 import { Tabs, TabsContent, TabsCount, TabsList, TabsTrigger } from "@/components/tabs";
 // import { BookMoveMock } from "@/mocks";
 import useShowQuotes from "@/stores/show-quotes.store";
-import { MoveQuote } from "@/types/structs";
+import { Quote } from "@/types/structs";
 import { useEffect, useState } from "react";
 
 const Page = () => {
@@ -64,25 +64,25 @@ const Page = () => {
                               </SequencesLayout>
                         )
                   }
-                  <Quotations<MoveQuote> 
+                  <Quotations<Quote> 
                         list={quotesResult}
                         renderItem={({index, item}) => (
-                              <Quotes key={item.vehicle + index}>
+                              <Quotes key={item.companyName + index}>
                                     <QuotesImage src="" type="Book a move" />
                                     <QuotesContent>
                                           <Row className="items-start justify-between gap-6 flex-wrap">
                                                 <Column>
-                                                <QuotesTitle title={item.name} />
+                                                <QuotesTitle title={item.companyName} />
                                                 <QuotesMovers>{item.movers} Movers</QuotesMovers>
                                                 </Column>
                                                 <QuotesMoversDoodles length={item.movers}/>
                                           </Row>
                                           <Row className="justify-between items-center">
                                                 <Column className="gap-1">
-                                                      <QuotesVehicle>{item.vehicle}</QuotesVehicle>
-                                                      <QuotesRatings rating={item.rating}/>
+                                                      <QuotesVehicle>{item.movingTruck}</QuotesVehicle>
+                                                      <QuotesRatings rating={item.averageRating}/>
                                                 </Column>
-                                                <QuotesAmount amount={item.amount}/>
+                                                {/* <QuotesAmount amount={item.amount}/> */}
                                           </Row>
                                     </QuotesContent>
                               </Quotes>
