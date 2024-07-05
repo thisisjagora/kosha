@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from "react"
 
-const Layout: FC<PropsWithChildren> = ({ ...props }) => <div {...props} className="w-full h-full flex flex-col items-center justify-center" />
+const Layout: FC<PropsWithChildren> = ({ ...props }) => <div {...props} className="w-full h-full flex flex-col items-center justify-start" />
 
 export default Layout;

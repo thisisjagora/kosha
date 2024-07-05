@@ -1,11 +1,11 @@
-import { MoveQuote } from '@/types/structs';
+import { MoveQuote, Quote } from '@/types/structs';
 import { create } from 'zustand';
 
 interface Store {
   showQuote: boolean;
-  quotesResult: Array<MoveQuote>;
+  quotesResult: Array<Quote>;
   setShowQuote: (value: boolean) => void;
-  setQuotesResult: (quotes: Array<MoveQuote>) => void;
+  setQuotesResult: (quotes: Array<Quote> | undefined) => void;
 }
 
 const useShowQuotes = create<Store>((set) => ({
@@ -14,7 +14,7 @@ const useShowQuotes = create<Store>((set) => ({
   setShowQuote: (value: boolean) => set((state) => ({
     showQuote: value
   })),
-  setQuotesResult: (quotes: Array<MoveQuote>) => set((state) => ({
+  setQuotesResult: (quotes: Array<Quote> | undefined) => set((state) => ({
     quotesResult: quotes
   }))
 }));
