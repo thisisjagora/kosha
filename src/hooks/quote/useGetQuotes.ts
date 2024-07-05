@@ -9,7 +9,6 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useGetQuotes = () => {
 	const setQuotesResult = useShowQuotes((state) => state.setQuotesResult);
-	const { reset } = useBookMoveStore((state) => state);
     
 	const methods = useMutation<any, any, BookMoveDto>({
 		mutationFn: (props) => getQuotesData(props)
@@ -21,7 +20,6 @@ export const useGetQuotes = () => {
 			.mutateAsync(payload)
 			.then((res) => {
                         setQuotesResult(res.result as Array<Quote>)
-				reset()
 			})
 			.catch((err) => {
                         toast({

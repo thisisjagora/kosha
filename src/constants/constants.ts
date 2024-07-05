@@ -5,3 +5,5 @@ export const SUCCESS_MESSAGE = {
 export const FIREBASE_COLLECTIONS = {
       users: "users"
 }
+
+export const LANDING_PAGE_URL = "https://www.koshamoves.ca/"

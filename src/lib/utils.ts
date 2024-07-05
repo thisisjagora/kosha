@@ -27,3 +27,32 @@ export function mergeArrays(...arrays: any[]) {
     }), {})
   );
 }
+
+function abbreviateNumber(value: number): string {
+  const suffixes = ['', 'K', 'M', 'B', 'T'];
+  let suffixIndex = 0;
+  let num = value;
+
+  while (num >= 1000 && suffixIndex < suffixes.length - 1) {
+    num /= 1000;
+    suffixIndex++;
+  }
+
+  return `${num.toFixed(2)}${suffixes[suffixIndex]}`;
+}
+
+export function formatCurrency(value: number, locale: string = 'en-US', currency: string = 'USD'): string {
+  const formattedValue = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+
+  if (value >= 1000000) {
+    return abbreviateNumber(value);
+  }
+
+  return formattedValue;
+}
+
