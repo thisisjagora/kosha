@@ -6,3 +6,7 @@ export enum EnvModes {
 export enum QueryKeys {
 	GET_QUOTES = "get-quotes"
 }
+
+export enum StorageKeys {
+	QUOTE_DETAILS_DATA = "quoteDetailsData"
+}

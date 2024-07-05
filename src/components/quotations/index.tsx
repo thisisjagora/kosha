@@ -24,7 +24,7 @@ export const Quotations = <T,>(props: Props<T>) => {
           }, [setShowQuote]);
       if(!showQuote) return null;
       return (
-            <Row className="flex-col sm:flex-row flex-wrap gap-4 w-full h-full justify-center items-center sm:justify-start sm:items-start">
+            <Row className="flex-col sm:flex-row flex-wrap gap-4 w-full h-full items-center sm:items-start justify-start">
                   {
                         list.length > 0 ? (
                               list.map((item, index) => renderItem({ index, item }))

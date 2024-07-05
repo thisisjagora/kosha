@@ -1,4 +1,4 @@
-import { BookMove, Services } from '@/types/structs';
+import { BookMove } from '@/types/structs';
 import { create } from 'zustand';
 
 interface Store {
