@@ -3,6 +3,12 @@ import { User } from "firebase/auth";
 import { ReactNode } from "react";
 import { z } from "zod";
 
+export interface ApiResponse<T> {
+      data: T;
+      status?: boolean;
+    }
+
+
 export interface Services {
       id: string,
       label: string,
@@ -12,11 +18,30 @@ export type BookMove = z.infer<typeof bookMoveSequenceStep1Schema> & z.infer<typ
 export type HireLabour = z.infer<typeof hireLabourSequenceStep1Schema> & z.infer<typeof hireLabourSequenceStep2Schema> & z.infer<typeof hireLabourSequenceStep3Schema>
 export type BookDelivery = z.infer<typeof bookDeliverySequenceStep1Schema> & z.infer<typeof bookDeliverySequenceStep2Schema> & z.infer<typeof bookDeliverySequenceStep3Schema>
 
-interface Quote  {
-      name: string,
-      movers: number,
-      rating: string,
-      amount: string,
+export interface Quote  {
+      companyName: string;
+      hourlyRate: number;
+      movers: number;
+      companyCity: string;
+      companyProvince: string;
+      movingTruck: string;
+      equippedToMove: string[];
+      minimumHours: number;
+      minimumAmount: number;
+      companyEmail: string;
+      companyId: string;
+      additionalMoverHourlyRate: number;
+      majorAppliancesFee: number;
+      workoutEquipmentsFee: number;
+      flightOfStairsFee: number;
+      pianosFee: number;
+      truckFee: number;
+      stopOverFee: number;
+      hotTubsFee: number;
+      poolTablesFee: number;
+      averageRating: number;
+      numberOfReviews: number;
+      voucherCode: string;
 }
 
 export interface MoveQuote extends Quote{

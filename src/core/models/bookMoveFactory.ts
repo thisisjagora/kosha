@@ -1,10 +1,13 @@
 import { mergeArrays } from "@/lib/utils";
 import { BookMoveDto } from "@/types/dtos";
 import { BookMove } from "@/types/structs";
+import { format } from "date-fns";
 
 const parseFlightOfStairs = (stop: any) => ({
       ...stop,
-      flightOfStairs: stop.flightOfStairs ? parseInt(stop.flightOfStairs) : 0,
+      flightOfStairs: typeof stop.flightOfStairs === "string" ? parseInt(stop.flightOfStairs) || 0 
+                      : typeof stop.flightOfStairs === "number" ? stop.flightOfStairs
+                      : 0,
     });
 
 /**
@@ -29,6 +32,9 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
     
     const filteredAddOns = addOns.filter(item => !isNaN(item.quantity) && item.quantity > 0);
 
+    const formattedDate = format(new Date(a.moveDate), 'M/d/yyyy');
+    const formattedTime = format(new Date(`1970-01-01T${a.time}:00`), 'h:mm a');
+
       return {
             fromAddress: {
                   address: a.pickUpLocation.location,
@@ -48,7 +54,7 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
                   hasElevator: a.PUDFinalDestination.elevatorAccess,
                   id: a.PUDFinalDestination.buildingType,
             },
-            date: `${a.moveDate} ${a.time}`,
+            date: `${formattedDate} ${formattedTime}`,
             additionalStops: mergeArrays(a.stops, a.PUDStops).map(parseFlightOfStairs),
             addOns: filteredAddOns,
             companyId: "",
