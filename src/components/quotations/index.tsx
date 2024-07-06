@@ -15,14 +15,6 @@ interface Props<T>{
 }
 export const Quotations = <T,>(props: Props<T>) => {
       const {list, renderItem} = props
-      const { showQuote, setShowQuote } = useShowQuotes((state) => state)
-
-      useEffect(() => {
-            return () => {
-              setShowQuote(false);
-            };
-          }, [setShowQuote]);
-      if(!showQuote) return null;
       return (
             <Row className="flex-col sm:flex-row flex-wrap gap-4 w-full h-full items-center sm:items-start justify-start">
                   {
@@ -34,7 +26,7 @@ export const Quotations = <T,>(props: Props<T>) => {
                                           <CircleAlert className="textPrimary"/>
                                           <P className="text-primary">We couldn't find any quotes for you at this time.</P>
                                           <Link href={Routes.root} className="border p-2 px-4 rounded-sm">
-                                                <P className="text-grey-300 text-sm border-primary-foreground">Try another request?</P>
+                                                <P className="text-grey-300 text-sm border-primary-foreground">Make a service request?</P>
                                           </Link>
                                     </Column>
                               </Row>

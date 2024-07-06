@@ -1,5 +1,7 @@
-import { MoveQuote, Quote } from '@/types/structs';
+import { StorageKeys } from '@/constants/enums';
+import { Quote } from '@/types/structs';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface Store {
   showQuote: boolean;
@@ -8,15 +10,24 @@ interface Store {
   setQuotesResult: (quotes: Array<Quote> | undefined) => void;
 }
 
-const useShowQuotes = create<Store>((set) => ({
-  showQuote: false,
-  quotesResult: [],
-  setShowQuote: (value: boolean) => set((state) => ({
-    showQuote: value
-  })),
-  setQuotesResult: (quotes: Array<Quote> | undefined) => set((state) => ({
-    quotesResult: quotes
-  }))
-}));
+const useShowQuotes = create<Store>()(
+  persist(
+    (set) => ({
+      showQuote: false,
+      quotesResult: [],
+      setShowQuote: (value: boolean) => set({ showQuote: value }),
+      setQuotesResult: (quotes: Array<Quote> | undefined) => set({ quotesResult: quotes || [] })
+    }),
+    {
+      name: StorageKeys.QUOTES_RESULT,
+      partialize: (state) => ({ quotesResult: state.quotesResult })
+    }
+  )
+);
+
+const clearQuotesStorage = () => {
+  localStorage.removeItem(StorageKeys.QUOTES_RESULT);
+};
 
 export default useShowQuotes;
+export { clearQuotesStorage }

@@ -43,6 +43,60 @@ export interface Quote  {
       numberOfReviews: number;
       voucherCode: string;
 }
+    
+    interface MoveTimestamp {
+      // Define properties for the MoveTimestamp interface
+    }
+    
+    interface FeeAdjustment {
+      // Define properties for the FeeAdjustment interface
+    }
+
+    interface Address {
+      address: string;
+      apartmentNumber: string;
+      buildingType: string;
+      flightOfStairs: number;
+      googlePlaceId: string;
+      hasElevator: string;
+    }
+    
+    export interface Booking {
+      bookingId?: string;
+      clientId: string;
+      driverId: string;
+      fromAddress: Address;
+      toAddress: Address;
+      additionalStops?: Address[];
+      hasAdditionalStops: boolean;
+      hasAddOns: boolean;
+      status: "New" | "Pending";
+      movingDate: string;
+      bookingDate: string;
+      modifiedDate?: Date;
+      cancelledDate?: Date;
+      moveStartTime?: Date;
+      moveResumeTime?: Date;
+      moveEndTime?: Date;
+      totalAmount?: number;
+      additionalAmount?: number;
+      gstAmount?: number;
+      workoutEquipmentsQuantity?: number;
+      majorAppliancesQuantity?: number;
+      pianosQuantity?: number;
+      hotTubsQuantity?: number;
+      poolTablesQuantity?: number;
+      quote: Quote;
+      paymentIntentId?: string;
+      moveTimestamps?: MoveTimestamp[];
+      oldMinimumAmount?: number;
+      additionalNotes?: string;
+      requestType: string;
+      serviceAddOns?: string[];
+      estimatedNumberOfBoxes?: number;
+      feeAdjustments?: FeeAdjustment[];
+    }
+    
 
 export interface MoveQuote extends Quote{
       vehicle: string
