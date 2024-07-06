@@ -24,6 +24,9 @@ import useShowQuotes from "@/stores/show-quotes.store";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
 import { Dialog, DialogContent } from "@/components/dialog";
+import { Routes } from "@/core/routing";
+import Link from "next/link";
+import { StorageKeys } from "@/constants/enums";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -791,7 +794,6 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
 };
 
 const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
-      const setShowQuote = useShowQuotes((state) => state.setShowQuote);
       const { update, formData } = useBookMoveStore((state) => state);
       const { isPending, isSuccess, getQuotes } = useGetQuotes();
       const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -800,7 +802,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
       const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
         resolver: zodResolver(bookMoveSequenceStep4Schema),
         defaultValues: {
-          services: []
+            services: formData.services
         }
       });
 
@@ -810,7 +812,8 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
         update(data);
-        getQuotes(bookMoveFactory(formData));
+        const updatedFormData = { ...formData, ...data };
+        getQuotes(bookMoveFactory(updatedFormData));
       };
     
       const handleSelectAllChange = (checked: boolean) => {
@@ -910,7 +913,10 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
                       {/* <P className="text-center text-grey-300"></P> */}
                     </Column>
-                    <Button className="w-full" onClick={() => setShowQuote(true)}>View Vendor Quotes</Button>
+                    <Link 
+                        className="w-full py-2 text-white-100 bg-primary text-center rounded-sm" 
+                        href={Routes.bookMoveQuotes}
+                  >View Vendor Quotes</Link>
                   </Column>
                 </DialogContent>
               </Dialog>
@@ -918,7 +924,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           </form>
         </Form>
       );
-    };
+};
 
 export const BookMoveSequence = {
       Step1,

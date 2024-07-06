@@ -43,7 +43,7 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
                   flightOfStairs: a.PUDPickUpLocation.flightOfStairs ? parseInt(a.PUDPickUpLocation.flightOfStairs) : 0,
                   googlePlaceId: a.PUDPickUpLocation.buildingType,
                   hasElevator: a.PUDPickUpLocation.elevatorAccess,
-                  id: a.PUDPickUpLocation.buildingType
+                  id: ""
             },
             toAddress: {
                   address: a.finalDestination.location,
@@ -52,13 +52,11 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
                   flightOfStairs: a.PUDFinalDestination.flightOfStairs ? parseInt(a.PUDFinalDestination.flightOfStairs) : 0,
                   googlePlaceId: a.PUDFinalDestination.buildingType,
                   hasElevator: a.PUDFinalDestination.elevatorAccess,
-                  id: a.PUDFinalDestination.buildingType,
+                  id: "",
             },
             date: `${formattedDate} ${formattedTime}`,
             additionalStops: mergeArrays(a.stops, a.PUDStops).map(parseFlightOfStairs),
             addOns: filteredAddOns,
-            companyId: "",
-            bookingId: "",
             requestType: "RegularMove"
       }
 }
