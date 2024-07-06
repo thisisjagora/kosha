@@ -4,11 +4,19 @@ import { Checkbox } from "@/components/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/form";
 import { Input } from "@/components/input";
 import { Column, Row } from "@/components/layout";
+import { toast } from "@/components/toast/use-toast";
+import { ErrorMessage, StorageKeys } from "@/constants/enums";
+import { useQuoteDetailsData } from "@/contexts/QuoteDetails.context";
+import { bookMoveFactory } from "@/core/models/bookMoveFactory";
+import { useAddToBookings } from "@/hooks/fireStore/useAddToBookings";
+import { generateBookingId } from "@/lib/helpers/generateBookingId";
 import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
-import { QuoteDetailsRate, Services } from "@/types/structs";
+import useUserStore from "@/stores/user.store";
+import { BookMove, Booking, QuoteDetailsRate, Services } from "@/types/structs";
+import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const QuoteDetails:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -66,51 +74,39 @@ const QuoteDetailsMap:FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
 interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
       movers: number
 }
-const QuoteDetailsWorkers:FC<QuotesDetailsWorkersProps> = ({ movers, ...props }) => {
-      const [count, setCount] = useState<number>(movers)
-      const doodles = generateDoodles({ length: 3});
+const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({ movers, ...props }) => {
+      const { updateQuoteField } = useQuoteDetailsData();
+      const [count, setCount] = useState<number>(movers);
+      const doodles = generateDoodles({ length: 3 });
+    
+      useEffect(() => {
+        updateQuoteField("movers", count);
+      }, [count]);
+    
       return (
-            <Column className={cn("max-w-[400px] text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg p-4", props.className)}>
-                  <Row className="justify-between items-center w-full">
-                        <Button 
-                              onClick={() => setCount((prevCount) => prevCount > 1 ? prevCount - 1 : 1)}
-                        className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                        >
-                              -
-                        </Button>
-
-                        <Column className="flex-1 max-w-max">
-                              <Row className="relative min-w-[210px]">
-                                    {
-                                          doodles.map((item, index) => (
-                                                <div key={item + index} className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", {
-                                                      "relative mr-[-20px]" : index !== length - 1,
-                                                }, `z-${index}`)}>
-                                                      <Picture 
-                                                            container={{
-                                                                  className: "w-full h-full rounded-full"
-                                                            }}
-                                                            image={{
-                                                                  alt: "movers doodle",
-                                                                  src: item,
-                                                                  className: "rounded-full "
-                                                            }}
-                                                      />
-                                                </div>
-                                          ))
-                                    }
-                              </Row>
-                              <H className="text-primary font-bold text-2xl">{count} Movers</H>
-                        </Column>
-                        <Button 
-                              onClick={() => setCount((prevCount) => prevCount + 1)}
-                              className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                         >+</Button>
-                  </Row>
-                  <P className="px-12 font-dm-sans text-grey-300 text-base">Click on the -\+ sign to increase or reduce the number of movers</P>
+        <Column className={cn("max-w-[400px] text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg p-4", props.className)}>
+          <Row className="justify-between items-center w-full">
+            <Button onClick={() => setCount((prevCount) => prevCount > 1 ? prevCount - 1 : 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+              -
+            </Button>
+            <Column className="flex-1 max-w-max">
+              <Row className="relative min-w-[210px]">
+                {doodles.map((item, index) => (
+                  <div key={item + index} className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", { "relative mr-[-20px]": index !== length - 1 }, `z-${index}`)}>
+                    <Picture container={{ className: "w-full h-full rounded-full" }} image={{ alt: "movers doodle", src: item, className: "rounded-full " }} />
+                  </div>
+                ))}
+              </Row>
+              <H className="text-primary font-bold text-2xl">{count} Movers</H>
             </Column>
-      )
-}
+            <Button onClick={() => setCount((prevCount) => prevCount + 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+              +
+            </Button>
+          </Row>
+          <P className="px-12 font-dm-sans text-grey-300 text-base">Click on the -\+ sign to increase or reduce the number of movers</P>
+        </Column>
+      );
+};
 interface QuoteDetailsRatesProps extends HTMLAttributes<HTMLDivElement> {
       rates: Array<QuoteDetailsRate>,
 }
@@ -141,9 +137,9 @@ const QuoteDetailsRates:FC<QuoteDetailsRatesProps> = ({ rates }) => {
 
 interface QuoteDetailsVehicleProps {
       truckType: string;
-    }
-    
-    const QuoteDetailsVehicle: React.FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
+}
+const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
+      const { updateQuoteField } = useQuoteDetailsData();
       const truckList = [
         { type: 'pickup truck', image: "/images/truckPickUp.png", quantity: 0 },
         { type: 'van', image: "/images/truckVan.png", quantity: 0 },
@@ -191,6 +187,10 @@ interface QuoteDetailsVehicleProps {
         }
       };
     
+      useEffect(() => {
+        updateQuoteField("movingTruck", selectedTruck.type);
+      }, [selectedTruck.type]);
+    
       return (
         <Column className="gap-6 w-full p-4 bg-white-100 shadow-custom rounded-lg">
           <H level={2} className="text-primary font-dm-sans text-lg">Choose Truck</H>
@@ -205,43 +205,64 @@ interface QuoteDetailsVehicleProps {
                   ) : (
                     <span className="border border-primary w-[20px] h-[20px] rounded-full" />
                   )}
-                  <Picture
-                    container={{
-                      className: "w-[73px] h-[38px]"
-                    }}
-                    image={{
-                      alt: "",
-                      src: item.image,
-                      className: "object-contain"
-                    }}
-                  />
+                  <Picture container={{ className: "w-[60px] h-[60px] rounded-full ml-4" }} image={{ alt: item.type, src: item.image, className: "rounded-full" }} />
                 </Row>
-                <Row className="items-center gap-1 max-w-[120px]">
-                  <Button
-                    onClick={() => handleDecrease(index)}
-                    className="rounded-full w-[22px] h-[22px] p-0 text-lg bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                  >
-                    -
-                  </Button>
-                  <span className="mx-4 flex-1 w-[30px] text-center">{item.quantity}</span>
-                  <Button
-                    onClick={() => handleIncrease(index)}
-                    className="rounded-full w-[22px] h-[22px] p-0 text-lg bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                  >
-                    +
-                  </Button>
+                <Row className="items-center gap-4">
+                  <Button size="icon" className="max-w-[20px] max-h-[20px]" onClick={() => handleDecrease(index)}>-</Button>
+                  <span>{item.quantity}</span>
+                  <Button size="icon" className="max-w-[20px] max-h-[20px]" onClick={() => handleIncrease(index)}>+</Button>
                 </Row>
               </Row>
             ))}
           </Column>
         </Column>
       );
-    };
+};
 interface QuoteDetailsChargeProps extends HTMLAttributes<HTMLDivElement> {
       amount: string,
       hourlyRate: string
 }
 const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ...props}) => {
+      const {user} = useUserStore((state) => state);
+      const {loading, addToBookings} = useAddToBookings();
+      const formData:BookMove = JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || "{}");
+      const quoteDetailsData = JSON.parse(localStorage.getItem(StorageKeys.QUOTE_DETAIL) || "{}");
+
+      if (!formData || !quoteDetailsData) {
+            toast({
+                  title: "Oops!",
+                  description: ErrorMessage.SERVICE_REQUEST_MADE,
+                  variant: "default"
+            })
+            return;
+      }
+
+      const handleBook = () => {
+            const formattedFormData = bookMoveFactory(formData);
+            const data = {
+              bookingId: generateBookingId(),
+              clientId: user?.uid ?? "",
+              driverId: "", //TODO: where is driverId from?
+              ...formattedFormData,
+              hasAdditionalStops: formattedFormData.additionalStops.length > 0 ? true : false,
+              hasAddOns: formData.services.length > 0 ? true : false,
+              status: "Pending" as "Pending",
+              movingDate: formattedFormData.date,
+              bookingDate: format(new Date(), 'M/dd/yyyy h:mm a'),
+              workoutEquipmentsQuantity: formData.workOutEquipment ? parseInt(formData.workOutEquipment) : 0,
+              majorAppliancesQuantity: formData.majorAppliances ? parseInt(formData.majorAppliances) : 0,
+              pianosQuantity: formData.pianos ? parseInt(formData.pianos ?? "0") : 0,
+              hotTubsQuantity: formData.hotTubs ? parseInt(formData.hotTubs ?? "0") : 0,
+              poolTablesQuantity: formData.poolTables ? parseInt(formData.poolTables) : 0,
+              quote: quoteDetailsData,
+              additionalNotes: formData.instructions,
+              serviceAddOns: formData.services,
+              estimatedNumberOfBoxes: formData.numberOfBoxes ? parseInt(formData.numberOfBoxes) : 0
+            };
+            const { date, addOns, ...dataWithoutDate } = data;
+
+            addToBookings(dataWithoutDate);
+      }
       return (
             <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
                   <H level={2} className="text-primary font-dm-sans text-lg">Total minimum charge</H>
@@ -249,7 +270,7 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
                   <Column className="gap-6">
                         <P className="text-grey-600 text-sm">Note: After Minimum Charge Billing Cost {hourlyRate} After Every Additional Hour</P>
                         <Input placeholder="Input Discount Code" className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400" />
-                        <Button>Book Now</Button>
+                        <Button loading={loading} onClick={ () => {if(formData && quoteDetailsData) handleBook()}}>Book Now</Button>
                   </Column>
             </Column>
       )

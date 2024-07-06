@@ -47,7 +47,5 @@ export interface BookMoveDto {
         hasElevator: string;
         id: string;
       }>;
-      companyId: string;
-      bookingId: string;
       requestType: "RegularMove" | "LabourOnly" | "LongDelivery";
 }
