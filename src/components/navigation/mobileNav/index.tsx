@@ -26,22 +26,22 @@ export const MobileNav:FC<Props> = ({ trigger }) => {
       const SIDE_NAV_MENU_DATA = [
             {
                   title: "Dashboard",
-                  icon: <Home {...sizes} invertColor={isActiveRoute(Routes.root) || sequenceRoutes.includes(path) } />,
+                  icon: <Home {...sizes} invertcolor={isActiveRoute(Routes.root) || sequenceRoutes.includes(path) } />,
                   route: Routes.root
             },
             {
                   title: "Bookings",
-                  icon: <Calendar {...sizes} invertColor={isActiveRoute(Routes.bookings)} />,
+                  icon: <Calendar {...sizes} invertcolor={isActiveRoute(Routes.bookings)} />,
                   route: Routes.bookings
             },
             {
                   title: "Messages",
-                  icon: <Chat {...sizes} invertColor={isActiveRoute(Routes.messages) || !!messagesRouteMatch} />,
+                  icon: <Chat {...sizes} invertcolor={isActiveRoute(Routes.messages) || !!messagesRouteMatch} />,
                   route: Routes.messages
             },
             {
                   title: "Profile",
-                  icon: <User {...sizes} invertColor={isActiveRoute(Routes.profile)} />,
+                  icon: <User {...sizes} invertcolor={isActiveRoute(Routes.profile)} />,
                   route: Routes.profile
             },
       ]
