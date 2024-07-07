@@ -46,7 +46,7 @@ const LocationInput: FC<LocationInputProps> = ({ name, control, label, defaultVa
         googleAutoComplete({ input: query, radius: 1800 });
       }
     }, 300),
-    []
+    [googleAutoComplete]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,7 +134,7 @@ const StopsLocationInput: FC<LocationInputProps> = ({ name, index, label, defaul
             googleAutoComplete({ input: query, radius: 1800 });
           }
         }, 300),
-        []
+        [googleAutoComplete]
       );
     
       const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
