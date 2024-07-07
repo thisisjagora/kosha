@@ -13,11 +13,11 @@ const initialState: BookDelivery = {
       time: "",
       pickUpLocation: {
             location: "",
-            apartment: ""
+            apartmentNumber: ""
       },
       deliveryLocation: {
             location: "",
-            apartment: ""
+            apartmentNumber: ""
       },
       PUDFinalDestination: {
             buildingType: "",
