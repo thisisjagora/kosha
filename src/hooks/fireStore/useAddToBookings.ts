@@ -4,11 +4,13 @@ import { Routes } from "@/core/routing";
 import { addToBookings as addToBookingsMethod } from "@/firebase/firestore";
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
+import useShowQuotes from "@/stores/show-quotes.store";
 import { Booking } from "@/types/structs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export const useAddToBookings = () => {
+      const {reset} = useShowQuotes((state) => state);
       const router = useRouter();
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState(null);
@@ -20,8 +22,9 @@ export const useAddToBookings = () => {
             addToBookingsMethod(payload)
             .then(() => {
                   localStorage.clear()
+                  reset()
                   toast({description: SUCCESS_MESSAGE.BOOKINGS_COMPLETE, variant: "success"})
-                  wait(500).then(() => router.push(Routes.bookings))
+                  wait(1000).then(() => router.push(Routes.bookings))
             })
             .catch((err) => {
                   setError(err);
