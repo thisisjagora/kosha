@@ -50,9 +50,12 @@ export const QuoteDetailsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const updateQuoteField = (field: keyof Quote, value: any) => {
     setQuoteDetailsData((prevData) => {
-      const newData = { ...prevData, [field]: value };
-      localStorage.setItem(StorageKeys.QUOTE_DETAIL, JSON.stringify(newData));
-      return newData;
+      if (prevData[field] !== value) {
+        const newData = { ...prevData, [field]: value };
+        localStorage.setItem(StorageKeys.QUOTE_DETAIL, JSON.stringify(newData));
+        return newData;
+      }
+      return prevData;
     });
   };
 
