@@ -13,10 +13,10 @@ import { generateBookingId } from "@/lib/helpers/generateBookingId";
 import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
 import useUserStore from "@/stores/user.store";
-import { BookMove, Booking, QuoteDetailsRate, Services } from "@/types/structs";
+import { BookMove, QuoteDetailsRate, Services } from "@/types/structs";
 import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const QuoteDetails:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -77,7 +77,7 @@ interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
 const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({ movers, ...props }) => {
       const { updateQuoteField } = useQuoteDetailsData();
       const [count, setCount] = useState<number>(movers);
-      const doodles = generateDoodles({ length: 3 });
+      const doodles = useMemo(() => generateDoodles({ length: 3 }), []);
     
       useEffect(() => {
         updateQuoteField("movers", count);
@@ -86,27 +86,38 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({ movers, ...props }
       return (
         <Column className={cn("max-w-[400px] text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg p-4", props.className)}>
           <Row className="justify-between items-center w-full">
-            <Button onClick={() => setCount((prevCount) => prevCount > 1 ? prevCount - 1 : 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+            <Button
+              onClick={() => setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 1))}
+              className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
+            >
               -
             </Button>
             <Column className="flex-1 max-w-max">
               <Row className="relative min-w-[210px]">
                 {doodles.map((item, index) => (
-                  <div key={item + index} className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", { "relative mr-[-20px]": index !== length - 1 }, `z-${index}`)}>
+                  <div
+                    key={item + index}
+                    className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", {
+                      "relative mr-[-20px]": index !== doodles.length - 1,
+                    }, `z-${index}`)}
+                  >
                     <Picture container={{ className: "w-full h-full rounded-full" }} image={{ alt: "movers doodle", src: item, className: "rounded-full " }} />
                   </div>
                 ))}
               </Row>
               <H className="text-primary font-bold text-2xl">{count} Movers</H>
             </Column>
-            <Button onClick={() => setCount((prevCount) => prevCount + 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+            <Button
+              onClick={() => setCount((prevCount) => prevCount + 1)}
+              className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
+            >
               +
             </Button>
           </Row>
           <P className="px-12 font-dm-sans text-grey-300 text-base">Click on the -\+ sign to increase or reduce the number of movers</P>
         </Column>
       );
-};
+    };
 interface QuoteDetailsRatesProps extends HTMLAttributes<HTMLDivElement> {
       rates: Array<QuoteDetailsRate>,
 }
@@ -270,7 +281,7 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
                   <Column className="gap-6">
                         <P className="text-grey-600 text-sm">Note: After Minimum Charge Billing Cost {hourlyRate} After Every Additional Hour</P>
                         <Input placeholder="Input Discount Code" className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400" />
-                        <Button loading={loading} onClick={ () => {if(formData && quoteDetailsData) handleBook()}}>Book Now</Button>
+                        <Button loading={loading} onClick={ () => {if(!(!formData || !quoteDetailsData)) handleBook()}}>Book Now</Button>
                   </Column>
             </Column>
       )
