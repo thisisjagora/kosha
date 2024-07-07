@@ -81,7 +81,7 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({ movers, ...props }
     
       useEffect(() => {
         updateQuoteField("movers", count);
-      }, [count]);
+      }, [count, updateQuoteField]);
     
       return (
         <Column className={cn("max-w-[400px] text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg p-4", props.className)}>
@@ -189,7 +189,7 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
     
       useEffect(() => {
         updateQuoteField("movingTruck", selectedTruck.type);
-      }, [selectedTruck.type]);
+      }, [selectedTruck.type, updateQuoteField]);
     
       return (
         <Column className="gap-6 w-full p-4 bg-white-100 shadow-custom rounded-lg">
