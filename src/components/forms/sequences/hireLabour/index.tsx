@@ -1,7 +1,7 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FC, useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { SERVICES, SequenceStepsProps } from "..";
 import { hireLabourSequenceStep1Schema, hireLabourSequenceStep2Schema, hireLabourSequenceStep3Schema } from "@/core/validators";
@@ -17,39 +17,40 @@ import { CalendarIcon } from "lucide-react";
 import { toast } from "@/components/toast/use-toast";
 import useHireLabourStore from "@/stores/hire-labour.store";
 import { Textarea } from "@/components/textarea";
-import { Camera, Cancel } from "@/components/Icons";
+import { Camera, Cancel, Check } from "@/components/Icons";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
-// import { AlertDialog } from "@/components/dialogs";
-import useShowQuotes from "@/stores/show-quotes.store";
+import { LocationInput } from "@/components/locationAutoCompleteInput";
+import { Dialog, DialogContent, DialogTitle } from "@/components/dialog";
+import Link from "next/link";
+import { Routes } from "@/core/routing";
+import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
+import { hireLabourFactory } from "@/core/models/hireLabourFactory";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const { update, formData } = useHireLabourStore((state) => state)
-      const {date, time, serviceLocation, apartment, buildingType, elevatorAccess, flightOfStairs} = formData
+      const {date, time, serviceLocation, apartmentNumber, buildingType, elevatorAccess, flightOfStairs} = formData
       const form = useForm<z.infer<typeof hireLabourSequenceStep1Schema>>({
             resolver: zodResolver(hireLabourSequenceStep1Schema),
             defaultValues:{
                 date,
                 time,
                 serviceLocation,
-                apartment,
+                apartmentNumber,
                 buildingType,
                 elevatorAccess,
                 flightOfStairs
             },
       })
 
+      const hasElevatorAccess = useWatch({
+            control: form.control,
+            name: "elevatorAccess",
+          });
+
       const onSubmit = (data: z.infer<typeof hireLabourSequenceStep1Schema>) => {
             onChangeStep("itm")
             update(data);
-            toast({
-                  title: "You submitted the following values:",
-                  description: (
-                    <pre className="mt-2 w-[340px] rounded-md p-4">
-                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                  ),
-                })
       }
       return (
             <Form {...form}>
@@ -96,7 +97,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                 <FormItem className="flex-1">
                                                       <FormLabel className="text-grey-300">Time</FormLabel>
                                                       <FormControl>
-                                                            <Input {...field}/>
+                                                            <Input type="time" {...field}/>
                                                       </FormControl>
                                                       <FormMessage className="text-destructive" />
                                                 </FormItem>
@@ -104,22 +105,10 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                               </Row>
                               <Row className="gap-6 flex-col sm:flex-row">
+                                    <LocationInput name="serviceLocation" control={form.control} label="Service Location" defaultValue={serviceLocation} />
                                     <FormField 
                                           control={form.control}
-                                          name="serviceLocation"
-                                          render={({ field }) => (
-                                                <FormItem className="flex-1">
-                                                      <FormLabel className="text-grey-300">Service Location</FormLabel>
-                                                      <FormControl>
-                                                            <Input {...field}/>
-                                                      </FormControl>
-                                                      <FormMessage className="text-destructive" />
-                                                </FormItem>
-                                          )}
-                                    />
-                                    <FormField 
-                                          control={form.control}
-                                          name="apartment"
+                                          name="apartmentNumber"
                                           render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                       <FormLabel className="text-grey-300">Apartment/Unit</FormLabel>
@@ -178,19 +167,23 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                   </FormItem>
                                           )}
                                     />
-                                    <FormField 
-                                          control={form.control}
-                                                            name="flightOfStairs"
-                                                            render={({ field }) => (
-                                                                  <FormItem className="flex-1">
-                                                                        <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
-                                                                        <FormControl>
-                                                                              <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
-                                                                        </FormControl>
-                                                                        <FormMessage className="text-destructive"/>
-                                                                  </FormItem>
-                                          )}
-                                    />
+                                    {
+                                          hasElevatorAccess === "No" && (
+                                                <FormField 
+                                                      control={form.control}
+                                                                        name="flightOfStairs"
+                                                                        render={({ field }) => (
+                                                                              <FormItem className="flex-1">
+                                                                                    <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
+                                                                                    <FormControl>
+                                                                                          <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
+                                                                                    </FormControl>
+                                                                                    <FormMessage className="text-destructive"/>
+                                                                              </FormItem>
+                                                      )}
+                                                />
+                                          )
+                                    }
                               </Row>
                         </Column>
                         <Row className="items-center justify-center my-8">
@@ -227,14 +220,6 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
       const onSubmit = (data: z.infer<typeof hireLabourSequenceStep2Schema>) => {
             onChangeStep("generalInfo")
             update(data);
-            toast({
-                  title: "You submitted the following values:",
-                  description: (
-                    <pre className="mt-2 w-[340px] rounded-md p-4">
-                      <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                    </pre>
-                  ),
-                })
       }
 
       return (
@@ -469,9 +454,11 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
 };
 
 const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
-      const { setShowQuote } = useShowQuotes((state) => state)
       const { update, formData } = useHireLabourStore((state) => state)
+      const { isPending, isSuccess, getQuotes } = useGetQuotes();
       const [selectAll, setSelectAll] = useState<boolean>(false);
+      const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess);
+
       const form = useForm<z.infer<typeof hireLabourSequenceStep3Schema>>({
             resolver: zodResolver(hireLabourSequenceStep3Schema),
             defaultValues: {
@@ -479,16 +466,14 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
             }
       });
 
+      useEffect(() => {
+            setIsDialogOpen(isSuccess);
+      }, [isSuccess]);
+
       const onSubmit = (data: z.infer<typeof hireLabourSequenceStep3Schema>) => {
             update(data)
-            toast({
-              title: "You submitted the following values:",
-              description: (
-                  <pre className="mt-2 w-[340px] rounded-md p-4">
-                        <code className="text-white">{JSON.stringify(formData, null, 2)}</code>
-                  </pre>
-              ),
-            })
+            const updatedFormData = { ...formData, ...data };
+            getQuotes(hireLabourFactory(updatedFormData));
       }
 
       const handleSelectAllChange = (checked: boolean) => {
@@ -570,18 +555,26 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
                                     className="flex-1 max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("itm")}
                               >Previous</Button>
-                              {/* <AlertDialog 
-                                    trigger={
-                                          <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
-                                    }
-                                    title="Labour Request Sent!"
-                                    buttonLabel="View Labour Vendor Quotes"
-                                    onClick={() => {
-                                          setTimeout(() => {
-                                                setShowQuote(true)
-                                          }, 2000)
-                                    }}
-                              /> */}
+                              <Button loading={isPending} type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+                              <Dialog
+                                    open={isDialogOpen}
+                                    onOpenChange={setIsDialogOpen}
+                                    >
+                                    <DialogContent className="sm:max-w-[600px]">
+                                          <DialogTitle className="sr-only">Labour Request Sent!</DialogTitle>
+                                          <Column className="items-center justify-center gap-8 md:px-24">
+                                          <Check className="w-[80px] h-[100px]" />
+                                          <Column className="items-center">
+                                          <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
+                                          {/* <P className="text-center text-grey-300"></P> */}
+                                          </Column>
+                                          <Link 
+                                                className="w-full py-2 text-white-100 bg-primary text-center rounded-sm" 
+                                                href={Routes.hireLabourQuotes}
+                                          >View Vendor Quotes</Link>
+                                          </Column>
+                                    </DialogContent>
+                              </Dialog>
                         </Row>
                   </form>
             </Form>
