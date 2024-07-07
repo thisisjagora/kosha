@@ -22,7 +22,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/checkbox";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
-import { Dialog, DialogContent } from "@/components/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/dialog";
 import { Routes } from "@/core/routing";
 import Link from "next/link";
 import { LocationInput, StopsLocationInput } from "@/components/locationAutoCompleteInput";
@@ -870,6 +870,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                 onOpenChange={setIsDialogOpen}
               >
                 <DialogContent className="sm:max-w-[600px]">
+                  <DialogTitle className="sr-only">Move Request Sent!</DialogTitle>
                   <Column className="items-center justify-center gap-8 md:px-24">
                     <Check className="w-[80px] h-[100px]" />
                     <Column className="items-center">
