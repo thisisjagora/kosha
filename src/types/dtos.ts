@@ -49,3 +49,12 @@ export interface BookMoveDto {
       }>;
       requestType: "RegularMove" | "LabourOnly" | "LongDelivery";
 }
+
+export interface GoogleAutoCompleteDto {
+  input: string,
+  location?: {
+    lat: string,
+    lng: string
+  }
+  radius: number
+}

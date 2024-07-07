@@ -20,13 +20,12 @@ import useBookMoveStore from "@/stores/book-move.store";
 import { Textarea } from "@/components/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
-import useShowQuotes from "@/stores/show-quotes.store";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
 import { Dialog, DialogContent } from "@/components/dialog";
 import { Routes } from "@/core/routing";
 import Link from "next/link";
-import { StorageKeys } from "@/constants/enums";
+import { LocationInput, StopsLocationInput } from "@/components/locationAutoCompleteInput";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -102,19 +101,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                               </Row>
                               <Row className="gap-6 flex-col sm:flex-row">
-                                    <FormField 
-                                          control={form.control}
-                                          name="pickUpLocation.location"
-                                          render={({ field }) => (
-                                                <FormItem className="flex-1">
-                                                      <FormLabel>Pickup Location</FormLabel>
-                                                      <FormControl>
-                                                            <Input {...field}/>
-                                                      </FormControl>
-                                                      <FormMessage />
-                                                </FormItem>
-                                          )}
-                                    />
+                                    <LocationInput name="pickUpLocation.location" control={form.control} label="Pickup Location" defaultValue={pickUpLocation.location} />
                                     <FormField 
                                           control={form.control}
                                           name="pickUpLocation.apartmentNumber"
@@ -170,19 +157,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                   </Button>
                                                       </Row>
                                                       <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                                                  <FormField 
-                                                                        control={form.control}
-                                                                        name={`stops.${index}.location`}
-                                                                        render={({ field }) => (
-                                                                              <FormItem className="flex-1">
-                                                                                    <FormLabel>Stop {index + 1}</FormLabel>
-                                                                                    <FormControl>
-                                                                                          <Input {...field}/>
-                                                                                    </FormControl>
-                                                                                    <FormMessage />
-                                                                              </FormItem>
-                                                                        )}
-                                                                  />
+                                                                  <StopsLocationInput name={`stops.${index}`} index={index} control={form.control} label={`Stop ${index + 1}`} defaultValue={stops[index]?.location} />
                                                                   <FormField 
                                                                         control={form.control}
                                                                         name={`stops.${index}.apartmentNumber`}
@@ -223,19 +198,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     </div>
                               </div>
                               <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                    <FormField 
-                                          control={form.control}
-                                          name="finalDestination.location"
-                                          render={({ field }) => (
-                                                <FormItem className="flex-1">
-                                                      <FormLabel>Final Destination</FormLabel>
-                                                      <FormControl>
-                                                            <Input {...field}/>
-                                                      </FormControl>
-                                                      <FormMessage />
-                                                </FormItem>
-                                          )}
-                                    />
+                                    <LocationInput name="finalDestination.location" control={form.control} label="Final Destination" defaultValue={finalDestination.location} />
                                     <FormField 
                                           control={form.control}
                                           name="finalDestination.apartmentNumber"
