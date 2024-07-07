@@ -4,11 +4,19 @@ import { Checkbox } from "@/components/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/form";
 import { Input } from "@/components/input";
 import { Column, Row } from "@/components/layout";
+import { toast } from "@/components/toast/use-toast";
+import { ErrorMessage, StorageKeys } from "@/constants/enums";
+import { useQuoteDetailsData } from "@/contexts/QuoteDetails.context";
+import { bookMoveFactory } from "@/core/models/bookMoveFactory";
+import { useAddToBookings } from "@/hooks/fireStore/useAddToBookings";
+import { generateBookingId } from "@/lib/helpers/generateBookingId";
 import { generateDoodles } from "@/lib/helpers/generateDoodle";
-import { cn } from "@/lib/utils";
-import { QuoteDetailsRate, Services } from "@/types/structs";
+import { cn, formatCurrency } from "@/lib/utils";
+import useUserStore from "@/stores/user.store";
+import { BookMove, Booking, QuoteDetailsRate, Services } from "@/types/structs";
+import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const QuoteDetails:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -23,9 +31,9 @@ interface QuoteDetailsMapProps extends HTMLAttributes<HTMLDivElement> {
                   long: string
             },
             name: string,
-            charge: string,
+            charge: number,
             reviews: number,
-            movesCompleted: number
+            movesCompleted: string
       }
 }
 const QuoteDetailsMap:FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
@@ -46,15 +54,15 @@ const QuoteDetailsMap:FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
                         <H className="text-2xl text-grey-300">{name}</H>
                         <Row className="items-start justify-evenly text-center gap-4 px-8">
                               <Column className="gap-0 flex-1">
-                                    <P className="text-primary font-bold font-dm-sans text-lg">${charge}</P>
+                                    <P className="text-primary font-bold font-dm-sans text-lg">{formatCurrency(charge)}</P>
                                     <P className="text-sm font-dm-sans text-grey-300">per hour</P>
                               </Column>
                               <Column className="gap-0 flex-1">
-                                    <P className="text-primary font-bold font-dm-sans text-lg">${reviews}</P>
+                                    <P className="text-primary font-bold font-dm-sans text-lg">{reviews}</P>
                                     <P className="text-sm font-dm-sans text-grey-300">reviews</P>
                               </Column>
                               <Column className="gap-0 flex-1">
-                                    <P className="text-primary font-bold font-dm-sans text-lg">${movesCompleted}</P>
+                                    <P className="text-primary font-bold font-dm-sans text-lg">{movesCompleted}</P>
                                     <P className="text-sm font-dm-sans text-grey-300">moves completed</P>
                               </Column>
                         </Row>
@@ -66,51 +74,41 @@ const QuoteDetailsMap:FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
 interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
       movers: number
 }
-const QuoteDetailsWorkers:FC<QuotesDetailsWorkersProps> = ({ movers, ...props }) => {
-      const [count, setCount] = useState<number>(movers)
-      const doodles = generateDoodles({length: 3})
+const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({ movers, ...props }) => {
+      const { updateQuoteField } = useQuoteDetailsData();
+      const [count, setCount] = useState<number>(movers);
+      const doodles = generateDoodles({ length: 3 });
+    
+      useEffect(() => {
+        updateQuoteField("movers", count);
+      }, [count, updateQuoteField]);
+    
       return (
-            <Column className={cn("text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg", props.className)}>
-                  <Row className="justify-evenly items-center w-full">
-                        <Button 
-                              onClick={() => setCount((prevCount) => prevCount > 0 ? prevCount - 1 : 0)}
-                              className="rounded-full shadow-custom w-[30px] h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                         >-</Button>
-                        <Column>
-                              <Row className="relative">
-                                    {
-                                          doodles.map((item, index) => (
-                                                <div key={item + index} className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", {
-                                                      "relative mr-[-20px]" : index !== length - 1,
-                                                }, `z-${index}`)}>
-                                                      <Picture 
-                                                            container={{
-                                                                  className: "w-full h-full rounded-full"
-                                                            }}
-                                                            image={{
-                                                                  alt: "movers doodle",
-                                                                  src: item,
-                                                                  className: "rounded-full "
-                                                            }}
-                                                      />
-                                                </div>
-                                          ))
-                                    }
-                              </Row>
-                              <H className="text-primary font-bold text-2xl">{count} Movers</H>
-                        </Column>
-                        <Button 
-                              onClick={() => setCount((prevCount) => prevCount + 1)}
-                              className="rounded-full shadow-custom w-[30px] h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                         >+</Button>
-                  </Row>
-                  <P className="px-12 xl:px-24 font-dm-sans text-grey-300 text-base">Click on the -\+ sign to increase or reduce the number of movers</P>
+        <Column className={cn("max-w-[400px] text-center items-center justify-center gap-4 bg-white-100 shadow-custom rounded-lg p-4", props.className)}>
+          <Row className="justify-between items-center w-full">
+            <Button onClick={() => setCount((prevCount) => prevCount > 1 ? prevCount - 1 : 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+              -
+            </Button>
+            <Column className="flex-1 max-w-max">
+              <Row className="relative min-w-[210px]">
+                {doodles.map((item, index) => (
+                  <div key={item + index} className={cn("w-[70px] h-[70px] p-[2px] rounded-full bg-white-100 border", { "relative mr-[-20px]": index !== length - 1 }, `z-${index}`)}>
+                    <Picture container={{ className: "w-full h-full rounded-full" }} image={{ alt: "movers doodle", src: item, className: "rounded-full " }} />
+                  </div>
+                ))}
+              </Row>
+              <H className="text-primary font-bold text-2xl">{count} Movers</H>
             </Column>
-      )
-}
-
+            <Button onClick={() => setCount((prevCount) => prevCount + 1)} className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100">
+              +
+            </Button>
+          </Row>
+          <P className="px-12 font-dm-sans text-grey-300 text-base">Click on the -\+ sign to increase or reduce the number of movers</P>
+        </Column>
+      );
+};
 interface QuoteDetailsRatesProps extends HTMLAttributes<HTMLDivElement> {
-      rates: Array<QuoteDetailsRate>
+      rates: Array<QuoteDetailsRate>,
 }
 const QuoteDetailsRates:FC<QuoteDetailsRatesProps> = ({ rates }) => {
       return (
@@ -118,30 +116,39 @@ const QuoteDetailsRates:FC<QuoteDetailsRatesProps> = ({ rates }) => {
                   <H level={2} className="text-primary font-dm-sans text-lg">Rates</H>
                   <Column>
                         {
-                              rates.map((item, index) => (
-                                    <Row key={item.label + index} className="items-center justify-between p-3 bg-white-100 shadow-custom rounded-lg">
-                                          <Row className="items-center">
-                                                <span className="w-[40px] h-[40px] bg-white-300 flex items-center justify-center rounded-lg">{item.icon}</span>
-                                                <P className="text-primary">{item.label}</P>
+                              rates.map((item, index) => {
+                                    if (!item.rate) return null;
+
+                                    return (
+                                          <Row key={item.label + index} className="items-center justify-between p-3 bg-white-100 shadow-custom rounded-lg">
+                                                <Row className="items-center">
+                                                      <span className="w-[40px] h-[40px] bg-white-300 flex items-center justify-center rounded-lg">{item.icon}</span>
+                                                      <P className="text-primary">{item.label} {item.count ? `(${item.count})` : null}</P>
+                                                </Row>
+                                                <P className="text-primary font-bold">{formatCurrency(item.rate)}</P>
                                           </Row>
-                                          <P className="text-primary font-bold">${item.rate}</P>
-                                    </Row>
-                              ))
+                                    )
+                              })
                         }
                   </Column>
             </Column>
       )
 }
 
-const QuoteDetailsVehicle = () => {
+interface QuoteDetailsVehicleProps {
+      truckType: string;
+}
+const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
+      const { updateQuoteField } = useQuoteDetailsData();
       const truckList = [
-        { type: 'pick-up', image: "/images/truckPickUp.png", quantity: 0 },
+        { type: 'pickup truck', image: "/images/truckPickUp.png", quantity: 0 },
         { type: 'van', image: "/images/truckVan.png", quantity: 0 },
         { type: '16 ft', image: "/images/truck16.png", quantity: 0 },
         { type: '24 ft', image: "/images/truck24.png", quantity: 0 }
       ];
     
       const [trucks, setTrucks] = useState(truckList);
+      const [selectedTruck, setSelectedTruck] = useState({ type: truckType, quantity: 0 });
     
       const handleIncrease = (index: number) => {
         setTrucks((prevTrucks) =>
@@ -149,6 +156,12 @@ const QuoteDetailsVehicle = () => {
             i === index ? { ...truck, quantity: truck.quantity + 1 } : truck
           )
         );
+        if (trucks[index].type === selectedTruck.type) {
+          setSelectedTruck((prevSelectedTruck) => ({
+            ...prevSelectedTruck,
+            quantity: prevSelectedTruck.quantity + 1
+          }));
+        }
       };
     
       const handleDecrease = (index: number) => {
@@ -159,7 +172,24 @@ const QuoteDetailsVehicle = () => {
               : truck
           )
         );
+        if (trucks[index].type === selectedTruck.type && selectedTruck.quantity > 0) {
+          setSelectedTruck((prevSelectedTruck) => ({
+            ...prevSelectedTruck,
+            quantity: prevSelectedTruck.quantity - 1
+          }));
+        }
       };
+    
+      const handleSelectTruck = (type: string) => {
+        const selected = trucks.find(truck => truck.type === type);
+        if (selected) {
+          setSelectedTruck({ type: selected.type, quantity: selected.quantity });
+        }
+      };
+    
+      useEffect(() => {
+        updateQuoteField("movingTruck", selectedTruck.type);
+      }, [selectedTruck.type, updateQuoteField]);
     
       return (
         <Column className="gap-6 w-full p-4 bg-white-100 shadow-custom rounded-lg">
@@ -167,49 +197,80 @@ const QuoteDetailsVehicle = () => {
           <Column className="gap-4">
             {trucks.map((item, index) => (
               <Row key={index} className="justify-between items-center">
-                <Picture 
-                  container={{
-                        className: "w-[73px] h-[38px]"
-                  }}
-                  image={{
-                        alt: "",
-                        src: item.image,
-                        className: "object-contain"
-                  }}
-                />
-                <Row className="items-center gap-1 max-w-[120px]">
-                  <Button
-                    onClick={() => handleDecrease(index)}
-                    className="rounded-full w-[22px] h-[22px] p-0 text-lg bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                  >
-                    -
-                  </Button>
-                  <span className="mx-4 flex-1 w-[30px] text-center">{item.quantity}</span>
-                  <Button
-                    onClick={() => handleIncrease(index)}
-                    className="rounded-full w-[22px] h-[22px] p-0 text-lg bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-                  >
-                    +
-                  </Button>
+                <Row onClick={() => handleSelectTruck(item.type)} className={`cursor-pointer items-center`}>
+                  {selectedTruck.type === item.type ? (
+                    <span className="rounded-full border border-primary w-[20px] h-[20px] flex items-center justify-center">
+                      <span className="bg-primary w-[10px] h-[10px] rounded-full" />
+                    </span>
+                  ) : (
+                    <span className="border border-primary w-[20px] h-[20px] rounded-full" />
+                  )}
+                  <Picture container={{ className: "w-[60px] h-[60px] rounded-full ml-4" }} image={{ alt: item.type, src: item.image, className: "rounded-full" }} />
+                </Row>
+                <Row className="items-center gap-4">
+                  <Button size="icon" className="max-w-[20px] max-h-[20px]" onClick={() => handleDecrease(index)}>-</Button>
+                  <span>{item.quantity}</span>
+                  <Button size="icon" className="max-w-[20px] max-h-[20px]" onClick={() => handleIncrease(index)}>+</Button>
                 </Row>
               </Row>
             ))}
           </Column>
         </Column>
       );
-    };
+};
 interface QuoteDetailsChargeProps extends HTMLAttributes<HTMLDivElement> {
-      amount: string
+      amount: string,
+      hourlyRate: string
 }
-const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, ...props}) => {
+const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ...props}) => {
+      const {user} = useUserStore((state) => state);
+      const {loading, addToBookings} = useAddToBookings();
+      const formData:BookMove = JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || "{}");
+      const quoteDetailsData = JSON.parse(localStorage.getItem(StorageKeys.QUOTE_DETAIL) || "{}");
+
+      if (!formData || !quoteDetailsData) {
+            toast({
+                  title: "Oops!",
+                  description: ErrorMessage.SERVICE_REQUEST_MADE,
+                  variant: "default"
+            })
+            return;
+      }
+
+      const handleBook = () => {
+            const formattedFormData = bookMoveFactory(formData);
+            const data = {
+              bookingId: generateBookingId(),
+              clientId: user?.uid ?? "",
+              driverId: "", //TODO: where is driverId from?
+              ...formattedFormData,
+              hasAdditionalStops: formattedFormData.additionalStops.length > 0 ? true : false,
+              hasAddOns: formData.services.length > 0 ? true : false,
+              status: "Pending" as "Pending",
+              movingDate: formattedFormData.date,
+              bookingDate: format(new Date(), 'M/dd/yyyy h:mm a'),
+              workoutEquipmentsQuantity: formData.workOutEquipment ? parseInt(formData.workOutEquipment) : 0,
+              majorAppliancesQuantity: formData.majorAppliances ? parseInt(formData.majorAppliances) : 0,
+              pianosQuantity: formData.pianos ? parseInt(formData.pianos ?? "0") : 0,
+              hotTubsQuantity: formData.hotTubs ? parseInt(formData.hotTubs ?? "0") : 0,
+              poolTablesQuantity: formData.poolTables ? parseInt(formData.poolTables) : 0,
+              quote: quoteDetailsData,
+              additionalNotes: formData.instructions,
+              serviceAddOns: formData.services,
+              estimatedNumberOfBoxes: formData.numberOfBoxes ? parseInt(formData.numberOfBoxes) : 0
+            };
+            const { date, addOns, ...dataWithoutDate } = data;
+
+            addToBookings(dataWithoutDate);
+      }
       return (
             <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
                   <H level={2} className="text-primary font-dm-sans text-lg">Total minimum charge</H>
-                  <H className="text-3xl font-bold">${amount}</H>
+                  <H className="text-3xl font-bold">{amount}</H>
                   <Column className="gap-6">
-                        <P className="text-grey-600 text-sm">Note: After Minimum Charge Billing Cost $120 After Every Additional Hour</P>
+                        <P className="text-grey-600 text-sm">Note: After Minimum Charge Billing Cost {hourlyRate} After Every Additional Hour</P>
                         <Input placeholder="Input Discount Code" className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400" />
-                        <Button>Book Now</Button>
+                        <Button loading={loading} onClick={ () => {if(formData && quoteDetailsData) handleBook()}}>Book Now</Button>
                   </Column>
             </Column>
       )

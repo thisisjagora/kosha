@@ -15,7 +15,6 @@ import { z } from "zod";
 import { SequenceStepsProps } from "..";
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/select";
-import { AlertDialog } from "@/components/dialogs";
 import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
 import { Camera, Cancel } from "@/components/Icons";
@@ -106,7 +105,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                                     <FormField 
                                           control={form.control}
-                                          name="pickUpLocation.apartment"
+                                          name="pickUpLocation.apartmentNumber"
                                           render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                       <FormLabel className="text-grey-300">Apartment/Unit</FormLabel>
@@ -137,7 +136,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                                     <FormField 
                                           control={form.control}
-                                          name="deliveryLocation.apartment"
+                                          name="deliveryLocation.apartmentNumber"
                                           render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                       <FormLabel className="text-grey-300">Apartment/Unit</FormLabel>
@@ -487,14 +486,7 @@ const Step3:FC<SequenceStepsProps>   = ({ onChangeStep }) => {
                                     className="flex-1 max-w-[180px] rounded-3xl"
                                     onClick={() => onChangeStep("pld")}
                               >Previous</Button>
-                              <AlertDialog 
-                                    trigger={
-                                          <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
-                                    }
-                                    title="Your Delivery Request has been Sent!"
-                                    buttonLabel="View Delivery Quotes"
-                                    onClick={() => setShowQuote(true)}
-                              />
+                              <Button type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
                         </Row>
                   </form>
             </Form>
