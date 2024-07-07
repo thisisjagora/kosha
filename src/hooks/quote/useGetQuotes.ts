@@ -8,7 +8,7 @@ import { Quote } from "@/types/structs";
 import { useMutation } from "@tanstack/react-query";
 
 export const useGetQuotes = () => {
-	const { formData } = useBookMoveStore((state) => state);
+	const { formData, reset } = useBookMoveStore((state) => state);
 	const setQuotesResult = useShowQuotes((state) => state.setQuotesResult);
     
 	const methods = useMutation<any, any, BookMoveDto>({
@@ -22,6 +22,7 @@ export const useGetQuotes = () => {
 			.then((res) => {
 				localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(formData))
                         setQuotesResult(res.result as Array<Quote>)
+				reset()
 			})
 			.catch((err) => {
                         toast({
