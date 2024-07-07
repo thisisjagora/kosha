@@ -1,10 +1,13 @@
 import { mergeArrays } from "@/lib/utils";
 import { BookMoveDto } from "@/types/dtos";
 import { BookMove } from "@/types/structs";
+import { format } from "date-fns";
 
 const parseFlightOfStairs = (stop: any) => ({
       ...stop,
-      flightOfStairs: stop.flightOfStairs ? parseInt(stop.flightOfStairs) : 0,
+      flightOfStairs: typeof stop.flightOfStairs === "string" ? parseInt(stop.flightOfStairs) || 0 
+                      : typeof stop.flightOfStairs === "number" ? stop.flightOfStairs
+                      : 0,
     });
 
 /**
@@ -29,30 +32,31 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
     
     const filteredAddOns = addOns.filter(item => !isNaN(item.quantity) && item.quantity > 0);
 
+    const formattedDate = format(new Date(a.moveDate), 'M/d/yyyy');
+    const formattedTime = format(new Date(`1970-01-01T${a.time}:00`), 'h:mm a');
+
       return {
             fromAddress: {
                   address: a.pickUpLocation.location,
                   apartmentNumber: a.pickUpLocation.apartmentNumber ?? "",
                   buildingType: a.PUDPickUpLocation.buildingType,
                   flightOfStairs: a.PUDPickUpLocation.flightOfStairs ? parseInt(a.PUDPickUpLocation.flightOfStairs) : 0,
-                  googlePlaceId: a.PUDPickUpLocation.buildingType,
+                  googlePlaceId: a.pickUpLocation.googlePlaceId ?? "",
                   hasElevator: a.PUDPickUpLocation.elevatorAccess,
-                  id: a.PUDPickUpLocation.buildingType
+                  id: ""
             },
             toAddress: {
                   address: a.finalDestination.location,
                   apartmentNumber: a.finalDestination.apartmentNumber ?? "",
                   buildingType: a.PUDFinalDestination.buildingType,
                   flightOfStairs: a.PUDFinalDestination.flightOfStairs ? parseInt(a.PUDFinalDestination.flightOfStairs) : 0,
-                  googlePlaceId: a.PUDFinalDestination.buildingType,
+                  googlePlaceId: a.finalDestination.googlePlaceId ?? "",
                   hasElevator: a.PUDFinalDestination.elevatorAccess,
-                  id: a.PUDFinalDestination.buildingType,
+                  id: "",
             },
-            date: `${a.moveDate} ${a.time}`,
+            date: `${formattedDate} ${formattedTime}`,
             additionalStops: mergeArrays(a.stops, a.PUDStops).map(parseFlightOfStairs),
             addOns: filteredAddOns,
-            companyId: "",
-            bookingId: "",
             requestType: "RegularMove"
       }
 }

@@ -1,7 +1,7 @@
 import { toast } from "@/components/toast/use-toast";
 import { Routes } from "@/core/routing";
 import { deleteUserAccount } from "@/firebase/auth";
-import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
+import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
 import useUserStore from "@/stores/user.store";
 import { IUser } from "@/types/structs";
@@ -21,13 +21,14 @@ export const useDeleteAccount = () => {
         deleteUserAccount(user as IUser)
           .then(() => {
             updateUser(null);
+            localStorage.clear();
             wait(1000).then(() => window.location.reload());
           })
           .catch((err) => {
             setError(err);
             toast({
               title: "Oops!",
-              description: getErrorMessage(err),
+              description: getFirebaseErrorMessage(err),
               variant: "destructive",
             });
           })

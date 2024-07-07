@@ -2,7 +2,7 @@ import * as React from "react";
 import type { SVGProps } from "react";
 import { memo } from "react";
 interface Props extends SVGProps<SVGSVGElement>{
-  invertColor?: boolean
+  invertcolor?: boolean
 }
 const SvgUser: React.FC<Props> = (props) => (
   <svg
@@ -16,7 +16,7 @@ const SvgUser: React.FC<Props> = (props) => (
     <ellipse
       cx={12.5}
       cy={17.5}
-      stroke={props.invertColor? "#ffffff" : "#A3AED0"}
+      stroke={props.invertcolor? "#ffffff" : "#A3AED0"}
       strokeLinejoin="round"
       strokeWidth={1.5}
       rx={7}
@@ -26,7 +26,7 @@ const SvgUser: React.FC<Props> = (props) => (
       cx={12.5}
       cy={7}
       r={4}
-      stroke={props.invertColor? "#ffffff" : "#A3AED0"}
+      stroke={props.invertcolor? "#ffffff" : "#A3AED0"}
       strokeLinejoin="round"
       strokeWidth={1.5}
     />

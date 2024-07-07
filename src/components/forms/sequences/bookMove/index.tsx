@@ -1,8 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SERVICES, SequenceStepsProps } from "..";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/form";
 import { AnimatePresence, motion } from "framer-motion";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema, bookMoveSequenceStep4Schema } from "@/core/validators";
@@ -20,10 +20,12 @@ import useBookMoveStore from "@/stores/book-move.store";
 import { Textarea } from "@/components/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Checkbox } from "@/components/checkbox";
-import useShowQuotes from "@/stores/show-quotes.store";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
-import { Dialog, DialogContent } from "@/components/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/dialog";
+import { Routes } from "@/core/routing";
+import Link from "next/link";
+import { LocationInput, StopsLocationInput } from "@/components/locationAutoCompleteInput";
 
 const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       const {update, formData, removeStop} = useBookMoveStore((state) => state)
@@ -91,7 +93,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                 <FormItem className="flex-1">
                                                       <FormLabel>Time</FormLabel>
                                                       <FormControl>
-                                                            <Input {...field}/>
+                                                            <Input {...field} type="time"/>
                                                       </FormControl>
                                                       <FormMessage />
                                                 </FormItem>
@@ -99,19 +101,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     />
                               </Row>
                               <Row className="gap-6 flex-col sm:flex-row">
-                                    <FormField 
-                                          control={form.control}
-                                          name="pickUpLocation.location"
-                                          render={({ field }) => (
-                                                <FormItem className="flex-1">
-                                                      <FormLabel>Pickup Location</FormLabel>
-                                                      <FormControl>
-                                                            <Input {...field}/>
-                                                      </FormControl>
-                                                      <FormMessage />
-                                                </FormItem>
-                                          )}
-                                    />
+                                    <LocationInput name="pickUpLocation.location" control={form.control} label="Pickup Location" defaultValue={pickUpLocation.location} />
                                     <FormField 
                                           control={form.control}
                                           name="pickUpLocation.apartmentNumber"
@@ -167,19 +157,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                                   </Button>
                                                       </Row>
                                                       <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                                                  <FormField 
-                                                                        control={form.control}
-                                                                        name={`stops.${index}.location`}
-                                                                        render={({ field }) => (
-                                                                              <FormItem className="flex-1">
-                                                                                    <FormLabel>Stop {index + 1}</FormLabel>
-                                                                                    <FormControl>
-                                                                                          <Input {...field}/>
-                                                                                    </FormControl>
-                                                                                    <FormMessage />
-                                                                              </FormItem>
-                                                                        )}
-                                                                  />
+                                                                  <StopsLocationInput name={`stops.${index}`} index={index} control={form.control} label={`Stop ${index + 1}`} defaultValue={stops[index]?.location} />
                                                                   <FormField 
                                                                         control={form.control}
                                                                         name={`stops.${index}.apartmentNumber`}
@@ -220,19 +198,7 @@ const Step1:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                     </div>
                               </div>
                               <Row className="bg-white-100 shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-                                    <FormField 
-                                          control={form.control}
-                                          name="finalDestination.location"
-                                          render={({ field }) => (
-                                                <FormItem className="flex-1">
-                                                      <FormLabel>Final Destination</FormLabel>
-                                                      <FormControl>
-                                                            <Input {...field}/>
-                                                      </FormControl>
-                                                      <FormMessage />
-                                                </FormItem>
-                                          )}
-                                    />
+                                    <LocationInput name="finalDestination.location" control={form.control} label="Final Destination" defaultValue={finalDestination.location} />
                                     <FormField 
                                           control={form.control}
                                           name="finalDestination.apartmentNumber"
@@ -271,6 +237,15 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                   PUDStops
             }
       })
+
+      const finalDestinationElevatorAccess = useWatch({
+            control: form.control,
+            name: "PUDFinalDestination.elevatorAccess",
+          });
+      const pickUpLocationElevatorAccess = useWatch({
+            control: form.control,
+            name: "PUDPickUpLocation.elevatorAccess",
+          });
 
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
             onChangeStep("generalInfo")
@@ -334,19 +309,23 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                             </FormItem>
                                                       )}
                                                 />
-                                                <FormField 
-                                                      control={form.control}
-                                                      name="PUDPickUpLocation.flightOfStairs"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
-                                                                  <FormControl>
-                                                                        <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
-                                                                  </FormControl>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
+                                                {
+                                                      pickUpLocationElevatorAccess === "Yes" ? null : (
+                                                            <FormField 
+                                                            control={form.control}
+                                                            name="PUDPickUpLocation.flightOfStairs"
+                                                            render={({ field }) => (
+                                                                  <FormItem className="flex-1">
+                                                                        <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
+                                                                        <FormControl>
+                                                                              <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
+                                                                        </FormControl>
+                                                                        <FormMessage className="text-destructive"/>
+                                                                  </FormItem>
+                                                            )}
+                                                      />
+                                                      )
+                                                }
                                           </Row>
                                     </Row>
                               </Row>
@@ -466,39 +445,43 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
                                                       )}
                                                 />
                                                 <FormField
-                                                      control={form.control} 
-                                                      name="PUDFinalDestination.elevatorAccess"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Elevator Access</FormLabel>
-                                                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                  <FormControl>
-                                                                        <SelectTrigger>
-                                                                        <SelectValue placeholder="Yes" />
-                                                                        </SelectTrigger>
-                                                                  </FormControl>
-                                                                  <SelectContent>
-                                                                        <SelectItem value="Yes">Yes</SelectItem>
-                                                                        <SelectItem value="No">No</SelectItem>
-                                                                  </SelectContent>
-                                                                  </Select>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
-                                                <FormField 
-                                                      control={form.control}
-                                                      name="PUDFinalDestination.flightOfStairs"
-                                                      render={({ field }) => (
-                                                            <FormItem className="flex-1">
-                                                                  <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
-                                                                  <FormControl>
-                                                                        <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
-                                                                  </FormControl>
-                                                                  <FormMessage className="text-destructive"/>
-                                                            </FormItem>
-                                                      )}
-                                                />
+                                                            control={form.control} 
+                                                            name="PUDFinalDestination.elevatorAccess"
+                                                            render={({ field }) => (
+                                                                  <FormItem className="flex-1">
+                                                                        <FormLabel className="text-grey-300">Elevator Access</FormLabel>
+                                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                        <FormControl>
+                                                                              <SelectTrigger>
+                                                                              <SelectValue placeholder="Yes" />
+                                                                              </SelectTrigger>
+                                                                        </FormControl>
+                                                                        <SelectContent>
+                                                                              <SelectItem value="Yes">Yes</SelectItem>
+                                                                              <SelectItem value="No">No</SelectItem>
+                                                                        </SelectContent>
+                                                                        </Select>
+                                                                        <FormMessage className="text-destructive"/>
+                                                                  </FormItem>
+                                                            )}
+                                                      />
+                                                {
+                                                      finalDestinationElevatorAccess === "No" && (
+                                                            <FormField 
+                                                            control={form.control}
+                                                            name="PUDFinalDestination.flightOfStairs"
+                                                            render={({ field }) => (
+                                                                  <FormItem className="flex-1">
+                                                                        <FormLabel className="text-grey-300">Flight of Stairs</FormLabel>
+                                                                        <FormControl>
+                                                                              <Input className="h-10 rounded-lg" {...field} {...InputDirectives.numbersOnly} />
+                                                                        </FormControl>
+                                                                        <FormMessage className="text-destructive"/>
+                                                                  </FormItem>
+                                                            )}
+                                                      />
+                                                      )
+                                                }
                                           </Row>
                                     </Row>
                               </Row>
@@ -773,127 +756,138 @@ const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) => {
       )
 };
 
-const Step4:FC<SequenceStepsProps>  = ({ onChangeStep })  => {
-      const setShowQuote = useShowQuotes((state) => state.setShowQuote)
-      const { update, formData } = useBookMoveStore((state) => state)
-      const {isPending, isSuccess, getQuotes} = useGetQuotes();
+const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
+      const { update, formData } = useBookMoveStore((state) => state);
+      const { isPending, isSuccess, getQuotes } = useGetQuotes();
       const [selectAll, setSelectAll] = useState<boolean>(false);
-      const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess)
+      const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess);
+    
       const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
-            resolver: zodResolver(bookMoveSequenceStep4Schema),
-            defaultValues: {
-                  services: []
-            }
+        resolver: zodResolver(bookMoveSequenceStep4Schema),
+        defaultValues: {
+            services: formData.services
+        }
       });
 
+      useEffect(() => {
+            setIsDialogOpen(isSuccess);
+      }, [isSuccess]);
+    
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
-            update(data)
-            getQuotes(bookMoveFactory(formData))
-      }
-
+        update(data);
+        const updatedFormData = { ...formData, ...data };
+        getQuotes(bookMoveFactory(updatedFormData));
+      };
+    
       const handleSelectAllChange = (checked: boolean) => {
-            setSelectAll(checked);
-            form.setValue(
-              "services",
-              checked ? SERVICES.map((service) => service.id) : []
-            );
-          };
-
+        setSelectAll(checked);
+        form.setValue(
+          "services",
+          checked ? SERVICES.map((service) => service.id) : []
+        );
+      };
+    
       return (
-            <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm">
-                        <Table>
-                              <TableHeader>
-                                    <Row className="mb-4 items-center">
-                                          <FormControl>
-                                                <Checkbox
-                                                id="select-all"
-                                                checked={selectAll}
-                                                onCheckedChange={handleSelectAllChange}
-                                                />
-                                          </FormControl>
-                                          <FormLabel htmlFor="select-all" className="font-medium text-base ml-2 hover:cursor-pointer">
-                                                Select All
-                                          </FormLabel>
-                                    </Row>
-                                    <TableRow>
-                                          <TableHead className="w-[300px] text-grey-100">Services</TableHead>
-                                          <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
-                                    </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                    {SERVICES.map((service, index) => (
-                                    <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
-                                          <TableCell>
-                                                <FormField
-                                                      control={form.control}
-                                                      name="services"
-                                                      render={({ field }) => {
-                                                      const checkboxId = `services-${service.id}`;
-                                                      const isChecked = field.value?.includes(service.id)
-                                                      return (
-                                                            <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                                                  <FormControl>
-                                                                        <Checkbox
-                                                                              className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
-                                                                              id={checkboxId}
-                                                                              checked={isChecked}
-                                                                              onCheckedChange={(checked) => {
-                                                                              return checked
-                                                                              ? field.onChange([...field.value || [], service.id])
-                                                                              : field.onChange(field.value?.filter((value) => value !== service.id));
-                                                                              }}
-                                                                        />
-                                                                  </FormControl>
-                                                                  <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
-                                                                        "text-primary font-medium": isChecked
-                                                                  })}>
-                                                                        {service.label}
-                                                                  </FormLabel>
-                                                            </FormItem>
-                                                      );
-                                                      }}
-                                                />
-                                          </TableCell>
-                                          <TableCell className="hidden sm:block">
-                                                <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
-                                                      {service.description}
-                                                </FormLabel>
-                                          </TableCell>
-                                    </TableRow>
-                                    ))}
-                              </TableBody>
-                        </Table>
-                        <Row className="items-center justify-center my-8 flex-wrap">
-                              <Button 
-                                    type="button" 
-                                    className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
-                                    onClick={() => onChangeStep("generalInfo")}
-                              >Previous</Button>
-                              <Button
-                                    loading={isPending}
-                                    type="submit" 
-                                    className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
-                              >Send Request</Button>
-                              <Dialog
-                                    open={isDialogOpen}
-                                    onOpenChange={setIsDialogOpen}
-                              >
-                                    <DialogContent className="sm:max-w-[600px]">
-                                          <Column className="items-center justify-center gap-8 md:px-24">
-                                                <Check className="w-[80px] h-[100px]"/>
-                                                <Column className="items-center">
-                                                      <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
-                                                      {/* <P className="text-center text-grey-300"></P> */}
-                                                </Column>
-                                                <Button className="w-full" onClick={() => setShowQuote(true)}>View Vendor Quotes</Button>
-                                          </Column>
-                                    </DialogContent>
-                              </Dialog>
-                        </Row>
-                  </form>
-            </Form>
-      )
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm">
+            <Table>
+              <TableHeader>
+                <Row className="mb-4 items-center">
+                  <FormControl>
+                    <Checkbox
+                      id="select-all"
+                      checked={selectAll}
+                      onCheckedChange={handleSelectAllChange}
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="select-all" className="font-medium text-base ml-2 hover:cursor-pointer">
+                    Select All
+                  </FormLabel>
+                </Row>
+                <TableRow>
+                  <TableHead className="w-[300px] text-grey-100">Services</TableHead>
+                  <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {SERVICES.map((service, index) => (
+                  <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name="services"
+                        render={({ field }) => {
+                          const checkboxId = `services-${service.id}`;
+                          const isChecked = field.value?.includes(service.id);
+                          return (
+                            <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                                  id={checkboxId}
+                                  checked={isChecked}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      field.onChange([...field.value || [], service.id]);
+                                    } else {
+                                      field.onChange(field.value?.filter((value) => value !== service.id));
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
+                                "text-primary font-medium": isChecked
+                              })}>
+                                {service.label}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell className="hidden sm:block">
+                      <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
+                        {service.description}
+                      </FormLabel>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Row className="items-center justify-center my-8 flex-wrap">
+              <Button
+                type="button"
+                className="order-1 sm:order-0 flex-1 min-w-[200px] sm:max-w-[180px] rounded-3xl"
+                onClick={() => onChangeStep("generalInfo")}
+              >Previous</Button>
+              <Button
+                loading={isPending}
+                type="submit"
+                className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
+              >Send Request</Button>
+              <Dialog
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+              >
+                <DialogContent className="sm:max-w-[600px]">
+                  <DialogTitle className="sr-only">Move Request Sent!</DialogTitle>
+                  <Column className="items-center justify-center gap-8 md:px-24">
+                    <Check className="w-[80px] h-[100px]" />
+                    <Column className="items-center">
+                      <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
+                      {/* <P className="text-center text-grey-300"></P> */}
+                    </Column>
+                    <Link 
+                        className="w-full py-2 text-white-100 bg-primary text-center rounded-sm" 
+                        href={Routes.bookMoveQuotes}
+                  >View Vendor Quotes</Link>
+                  </Column>
+                </DialogContent>
+              </Dialog>
+            </Row>
+          </form>
+        </Form>
+      );
 };
 
 export const BookMoveSequence = {
