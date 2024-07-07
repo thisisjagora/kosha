@@ -48,7 +48,7 @@ const Page = () => {
                               </SequencesLayout>
                         )
                   }
-                  <Quotations<DeliveryQuote> 
+                  {/* <Quotations<DeliveryQuote> 
                         list={BookDeliveryMock}
                         renderItem={({index, item}) => (
                               <Quotes key={item.name + index} className="min-w-[270px]">
@@ -68,7 +68,7 @@ const Page = () => {
                                     </QuotesContent>
                               </Quotes>
                         )}
-                  />
+                  /> */}
             </>
       )
 }
