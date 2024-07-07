@@ -1,7 +1,7 @@
 import { AdditionalStops, Alarm, Appliances, FlightOfStairs, Piano, TruckFrontGrey } from "@/components/Icons";
 import { DeliveryQuote, LabourQuote, MoveQuote, QuoteDetailsRate } from "@/types/structs";
 
-export const BookMoveMock:Array<MoveQuote> = [
+export const BookMoveMock = [
       {
             name: "Pete and Sons",
             movers: 2,
@@ -74,7 +74,7 @@ export const BookMoveMock:Array<MoveQuote> = [
       },
 ]
 
-export const HireLabourMock:Array<LabourQuote> = [
+export const HireLabourMock = [
       {
             name: "Faith Delivery",
             movers: 3,
@@ -140,7 +140,7 @@ export const HireLabourMock:Array<LabourQuote> = [
       }
 ]
 
-export const BookDeliveryMock:Array<DeliveryQuote> = [
+export const BookDeliveryMock = [
       {
             name: "Tiyende Movers",
             rating: "4.6",
@@ -203,35 +203,3 @@ const iconSizes = {
       width: 21,
       height: 21
 }
-export const QuoteDetailsRatesMock:Array<QuoteDetailsRate> = [
-      {
-            icon: <TruckFrontGrey {...iconSizes} />,
-            label: "Truck Fee",
-            rate: "49"
-      },
-      {
-            icon: <Appliances {...iconSizes} />,
-            label: "Appliances",
-            rate: "279.95"
-      },
-      {
-            icon: <FlightOfStairs {...iconSizes} />,
-            label: "Flight of Stairs",
-            rate: "95"
-      },
-      {
-            icon: <Piano {...iconSizes} />,
-            label: "Piano",
-            rate: "79.50"
-      },
-      {
-            icon: <AdditionalStops {...iconSizes} />,
-            label: "Additional Stops",
-            rate: "27.50"
-      },
-      {
-            icon: <Alarm {...iconSizes} />,
-            label: "Minimum Hours",
-            rate: "356"
-      }
-]

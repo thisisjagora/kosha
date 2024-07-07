@@ -25,7 +25,8 @@ export const signUpSchema = z.object({
 
 const locationSchema = z.object({
   location: z.string().min(1, {message: "Location is required"}),
-  apartmentNumber: z.string().optional()
+  apartmentNumber: z.string().optional(),
+  googlePlaceId: z.string().optional()
 });
 
 export const bookMoveSequenceStep1Schema = z.object({

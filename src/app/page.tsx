@@ -5,10 +5,8 @@ import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
-import { formatStopsAndPUDStops } from "@/core/models/bookMoveFactory";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
-import { QuoteDetailsRatesMock } from "@/mocks";
 import Link from "next/link";
 import { useState } from "react";
 

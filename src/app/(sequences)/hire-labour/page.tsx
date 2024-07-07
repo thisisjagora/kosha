@@ -48,7 +48,7 @@ const Page = () => {
                               </SequencesLayout>
                         )
                   }
-                  <Quotations<LabourQuote> 
+                  {/* <Quotations<LabourQuote> 
                         list={HireLabourMock}
                         renderItem={({index, item}) => (
                               <Quotes key={item.name + index}>
@@ -60,7 +60,7 @@ const Page = () => {
                                                 <QuotesMovers>{item.movers} Movers</QuotesMovers>
                                                 </Column>
                                                 <QuotesMoversDoodles length={item.movers}/>
-                                                {/* <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime> */}
+                                                <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
                                           </Row>
                                           <Row className="justify-between items-center">
                                                 <Column className="gap-1">
@@ -72,7 +72,7 @@ const Page = () => {
                                     </QuotesContent>
                               </Quotes>
                         )}
-                  />
+                  /> */}
             </>
       )
 }

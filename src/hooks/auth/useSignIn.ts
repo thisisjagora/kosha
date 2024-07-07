@@ -1,8 +1,9 @@
 import { toast } from "@/components/toast/use-toast";
 import { Routes } from "@/core/routing";
 import { signIn, signInWithGoogle as signInWithPopup } from "@/firebase/auth"
-import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
+import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import useUserStore from "@/stores/user.store";
+import { SignInDto } from "@/types/dtos";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -25,7 +26,7 @@ export const useSignIn = () => {
                   setError(err);
                   toast({
                         title:"Oops!",
-                        description: getErrorMessage(err),
+                        description: getFirebaseErrorMessage(err),
                         variant:"destructive"
                   })
             })            
@@ -59,7 +60,7 @@ export const useSignInWithGoogle = () => {
                         setError(err);
                         toast({
                               title:"Oops!",
-                              description: getErrorMessage(err),
+                              description: getFirebaseErrorMessage(err),
                               variant:"destructive"
                         })
                   })            
