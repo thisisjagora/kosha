@@ -8,6 +8,7 @@ interface Store {
   quotesResult: Array<Quote>;
   setShowQuote: (value: boolean) => void;
   setQuotesResult: (quotes: Array<Quote> | undefined) => void;
+  reset: () => void;
 }
 
 const useShowQuotes = create<Store>()(
@@ -16,7 +17,8 @@ const useShowQuotes = create<Store>()(
       showQuote: false,
       quotesResult: [],
       setShowQuote: (value: boolean) => set({ showQuote: value }),
-      setQuotesResult: (quotes: Array<Quote> | undefined) => set({ quotesResult: quotes || [] })
+      setQuotesResult: (quotes: Array<Quote> | undefined) => set({ quotesResult: quotes || [] }),
+      reset: () => set({ quotesResult: [] })
     }),
     {
       name: StorageKeys.QUOTES_RESULT,
