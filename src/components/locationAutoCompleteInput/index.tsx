@@ -7,8 +7,11 @@ import { debounce } from "lodash";
 import useBookMoveStore from "@/stores/book-move.store";
 import { trimTextAtPeriod } from "@/lib/utils";
 import { Loader } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import {  useFormContext } from "react-hook-form";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import useHireLabourStore from "@/stores/hire-labour.store";
+import { useValidRoute } from "@/hooks/useValidRoute";
+import { Routes } from "@/core/routing";
 
 interface LocationInputProps {
   name: string;
@@ -19,6 +22,7 @@ interface LocationInputProps {
 }
 
 const LocationInput: FC<LocationInputProps> = ({ name, control, label, defaultValue }) => {
+  const { isValidRoute: isHireLabourRoute } = useValidRoute(Routes.sequence.hireLabour)
   const { googleAutoComplete, data, isPending } = useGoogleAutoComplete();
   const [inputValue, setInputValue] = useState(defaultValue);
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -27,6 +31,7 @@ const LocationInput: FC<LocationInputProps> = ({ name, control, label, defaultVa
 
   const { setValue } = useFormContext();
   const updateField = useBookMoveStore((state) => state.updateField);
+  const { updateField : updateHireLabourField } = useHireLabourStore((state) => state);
 
   useEffect(() => {
     if (data) {
@@ -58,12 +63,20 @@ const LocationInput: FC<LocationInputProps> = ({ name, control, label, defaultVa
     setInputValue(suggestion.description);
     field.onChange(suggestion.description);
     const trimmedName = trimTextAtPeriod(name);
-    setValue(`${trimmedName}.location`, suggestion.description);
-    setValue(`${trimmedName}.googlePlaceId`, suggestion.place_id);
-    updateField(trimmedName, {
-      location: suggestion.description,
-      googlePlaceId: suggestion.place_id
-    });
+
+    if(isHireLabourRoute){
+      setValue(name, suggestion.description);
+      setValue("googlePlaceId", suggestion.place_id);
+      updateHireLabourField(name, suggestion.description)
+      updateHireLabourField("googlePlaceId", suggestion.place_id)
+    }else{
+      setValue(`${trimmedName}.location`, suggestion.description);
+      setValue(`${trimmedName}.googlePlaceId`, suggestion.place_id);
+      updateField(trimmedName, {
+        location: suggestion.description,
+        googlePlaceId: suggestion.place_id
+      });
+    }
     setSuggestions([]);
     setIsOpen(false);
   };
