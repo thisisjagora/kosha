@@ -15,12 +15,14 @@ const initialState: BookMove = {
       time: "",
       pickUpLocation: {
             location: "",
-            apartmentNumber: ""
+            apartmentNumber: "",
+            googlePlaceId: ""
       },
       stops: [],
       finalDestination: {
             location: "",
-            apartmentNumber: ""
+            apartmentNumber: "",
+            googlePlaceId: ""
       },
       PUDFinalDestination: {
             elevatorAccess: "Yes",
@@ -49,9 +51,20 @@ const useBookMoveStore = create<Store>((set) => ({
   update: (newData) => set((state) => ({
     formData: { ...state.formData, ...newData }
   })),
-  updateField: (fieldName, newValue) => set((state) => ({
+  updateField: (fieldName, newValue) => set((state) => {
+    if (fieldName.startsWith('stops')) {
+      const stopIndex = parseInt(fieldName.split('.')[1]);
+      const updatedStops = [...state.formData.stops];
+      const updatedStop = { ...updatedStops[stopIndex], ...newValue as {} };
+      updatedStops[stopIndex] = updatedStop;
+      return {
+        formData: { ...state.formData, stops: updatedStops }
+      };
+    }
+    return {
       formData: { ...state.formData, [fieldName]: newValue }
-    })),
+    };
+  }),
   removeStop: (index) => set((state) => ({
       formData: {
         ...state.formData,

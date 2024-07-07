@@ -41,7 +41,7 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
                   apartmentNumber: a.pickUpLocation.apartmentNumber ?? "",
                   buildingType: a.PUDPickUpLocation.buildingType,
                   flightOfStairs: a.PUDPickUpLocation.flightOfStairs ? parseInt(a.PUDPickUpLocation.flightOfStairs) : 0,
-                  googlePlaceId: a.PUDPickUpLocation.buildingType,
+                  googlePlaceId: a.pickUpLocation.googlePlaceId ?? "",
                   hasElevator: a.PUDPickUpLocation.elevatorAccess,
                   id: ""
             },
@@ -50,7 +50,7 @@ export const bookMoveFactory = (a:BookMove): BookMoveDto => {
                   apartmentNumber: a.finalDestination.apartmentNumber ?? "",
                   buildingType: a.PUDFinalDestination.buildingType,
                   flightOfStairs: a.PUDFinalDestination.flightOfStairs ? parseInt(a.PUDFinalDestination.flightOfStairs) : 0,
-                  googlePlaceId: a.PUDFinalDestination.buildingType,
+                  googlePlaceId: a.finalDestination.googlePlaceId ?? "",
                   hasElevator: a.PUDFinalDestination.elevatorAccess,
                   id: "",
             },

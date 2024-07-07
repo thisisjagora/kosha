@@ -16,10 +16,8 @@ export const addToBookings = async (payload: Booking) => {
     }
 
     const res = await addDoc(collection(db, FIREBASE_COLLECTIONS.BOOKINGS), payload);
-    console.log("Document written with ID: ", res.id);
     return res;
   } catch (err) {
-    console.error("Error adding document: ", err);
     throw err;
   }
 };

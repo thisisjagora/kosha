@@ -56,3 +56,10 @@ export function formatCurrency(value: number, locale: string = 'en-US', currency
   return formattedValue;
 }
 
+export function trimTextAtPeriod(text: string) {
+  const periodIndex = text.indexOf('.');
+  if (periodIndex === -1) {
+    return text;
+  }
+  return text.substring(0, periodIndex);
+}
