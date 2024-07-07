@@ -6,23 +6,34 @@ import useShowQuotes from "@/stores/show-quotes.store";
 import { BookMoveDto } from "@/types/dtos";
 import { Quote } from "@/types/structs";
 import { useMutation } from "@tanstack/react-query";
+import { useValidRoute } from "../useValidRoute";
+import { Routes } from "@/core/routing";
+import useHireLabourStore from "@/stores/hire-labour.store";
 
 export const useGetQuotes = () => {
+	const { isValidRoute: isHireLabourRoute } = useValidRoute(Routes.sequence.hireLabour)
 	const { formData, reset } = useBookMoveStore((state) => state);
+	const {formData: hireLabourFormData, reset: resetHireLabour } = useHireLabourStore((state) => state);
 	const setQuotesResult = useShowQuotes((state) => state.setQuotesResult);
     
-	const methods = useMutation<any, any, BookMoveDto>({
+	const methods = useMutation<any, any, Partial<BookMoveDto>>({
 		mutationFn: (props) => getQuotesData(props)
 	    });
     
 
-	const _useGetQuotes = (payload : BookMoveDto ) =>
+	const _useGetQuotes = (payload : Partial<BookMoveDto> ) =>
 		methods
 			.mutateAsync(payload)
 			.then((res) => {
-				localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(formData))
-                        setQuotesResult(res.result as Array<Quote>)
-				reset()
+				if(isHireLabourRoute){
+					localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(hireLabourFormData))
+					setQuotesResult(res.result as Array<Quote>)
+					resetHireLabour()
+				}else{
+					localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(formData))
+					setQuotesResult(res.result as Array<Quote>)
+					reset()
+				}
 			})
 			.catch((err) => {
                         toast({

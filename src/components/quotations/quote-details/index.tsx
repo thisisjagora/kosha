@@ -151,6 +151,7 @@ interface QuoteDetailsVehicleProps {
 }
 const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
       const { updateQuoteField } = useQuoteDetailsData();
+      //TODO: confirm the types of vehicles available
       const truckList = [
         { type: 'pickup truck', image: "/images/truckPickUp.png", quantity: 0 },
         { type: 'van', image: "/images/truckVan.png", quantity: 0 },
@@ -274,6 +275,7 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
 
             addToBookings(dataWithoutDate);
       }
+      //TODO: how the voucher code works
       return (
             <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
                   <H level={2} className="text-primary font-dm-sans text-lg">Total minimum charge</H>

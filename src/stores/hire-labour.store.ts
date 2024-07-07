@@ -6,16 +6,18 @@ interface Store {
   update: (newData: Partial<HireLabour>) => void;
   updateField: <K extends keyof HireLabour>(fieldName: K, newValue: HireLabour[K]) => void;
   removeImage: (index: number) => void;
+  reset: () => void;
 }
 
 const initialState: HireLabour = {
       date: new Date(),
       time: "",
       serviceLocation: "",
-      apartment: "",
-      elevatorAccess: "",
-      flightOfStairs: "",
-      buildingType: "",
+      googlePlaceId: "",
+      apartmentNumber: "",
+      elevatorAccess: "Yes",
+      flightOfStairs: "0",
+      buildingType: "Condo",
       majorAppliances: "",
       workOutEquipment: "",
       pianos:"",
@@ -40,7 +42,8 @@ const useHireLabourStore = create<Store>((set) => ({
       return {
         formData: { ...state.formData, images: newImages }
       };
-    })
+    }),
+    reset: () => set({ formData: initialState })
 }));
 
 export default useHireLabourStore;
