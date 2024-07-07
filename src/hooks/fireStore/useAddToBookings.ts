@@ -1,26 +1,27 @@
-import { signUp } from "@/firebase/auth"
-import { useState } from "react";
 import { toast } from "@/components/toast/use-toast";
+import { SUCCESS_MESSAGE } from "@/constants/enums";
+import { Routes } from "@/core/routing";
+import { addToBookings as addToBookingsMethod } from "@/firebase/firestore";
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
+import { Booking } from "@/types/structs";
 import { useRouter } from "next/navigation";
-import { Routes } from "@/core/routing";
-import { SignUpDto } from "@/types/dtos";
-import { SUCCESS_MESSAGE } from "@/constants/enums";
+import { useState } from "react";
 
-export const useSignUp = () => {
+export const useAddToBookings = () => {
+      const router = useRouter();
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState(null);
-      const router = useRouter();
 
-      const signUpWithEmail = (payload: SignUpDto) => {
+      const addToBookings = (payload: Booking) => {
             setLoading(true);
             setError(null);
 
-            signUp(payload)
+            addToBookingsMethod(payload)
             .then(() => {
-                  toast({description: SUCCESS_MESSAGE.USER_SIGNUP, variant: "success"})
-                  wait(2000).then(() => router.push(Routes.root))
+                  localStorage.clear()
+                  toast({description: SUCCESS_MESSAGE.BOOKINGS_COMPLETE, variant: "success"})
+                  wait(500).then(() => router.push(Routes.bookings))
             })
             .catch((err) => {
                   setError(err);
@@ -29,14 +30,14 @@ export const useSignUp = () => {
                         description: getFirebaseErrorMessage(err),
                         variant:"destructive"
                   })
-            })
+            })            
             .finally(() => {
                   setLoading(false);
             })
       }
       return {
-            signUpWithEmail,
+            addToBookings,
             loading,
             error
       }
-}
+} 

@@ -1,7 +1,7 @@
 import { AdditionalStops, Alarm, Appliances, FlightOfStairs, Piano, TruckFrontGrey } from "@/components/Icons";
 import { DeliveryQuote, LabourQuote, MoveQuote, QuoteDetailsRate } from "@/types/structs";
 
-export const BookMoveMock:Array<MoveQuote> = [
+export const BookMoveMock = [
       {
             name: "Pete and Sons",
             movers: 2,
@@ -74,7 +74,7 @@ export const BookMoveMock:Array<MoveQuote> = [
       },
 ]
 
-export const HireLabourMock:Array<LabourQuote> = [
+export const HireLabourMock = [
       {
             name: "Faith Delivery",
             movers: 3,
@@ -140,7 +140,7 @@ export const HireLabourMock:Array<LabourQuote> = [
       }
 ]
 
-export const BookDeliveryMock:Array<DeliveryQuote> = [
+export const BookDeliveryMock = [
       {
             name: "Tiyende Movers",
             rating: "4.6",

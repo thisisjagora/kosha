@@ -12,5 +12,7 @@ export const Routes = {
             hireLabour: "/hire-labour",
             bookDelivery: "/book-delivery",
             bookMove: "/book-move"
-      }
+      },
+      bookMoveQuotes: "/book-move/quotes",
+      bookMoveQuoteDetails: "/book-move/quote-details"
 }

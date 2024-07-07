@@ -2,8 +2,9 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, de
 import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import firebaseApp from "./config";
 import { db } from "./firestore";
-import { FIREBASE_COLLECTIONS } from "@/constants/constants";
 import { IUser } from "@/types/structs";
+import { ResetPasswordDto, SignInDto, SignUpDto } from "@/types/dtos";
+import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 
 export const auth = getAuth(firebaseApp);
 
@@ -11,7 +12,7 @@ export const auth = getAuth(firebaseApp);
           const { email, password } = payload;
           try {
             const res = await signInWithEmailAndPassword(auth, email, password);
-            const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid));
+            const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.USERS, res.user.uid));
             if (userDoc.exists()) {
               return { ...res.user, ...userDoc.data() };
             } else {
@@ -26,7 +27,7 @@ export const auth = getAuth(firebaseApp);
     const signInWithGoogle = async () => {
       try{
         const res = await signInWithPopup(auth, new GoogleAuthProvider())
-        const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid));
+        const userDoc = await getDoc(doc(db, FIREBASE_COLLECTIONS.USERS, res.user.uid));
         if (userDoc.exists()) {
           return { ...res.user, ...userDoc.data() };
         } else {
@@ -45,7 +46,7 @@ export const auth = getAuth(firebaseApp);
         const res = await createUserWithEmailAndPassword(auth, email, password);
     
         try {
-          await setDoc(doc(db, FIREBASE_COLLECTIONS.users, res.user.uid), {
+          await setDoc(doc(db, FIREBASE_COLLECTIONS.USERS, res.user.uid), {
             fullName: name,
             email,
             phoneNumber: phone
@@ -77,7 +78,7 @@ export const auth = getAuth(firebaseApp);
      */
     const deleteUserAccount = async (user: IUser) => {
       try {
-        await deleteDoc(doc(db, FIREBASE_COLLECTIONS.users, user.uid));
+        await deleteDoc(doc(db, FIREBASE_COLLECTIONS.USERS, user.uid));
       } catch (err) {
         throw err;
       }

@@ -47,7 +47,14 @@ export interface BookMoveDto {
         hasElevator: string;
         id: string;
       }>;
-      companyId: string;
-      bookingId: string;
       requestType: "RegularMove" | "LabourOnly" | "LongDelivery";
+}
+
+export interface GoogleAutoCompleteDto {
+  input: string,
+  location?: {
+    lat: string,
+    lng: string
+  }
+  radius: number
 }

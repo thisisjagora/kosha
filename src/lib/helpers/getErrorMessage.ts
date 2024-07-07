@@ -1,6 +1,6 @@
 import { FirebaseError } from "firebase/app";
 
-export const getErrorMessage = (error: FirebaseError) => {
+export const getFirebaseErrorMessage = (error: FirebaseError) => {
       switch (error.message) {
         case "Firebase: Error (auth/email-already-in-use).":
           return "This email is already in use.";
