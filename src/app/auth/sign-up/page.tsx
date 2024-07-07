@@ -2,13 +2,14 @@ import { Caret, Google } from "@/components/Icons";
 import { Button, H, P } from "@/components/atoms";
 import { SignUpForm } from "@/components/forms";
 import { Column, Row } from "@/components/layout";
+import { LANDING_PAGE_URL } from "@/constants/constants";
 import Link from "next/link";
 
 const Page = () => {
       return (
             <div className="flex-1 flex items-center justify-center h-full">
                   <Column className="justify-between gap-10 h-full w-full max-w-[420px]">
-                        <Link href="/">
+                        <Link href={LANDING_PAGE_URL}>
                               <Row className="text-primary-foreground font-dm-sans max-w-max p-2 items-center gap-4">
                                     <Caret width={22} height={22}/>
                                     <p className="">Back to Website</p>

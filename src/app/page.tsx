@@ -7,7 +7,6 @@ import { MoveHistory } from "@/components/moveHistory";
 import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
-import { QuoteDetailsRatesMock } from "@/mocks";
 import Link from "next/link";
 import { useState } from "react";
 

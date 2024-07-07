@@ -1,11 +1,12 @@
 import { signUp } from "@/firebase/auth"
 import { useState } from "react";
 import { toast } from "@/components/toast/use-toast";
-import { getErrorMessage } from "@/lib/helpers/getErrorMessage";
-import { SUCCESS_MESSAGE } from "@/constants/constants";
+import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Routes } from "@/core/routing";
+import { SignUpDto } from "@/types/dtos";
+import { SUCCESS_MESSAGE } from "@/constants/enums";
 
 export const useSignUp = () => {
       const [loading, setLoading] = useState(false);
@@ -18,14 +19,14 @@ export const useSignUp = () => {
 
             signUp(payload)
             .then(() => {
-                  toast({description: SUCCESS_MESSAGE.user_signup, variant: "success"})
+                  toast({description: SUCCESS_MESSAGE.USER_SIGNUP, variant: "success"})
                   wait(2000).then(() => router.push(Routes.root))
             })
             .catch((err) => {
                   setError(err);
                   toast({
                         title:"Oops!",
-                        description: getErrorMessage(err),
+                        description: getFirebaseErrorMessage(err),
                         variant:"destructive"
                   })
             })

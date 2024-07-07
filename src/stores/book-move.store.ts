@@ -1,4 +1,4 @@
-import { BookMove, Services } from '@/types/structs';
+import { BookMove } from '@/types/structs';
 import { create } from 'zustand';
 
 interface Store {
@@ -7,6 +7,7 @@ interface Store {
   updateField: <K extends keyof BookMove>(fieldName: K, newValue: BookMove[K]) => void;
   removeStop: (index: number) => void;
   removeImage: (index: number) => void;
+  reset: () => void;
 }
 
 const initialState: BookMove = {
@@ -14,22 +15,24 @@ const initialState: BookMove = {
       time: "",
       pickUpLocation: {
             location: "",
-            apartment: ""
+            apartmentNumber: "",
+            googlePlaceId: ""
       },
       stops: [],
       finalDestination: {
             location: "",
-            apartment: ""
+            apartmentNumber: "",
+            googlePlaceId: ""
       },
       PUDFinalDestination: {
-            elevatorAccess: "",
-            flightOfStairs: "",
-            buildingType: ""
+            elevatorAccess: "Yes",
+            flightOfStairs: "0",
+            buildingType: "Condo"
       },
       PUDPickUpLocation: {
-            elevatorAccess: "",
-            flightOfStairs: "",
-            buildingType: ""
+            elevatorAccess: "Yes",
+            flightOfStairs: "0",
+            buildingType: "Condo"
       },
       PUDStops: [],
       majorAppliances: "",
@@ -40,7 +43,7 @@ const initialState: BookMove = {
       numberOfBoxes: "",
       instructions: "",
       images: [],
-      services:[]
+      services:[],
 }
 
 const useBookMoveStore = create<Store>((set) => ({
@@ -48,9 +51,20 @@ const useBookMoveStore = create<Store>((set) => ({
   update: (newData) => set((state) => ({
     formData: { ...state.formData, ...newData }
   })),
-  updateField: (fieldName, newValue) => set((state) => ({
+  updateField: (fieldName, newValue) => set((state) => {
+    if (fieldName.startsWith('stops')) {
+      const stopIndex = parseInt(fieldName.split('.')[1]);
+      const updatedStops = [...state.formData.stops];
+      const updatedStop = { ...updatedStops[stopIndex], ...newValue as {} };
+      updatedStops[stopIndex] = updatedStop;
+      return {
+        formData: { ...state.formData, stops: updatedStops }
+      };
+    }
+    return {
       formData: { ...state.formData, [fieldName]: newValue }
-    })),
+    };
+  }),
   removeStop: (index) => set((state) => ({
       formData: {
         ...state.formData,
@@ -63,7 +77,8 @@ const useBookMoveStore = create<Store>((set) => ({
       return {
         formData: { ...state.formData, images: newImages }
       };
-    })
+    }),
+    reset: () => set({ formData: initialState })
 }));
 
 export default useBookMoveStore;

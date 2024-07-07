@@ -1,15 +1,60 @@
-interface SignInDto {
+export interface SignInDto {
       email: string,
       password: string
 }
 
-interface SignUpDto {
+export interface SignUpDto {
       name: string,
       phone: string,
       email: string,
       password: string
 }
 
-interface ResetPasswordDto {
+export interface ResetPasswordDto {
       email: string
+}
+
+export interface BookMoveDto {
+      fromAddress: {
+        address: string;
+        apartmentNumber: string;
+        buildingType: string;
+        flightOfStairs: number;
+        googlePlaceId: string;
+        hasElevator: string;
+        id: string;
+      };
+      toAddress: {
+        address: string;
+        apartmentNumber: string;
+        buildingType: string;
+        flightOfStairs: number;
+        googlePlaceId: string;
+        hasElevator: string;
+        id: string;
+      };
+      date: string;
+      addOns: Array<{
+        name: string;
+        quantity: number;
+      }>;
+      additionalStops: Array<{
+        address: string;
+        apartmentNumber: string;
+        buildingType: string;
+        flightOfStairs: number;
+        googlePlaceId: string;
+        hasElevator: string;
+        id: string;
+      }>;
+      requestType: "RegularMove" | "LabourOnly" | "LongDelivery";
+}
+
+export interface GoogleAutoCompleteDto {
+  input: string,
+  location?: {
+    lat: string,
+    lng: string
+  }
+  radius: number
 }
