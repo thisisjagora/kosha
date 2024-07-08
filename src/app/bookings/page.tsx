@@ -3,10 +3,18 @@ import { Activity, LeftColumn, RightColumn } from "@/components/activity";
 import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
-import { useState } from "react";
+import { useGetBookings } from "@/hooks/fireStore/useGetBookings";
+import { useEffect, useState } from "react";
 
 const Page = () => {
-      const [date, setDate] = useState<Date | undefined>(new Date())
+      const {getBookings, loading} = useGetBookings();
+      const [date, setDate] = useState<Date | undefined>(new Date());
+
+      // useEffect(() => {
+      //   getBookings(date ?? new Date());
+      // }, [date]);
+
+
       return (
             <Row className="gap-8 flex-col md:flex-row">
               <Column className="flex-1 gap-8">
