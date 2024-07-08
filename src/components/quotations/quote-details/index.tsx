@@ -8,12 +8,15 @@ import { toast } from "@/components/toast/use-toast";
 import { ErrorMessage, StorageKeys } from "@/constants/enums";
 import { useQuoteDetailsData } from "@/contexts/QuoteDetails.context";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
+import { hireLabourFactory } from "@/core/models/hireLabourFactory";
+import { Routes } from "@/core/routing";
 import { useAddToBookings } from "@/hooks/fireStore/useAddToBookings";
+import { useValidRoute } from "@/hooks/useValidRoute";
 import { generateBookingId } from "@/lib/helpers/generateBookingId";
 import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
 import useUserStore from "@/stores/user.store";
-import { BookMove, QuoteDetailsRate, Services } from "@/types/structs";
+import { BookMove, Booking, QuoteDetailsRate, Services } from "@/types/structs";
 import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
@@ -151,6 +154,7 @@ interface QuoteDetailsVehicleProps {
 }
 const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({ truckType }) => {
       const { updateQuoteField } = useQuoteDetailsData();
+      //TODO: confirm the types of vehicles available
       const truckList = [
         { type: 'pickup truck', image: "/images/truckPickUp.png", quantity: 0 },
         { type: 'van', image: "/images/truckVan.png", quantity: 0 },
@@ -234,9 +238,10 @@ interface QuoteDetailsChargeProps extends HTMLAttributes<HTMLDivElement> {
       hourlyRate: string
 }
 const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ...props}) => {
+      const { isValidRoute: isHireLabourRoute } = useValidRoute(Routes.hireLabourQuoteDetails)
       const {user} = useUserStore((state) => state);
       const {loading, addToBookings} = useAddToBookings();
-      const formData:BookMove = JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || "{}");
+      const formData = JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || "{}");
       const quoteDetailsData = JSON.parse(localStorage.getItem(StorageKeys.QUOTE_DETAIL) || "{}");
 
       if (!formData || !quoteDetailsData) {
@@ -249,13 +254,13 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
       }
 
       const handleBook = () => {
-            const formattedFormData = bookMoveFactory(formData);
+            const formattedFormData = isHireLabourRoute? hireLabourFactory(formData) : bookMoveFactory(formData);
             const data = {
               bookingId: generateBookingId(),
               clientId: user?.uid ?? "",
               driverId: "", //TODO: where is driverId from?
               ...formattedFormData,
-              hasAdditionalStops: formattedFormData.additionalStops.length > 0 ? true : false,
+              hasAdditionalStops: formattedFormData.additionalStops? formattedFormData.additionalStops.length > 0 ? true : false : false,
               hasAddOns: formData.services.length > 0 ? true : false,
               status: "Pending" as "Pending",
               movingDate: formattedFormData.date,
@@ -271,9 +276,9 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
               estimatedNumberOfBoxes: formData.numberOfBoxes ? parseInt(formData.numberOfBoxes) : 0
             };
             const { date, addOns, ...dataWithoutDate } = data;
-
-            addToBookings(dataWithoutDate);
+            addToBookings(dataWithoutDate as Booking);
       }
+      //TODO: how the voucher code works
       return (
             <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
                   <H level={2} className="text-primary font-dm-sans text-lg">Total minimum charge</H>
@@ -288,58 +293,79 @@ const QuoteDetailsCharge:FC<QuoteDetailsChargeProps> = ({ amount, hourlyRate, ..
 }
 
 interface QuoteDetailsServiceRequirementProps extends HTMLAttributes<HTMLDivElement> {
-      services: Array<Services>
+      services: Array<String>
 }
-const QuoteDetailsServiceRequirement:FC<QuoteDetailsServiceRequirementProps> = ({ services, ...props }) => {
+const QuoteDetailsServiceRequirement: FC<QuoteDetailsServiceRequirementProps> = ({ ...props }) => {
+      const services = [
+            "reassembly",
+            "disassembly",
+            "furniture wrapping",
+            "dollies",
+            "moving pads",
+            "straps",
+            "floor runners",
+            "tape",
+            "move garage items",
+            "move patio items"
+      ]
       const form = useForm({
-            defaultValues: {
-                  services: services?.map((service) => service.id) || []
-            }
+        defaultValues: {
+          services
+        }
       });
+    
+      const { watch, control, setValue } = form;
+    
+      const watchedServices = watch('services');
+    
+      useEffect(() => {
+        localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify({ ...JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || '{}'), services: watchedServices }));
+      }, [watchedServices]);
+    
       return (
-            <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
-                  <H level={2} className="text-primary font-dm-sans text-lg">Services Requirements</H>
-                  <Form {...form}>
-                        <form>
-                              {
-                                    services.map((item, index) => (
-                                          <FormField
-                                                key={item.label + index}
-                                                control={form.control}
-                                                name="services"
-                                                render={({ field }) => {
-                                                const checkboxId = `services-${item.id}`;
-                                                const isChecked = field.value?.includes(item.id)
-                                                return (
-                                                      <FormItem className="flex flex-row items-center gap-4 space-y-0 mb-2">
-                                                            <FormControl>
-                                                                  <Checkbox
-                                                                        className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
-                                                                        id={checkboxId}
-                                                                        checked={isChecked}
-                                                                        onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                        ? field.onChange([...field.value || [], item.id])
-                                                                        : field.onChange(field.value?.filter((value) => value !== item.id));
-                                                                        }}
-                                                                  />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100 hover:cursor-pointer", {
-                                                                  "text-primary font-medium": isChecked
-                                                            })}>
-                                                                  {item.label}
-                                                            </FormLabel>
-                                                      </FormItem>
-                                                );
-                                                }}
-                                          />
-                                    ))
-                              }
-                        </form>
-                  </Form>
-            </Column>
-      )
-}
+        <Column {...props} className="gap-12 w-full p-6 bg-white-100 shadow-custom rounded-lg">
+          <H level={2} className="text-primary font-dm-sans text-lg">Services Requirements</H>
+          <Form {...form}>
+            <form>
+              {services.map((item, index) => (
+                <FormField
+                  key={index}
+                  control={control}
+                  name="services"
+                  render={({ field }) => {
+                    const checkboxId = `services-${item}`;
+                    const isChecked = field.value?.includes(item);
+                    return (
+                      <FormItem className="flex flex-row items-center gap-4 space-y-0 mb-2">
+                        <FormControl>
+                          <Checkbox
+                            className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                            id={checkboxId}
+                            checked={isChecked}
+                            onCheckedChange={(checked) => {
+                              const updatedServices = checked
+                                ? [...field.value || [], item]
+                                : field.value?.filter((value) => value !== item);
+                              setValue('services', updatedServices);
+                              field.onChange(updatedServices);
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100 hover:cursor-pointer", {
+                          "text-primary font-medium": isChecked
+                        })}>
+                          {item}
+                        </FormLabel>
+                      </FormItem>
+                    );
+                  }}
+                />
+              ))}
+            </form>
+          </Form>
+        </Column>
+      );
+    };
 
 interface QuoteDetailsNotesImagesProps extends HTMLAttributes<HTMLDivElement> {
       images: Array<string>,
