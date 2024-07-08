@@ -69,8 +69,8 @@ const switchHeaderContent = (route: string, isQuotesVisible: boolean) => {
           };
         case Routes.sequence.hireLabour:
           return {
-            title: isQuotesVisible? "Home/Best Labour Options" : "Home",
-            description: isQuotesVisible? "Quotes from Labour Vendors" : "Hire Labour only"
+            title:  "Home",
+            description: "Hire Labour only"
           };
         case Routes.sequence.bookDelivery:
           return {
@@ -78,11 +78,21 @@ const switchHeaderContent = (route: string, isQuotesVisible: boolean) => {
             description: isQuotesVisible? "Quotes from Delivery Vendors" : "Schedule your Delivery"
           };
           case Routes.bookMoveQuotes: 
+            return {
+              title: "Home/Best Moving Options",
+              description: "Quotes from Moving Vendors"
+            };
+        case Routes.bookMoveQuoteDetails: 
           return {
             title: "Home/Best Moving Options",
-            description: "Quotes from Moving Vendors"
-          }
-        case Routes.bookMoveQuoteDetails: 
+            description: "Quote Details"
+          };
+          case Routes.hireLabourQuotes: 
+            return {
+              title: "Home/Best Labour Options",
+              description: "Quotes from Labour Vendors"
+            };
+        case Routes.hireLabourQuoteDetails: 
           return {
             title: "Home/Best Moving Options",
             description: "Quote Details"

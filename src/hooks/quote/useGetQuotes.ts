@@ -15,11 +15,9 @@ export const useGetQuotes = () => {
 	const { formData, reset } = useBookMoveStore((state) => state);
 	const {formData: hireLabourFormData, reset: resetHireLabour } = useHireLabourStore((state) => state);
 	const setQuotesResult = useShowQuotes((state) => state.setQuotesResult);
-    
 	const methods = useMutation<any, any, Partial<BookMoveDto>>({
 		mutationFn: (props) => getQuotesData(props)
 	    });
-    
 
 	const _useGetQuotes = (payload : Partial<BookMoveDto> ) =>
 		methods
