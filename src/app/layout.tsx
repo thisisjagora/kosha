@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, Source_Sans_3, Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/toast/toaster";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Layout } from "@/components/layout";
 import { cn } from "@/lib/utils";
 
