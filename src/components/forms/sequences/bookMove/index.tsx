@@ -774,9 +774,9 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
       }, [isSuccess]);
     
       const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
-        update(data);
         const updatedFormData = { ...formData, ...data };
-        getQuotes(bookMoveFactory(updatedFormData));
+        update(updatedFormData);
+        if(formData.pickUpLocation.location) getQuotes(bookMoveFactory(updatedFormData));
       };
     
       const handleSelectAllChange = (checked: boolean) => {

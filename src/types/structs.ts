@@ -60,7 +60,7 @@ export interface Quote  {
       googlePlaceId: string;
       hasElevator: string;
     }
-    
+
     export interface Booking {
       bookingId?: string;
       clientId: string;
@@ -70,7 +70,7 @@ export interface Quote  {
       additionalStops?: Address[];
       hasAdditionalStops: boolean;
       hasAddOns: boolean;
-      status: "New" | "Pending";
+      status: "New" | "Pending" | "Confirmed" | "Rejected" | "InProgress" | "Completed" | "DepositHeld" | "Cancelled" | "Edited" | "Paused" | "PendingPayment";
       movingDate: string;
       bookingDate: string;
       modifiedDate?: Date;
@@ -91,7 +91,7 @@ export interface Quote  {
       moveTimestamps?: MoveTimestamp[];
       oldMinimumAmount?: number;
       additionalNotes?: string;
-      requestType: string;
+      requestType: "RegularMove" | "LabourOnly" | "Delivery";
       serviceAddOns?: string[];
       estimatedNumberOfBoxes?: number;
       feeAdjustments?: FeeAdjustment[];
