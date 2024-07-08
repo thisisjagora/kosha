@@ -12,7 +12,7 @@ export const getQuote = async (payload: BookMoveDto ): Promise<any> => {
       }
 };
 
-export const getQuotes = async (payload: BookMoveDto): Promise<ApiResponse<Array<Quote>>> => {
+export const getQuotes = async (payload: Partial<BookMoveDto>): Promise<ApiResponse<Array<Quote>>> => {
     try {
       const res = await axiosInstance.post<ApiResponse<Array<Quote>>>(Endpoints.GET_QUOTES, {
         data: {
