@@ -3,7 +3,6 @@ import { HireLabour } from "@/types/structs"
 import { format } from "date-fns";
 
 export const hireLabourFactory = (a:HireLabour): Partial<BookMoveDto> => {
-
       const addOns = [
             { name: "Major Appliances", quantity: parseInt(a.majorAppliances ?? "0") },
             { name: "Workout Equipment", quantity: parseInt(a.workOutEquipment ?? "0") },

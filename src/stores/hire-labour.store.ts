@@ -31,9 +31,10 @@ const initialState: HireLabour = {
 
 const useHireLabourStore = create<Store>((set) => ({
   formData: initialState,
-  update: (newData) => set((state) => ({
-    formData: { ...state.formData, ...newData }
-  })),
+  update: (newData) => set((state) => {
+    const updatedFormData = { ...state.formData, ...newData };
+    return { formData: updatedFormData };
+  }),
   updateField: (fieldName, newValue) => set((state) => ({
       formData: { ...state.formData, [fieldName]: newValue }
     })),

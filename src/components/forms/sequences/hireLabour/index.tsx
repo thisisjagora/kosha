@@ -453,133 +453,132 @@ const Step2:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
       )
 };
 
-const Step3:FC<SequenceStepsProps>  = ({ onChangeStep }) =>{
-      const { update, formData } = useHireLabourStore((state) => state)
+const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
+      const { update, formData } = useHireLabourStore((state) => state);
       const { isPending, isSuccess, getQuotes } = useGetQuotes();
       const [selectAll, setSelectAll] = useState<boolean>(false);
       const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess);
-
+    
       const form = useForm<z.infer<typeof hireLabourSequenceStep3Schema>>({
-            resolver: zodResolver(hireLabourSequenceStep3Schema),
-            defaultValues: {
-                  services: formData.services || []
-            }
+        resolver: zodResolver(hireLabourSequenceStep3Schema),
+        defaultValues: {
+          services: formData.services
+        }
       });
-
+    
       useEffect(() => {
-            setIsDialogOpen(isSuccess);
+        setIsDialogOpen(isSuccess);
       }, [isSuccess]);
-
+    
       const onSubmit = (data: z.infer<typeof hireLabourSequenceStep3Schema>) => {
-            update(data)
-            const updatedFormData = { ...formData, ...data };
-            getQuotes(hireLabourFactory(updatedFormData));
-      }
-
+        const updatedFormData = { ...formData, ...data };
+        update(updatedFormData);
+        if(formData.serviceLocation)getQuotes(hireLabourFactory(updatedFormData));
+      };
+    
       const handleSelectAllChange = (checked: boolean) => {
-            setSelectAll(checked);
-            form.setValue(
-              "services",
-              checked ? SERVICES.map((service) => service.id) : []
-            );
-          };
-
+        setSelectAll(checked);
+        form.setValue(
+          "services",
+          checked ? SERVICES.map((service) => service.id) : []
+        );
+      };
+    
       return (
-            <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm">
-                        <Table>
-                              <TableHeader>
-                                    <Row className="mb-4 items-center">
-                                          <FormControl>
-                                                <Checkbox
-                                                id="select-all"
-                                                checked={selectAll}
-                                                onCheckedChange={handleSelectAllChange}
-                                                />
-                                          </FormControl>
-                                          <FormLabel htmlFor="select-all" className="font-medium text-base ml-2 hover:cursor-pointer">
-                                                Select All
-                                          </FormLabel>
-                                    </Row>
-                                    <TableRow>
-                                          <TableHead className="w-[300px] text-grey-100">Services</TableHead>
-                                          <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
-                                    </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                    {SERVICES.map((service, index) => (
-                                    <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
-                                          <TableCell>
-                                                <FormField
-                                                      control={form.control}
-                                                      name="services"
-                                                      render={({ field }) => {
-                                                      const checkboxId = `services-${service.id}`;
-                                                      const isChecked = field.value?.includes(service.id)
-                                                      return (
-                                                            <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                  <Checkbox
-                                                                        className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
-                                                                        id={checkboxId}
-                                                                        checked={isChecked}
-                                                                        onCheckedChange={(checked) => {
-                                                                        return checked
-                                                                        ? field.onChange([...field.value || [], service.id])
-                                                                        : field.onChange(field.value?.filter((value) => value !== service.id));
-                                                                        }}
-                                                                  />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
-                                                                  "text-primary font-medium": isChecked
-                                                            })}>
-                                                                  {service.label}
-                                                            </FormLabel>
-                                                            </FormItem>
-                                                      );
-                                                      }}
-                                                />
-                                          </TableCell>
-                                          <TableCell className="hidden sm:block">
-                                                <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
-                                                      {service.description}
-                                                </FormLabel>
-                                          </TableCell>
-                                    </TableRow>
-                                    ))}
-                              </TableBody>
-                        </Table>
-                        <Row className="items-center justify-center my-8">
-                              <Button 
-                                    type="button" 
-                                    className="flex-1 max-w-[180px] rounded-3xl"
-                                    onClick={() => onChangeStep("itm")}
-                              >Previous</Button>
-                              <Button loading={isPending} type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
-                              <Dialog
-                                    open={isDialogOpen}
-                                    onOpenChange={setIsDialogOpen}
-                                    >
-                                    <DialogContent className="sm:max-w-[600px]">
-                                          <DialogTitle className="sr-only">Labour Request Sent!</DialogTitle>
-                                          <Column className="items-center justify-center gap-8 md:px-24">
-                                          <Check className="w-[80px] h-[100px]" />
-                                          <Column className="items-center">
-                                          <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
-                                          {/* <P className="text-center text-grey-300"></P> */}
-                                          </Column>
-                                          <Link 
-                                                className="w-full py-2 text-white-100 bg-primary text-center rounded-sm" 
-                                                href={Routes.hireLabourQuotes}
-                                          >View Vendor Quotes</Link>
-                                          </Column>
-                                    </DialogContent>
-                              </Dialog>
-                        </Row>
-                  </form>
-            </Form>
-      )
-};
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300 p-6 bg-white-100 flex flex-col gap-6 rounded-xl shadow-sm">
+            <Table>
+              <TableHeader>
+                <Row className="mb-4 items-center">
+                  <FormControl>
+                    <Checkbox
+                      id="select-all"
+                      checked={selectAll}
+                      onCheckedChange={handleSelectAllChange}
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="select-all" className="font-medium text-base ml-2 hover:cursor-pointer">
+                    Select All
+                  </FormLabel>
+                </Row>
+                <TableRow>
+                  <TableHead className="w-[300px] text-grey-100">Services</TableHead>
+                  <TableHead className="text-grey-100 hidden sm:block">Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {SERVICES.map((service, index) => (
+                  <TableRow className="border-none hover:cursor-pointer" key={service.id + index}>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name="services"
+                        render={({ field }) => {
+                          const checkboxId = `services-${service.id}`;
+                          const isChecked = field.value?.includes(service.id);
+                          return (
+                            <FormItem key={service.id} className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
+                                  id={checkboxId}
+                                  checked={isChecked}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([...field.value || [], service.id])
+                                      : field.onChange(field.value?.filter((value) => value !== service.id));
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel htmlFor={checkboxId} className={cn("font-medium text-grey-100", {
+                                "text-primary font-medium": isChecked
+                              })}>
+                                {service.label}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell className="hidden sm:block">
+                      <FormLabel htmlFor={`services-${service.id}`} className={cn("font-medium")}>
+                        {service.description}
+                      </FormLabel>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Row className="items-center justify-center my-8">
+              <Button
+                type="button"
+                className="flex-1 max-w-[180px] rounded-3xl"
+                onClick={() => onChangeStep("itm")}
+              >Previous</Button>
+              <Button loading={isPending} type="submit" className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl">Send Request</Button>
+              <Dialog
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+              >
+                <DialogContent className="sm:max-w-[600px]">
+                  <DialogTitle className="sr-only">Labour Request Sent!</DialogTitle>
+                  <Column className="items-center justify-center gap-8 md:px-24">
+                    <Check className="w-[80px] h-[100px]" />
+                    <Column className="items-center">
+                      <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
+                    </Column>
+                    <Link
+                      className="w-full py-2 text-white-100 bg-primary text-center rounded-sm"
+                      href={Routes.hireLabourQuotes}
+                    >View Vendor Quotes</Link>
+                  </Column>
+                </DialogContent>
+              </Dialog>
+            </Row>
+          </form>
+        </Form>
+      );
+    };
 
 
 export const HireLabourSequence = {
