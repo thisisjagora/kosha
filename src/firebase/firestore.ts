@@ -36,3 +36,10 @@ export const getBookings = async (date: string) => {
   }
 
 }
+
+
+// For conversations 
+// - Fetch conversations from chat collections
+// - Filter by currentUserLoggedIn user id
+// - Fetch recipient user profile from user's collection
+// - Fetch latest message from chat_messages collection using the chat id gotten from conversations query.
