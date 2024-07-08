@@ -2,6 +2,7 @@ import { collection, getFirestore, addDoc, getDocs, where, query } from "firebas
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 import { Booking } from "@/types/structs";
+import { format } from "date-fns";
 
 export const db = getFirestore(firebaseApp);
 
@@ -22,16 +23,30 @@ export const addToBookings = async (payload: Booking) => {
   }
 };
 
-export const getBookings = async (date: string) => {
-  try{
-    const q = query(collection(db, FIREBASE_COLLECTIONS.BOOKINGS), where("bookingDate", "==", date));
+const extractDatePart = (date: Date): string => {
+  return format(date, "M/d/yyyy");
+};
+
+export const getBookings = async (inputDate: Date) => {
+  try {
+    const formattedDate = extractDatePart(inputDate);
+    const startOfDay = `${formattedDate} 12:00 AM`;
+    const endOfDay = `${formattedDate} 11:59 PM`;
+
+    const q = query(
+      collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
+      where("bookingDate", ">=", startOfDay),
+      where("bookingDate", "<=", endOfDay)
+    );
 
     const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
-      throw new Error("Document with the same bookingId already exists.");
-    }
-  }catch(err){
+    const bookings: Array<Partial<Booking>> = [];
+    querySnapshot.forEach((doc) => {
+      bookings.push(doc.data());
+    });
+    return bookings.length > 0 ? bookings : [];
+  } catch (err) {
     throw err;
   }
 
