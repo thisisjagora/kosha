@@ -71,7 +71,8 @@ export const hireLabourSequenceStep1Schema = z.object({
   date: z.date({message: "Move date is required"}),
   time: z.string().min(1, {message: "Time is required"}),
   serviceLocation: z.string().min(1, {message: "Location is required"}),
-  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+  apartmentNumber: z.string().optional(),
+  googlePlaceId: z.string().optional()
 }).extend(pickUpDetailSchema.shape);
 
 export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
