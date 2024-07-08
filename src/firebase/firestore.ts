@@ -21,3 +21,18 @@ export const addToBookings = async (payload: Booking) => {
     throw err;
   }
 };
+
+export const getBookings = async (date: string) => {
+  try{
+    const q = query(collection(db, FIREBASE_COLLECTIONS.BOOKINGS), where("bookingDate", "==", date));
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      throw new Error("Document with the same bookingId already exists.");
+    }
+  }catch(err){
+    throw err;
+  }
+
+}

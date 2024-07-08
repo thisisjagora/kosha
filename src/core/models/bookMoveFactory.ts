@@ -19,7 +19,7 @@ const parseFlightOfStairs = (stop: any) => ({
  * requestType is defaulted
  */
 export const bookMoveFactory = (a:BookMove): BookMoveDto => {
-    //TODO: Handle googlePlaceId, id, companyId, buildingId
+    //TODO: Handle driverId
 
     const addOns = [
       { name: "Major Appliances", quantity: parseInt(a.majorAppliances ?? "0") },
