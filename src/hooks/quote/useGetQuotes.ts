@@ -22,8 +22,8 @@ export const useGetQuotes = () => {
 		methods
 			.mutateAsync(payload)
 			.then((res) => {
-				const { formData, reset } = bookMoveStore((state) => state);
-				const {formData: hireLabourFormData, reset: resetHireLabour } = hireLabourStore((state) => state);
+				const { formData, reset } = bookMoveStore.getState();
+				const {formData: hireLabourFormData, reset: resetHireLabour } = hireLabourStore.getState();
 				if(isHireLabourRoute){
 					localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(hireLabourFormData))
 					setQuotesResult(res.result as Array<Quote>)
@@ -34,7 +34,7 @@ export const useGetQuotes = () => {
 					reset()
 				}
 			})
-			.catch((err) => {
+			.catch(() => {
                         toast({
                               title:"Oops!",
                               description: ErrorMessage.UNEXPECTED_ERROR, //TODO:add a proper function to handle error
