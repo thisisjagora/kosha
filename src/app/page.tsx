@@ -56,7 +56,7 @@ export default function Home() {
   return (
     <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
-        <Activity>
+        {/* <Activity>
           <LeftColumn>
             <H
               level={3}
@@ -82,7 +82,7 @@ export default function Home() {
               }}
             />
           </RightColumn>
-        </Activity>
+        </Activity>         */}
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">
             Select a Service
@@ -208,18 +208,13 @@ export default function Home() {
           className="rounded-xl shadow-custom bg-white-100 w-full"
         />
         <Column className="bg-white-100 shadow-custom rounded-xl p-4 gap-8">
-          <Column className="gap-2">
-            <H level={3} className="m-0 p-0 text-primary font-bold text-2xl">
-              Move History
-            </H>
-            <P className="m-0 p-0 text-primary-foreground">
-              Here you can find all your transactions on this account and you
-              can print them out as .pdf or .csv file
-            </P>
-          </Column>
-          <Column>
-            <MoveHistory status="Pending" type="Hire labor" />
-          </Column>
+            <Column className="gap-2">
+              <H level={3} className="m-0 p-0 text-primary font-bold text-2xl">Move History</H>
+              <P className="m-0 p-0 text-primary-foreground">Here you can find all your transactions on this account and you can print them out as .pdf or .csv file</P>
+            </Column>
+            <Column>
+              {/* <MoveHistory status="Pending" type="Hire labor" /> */}
+            </Column>
         </Column>
       </Column>
     </Row>
