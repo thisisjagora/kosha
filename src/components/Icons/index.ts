@@ -7,6 +7,7 @@ export { default as Camera } from "./Camera";
 export { default as Cancel } from "./Cancel";
 export { default as Caret } from "./Caret";
 export { default as Chat } from "./Chat";
+export { default as ChatBoxTail } from "./ChatBoxTail";
 export { default as Check } from "./Check";
 export { default as Edit } from "./Edit";
 export { default as FlightOfStairs } from "./FlightOfStairs";

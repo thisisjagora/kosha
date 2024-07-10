@@ -15,7 +15,9 @@ export enum StorageKeys {
 
 export enum FIREBASE_COLLECTIONS {
       USERS = "users",
-	BOOKINGS = "bookings"
+	BOOKINGS = "bookings",
+	CHATS = "chats",
+	CHAT_MESSAGES = "chat_messages",
 }
 
 export enum SUCCESS_MESSAGE {
@@ -26,4 +28,11 @@ export enum SUCCESS_MESSAGE {
 export enum ErrorMessage {
 	UNEXPECTED_ERROR = "An unexpected error occurred. Please try again.",
 	SERVICE_REQUEST_MADE = "You have completed that service request!"
+}
+
+export enum CacheKey {
+	BOOKINGS_STATE = 'BOOKINGS_STATE',
+	CHATS_STATE = 'CHATS_STATE',
+	CHAT_STATE = 'CHAT_STATE',
+	CHAT_MESSAGES_STATE = 'CHAT_MESSAGES_STATE',
 }

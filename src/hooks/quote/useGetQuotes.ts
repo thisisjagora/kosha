@@ -1,19 +1,18 @@
 import { toast } from "@/components/toast/use-toast";
 import { ErrorMessage, StorageKeys } from "@/constants/enums";
 import { getQuotes as getQuotesData } from "@/core/api/quote";
-import useBookMoveStore from "@/stores/book-move.store";
+import bookMoveStore from "@/stores/book-move.store";
 import useShowQuotes from "@/stores/show-quotes.store";
 import { BookMoveDto } from "@/types/dtos";
 import { Quote } from "@/types/structs";
 import { useMutation } from "@tanstack/react-query";
 import { useValidRoute } from "../useValidRoute";
 import { Routes } from "@/core/routing";
-import useHireLabourStore from "@/stores/hire-labour.store";
+import hireLabourStore from "@/stores/hire-labour.store";
 
 export const useGetQuotes = () => {
 	const { isValidRoute: isHireLabourRoute } = useValidRoute(Routes.sequence.hireLabour)
-	const { formData, reset } = useBookMoveStore((state) => state);
-	const {formData: hireLabourFormData, reset: resetHireLabour } = useHireLabourStore((state) => state);
+	// const { formData, reset } = useBookMoveStore((state) => state);
 	const setQuotesResult = useShowQuotes((state) => state.setQuotesResult);
 	const methods = useMutation<any, any, Partial<BookMoveDto>>({
 		mutationFn: (props) => getQuotesData(props)
@@ -23,6 +22,8 @@ export const useGetQuotes = () => {
 		methods
 			.mutateAsync(payload)
 			.then((res) => {
+				const { formData, reset } = bookMoveStore.getState();
+				const {formData: hireLabourFormData, reset: resetHireLabour } = hireLabourStore.getState();
 				if(isHireLabourRoute){
 					localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(hireLabourFormData))
 					setQuotesResult(res.result as Array<Quote>)
@@ -33,7 +34,7 @@ export const useGetQuotes = () => {
 					reset()
 				}
 			})
-			.catch((err) => {
+			.catch(() => {
                         toast({
                               title:"Oops!",
                               description: ErrorMessage.UNEXPECTED_ERROR, //TODO:add a proper function to handle error
