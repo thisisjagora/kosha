@@ -7,7 +7,9 @@ import {
   addDoc,
   doc,
   getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
+import {} from "firebase/database";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 import { ChatMessage, Chat } from "@/types/structs";
 import { db } from ".";
@@ -41,7 +43,8 @@ export const getChat = async (id: string) => {
     const querySnapshot = await getDoc(
       doc(db, FIREBASE_COLLECTIONS.BOOKINGS, id)
     );
-    if (!querySnapshot.exists()) throw new Error("No chat found", { cause: 404 });
+    if (!querySnapshot.exists())
+      throw new Error("No chat found", { cause: 404 });
     const chat = {
       id: querySnapshot.id,
       ...querySnapshot.data(),
@@ -52,11 +55,14 @@ export const getChat = async (id: string) => {
   }
 };
 
-export const addToChatMessages = async (payload: ChatMessage) => {
+export const addToChatMessages = async (payload: Omit<ChatMessage, 'timestamp'>) => {
   try {
     const res = await addDoc(
       collection(db, FIREBASE_COLLECTIONS.CHAT_MESSAGES),
-      payload
+      {
+        ...payload,
+        timestamp: serverTimestamp(),
+      }
     );
     return res;
   } catch (err) {

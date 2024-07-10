@@ -32,6 +32,7 @@ import { ChatMessage } from "@/types/structs";
 import { ChatBoxTail } from "@/components/Icons";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
+import { Timestamp } from "firebase/firestore";
 
 export default function MessagePage({ params }: { params: { slug: string } }) {
   const {
@@ -70,7 +71,15 @@ export default function MessagePage({ params }: { params: { slug: string } }) {
         <DMHeader
           name={chat.quote?.companyName ?? ""}
           time={
-            chat.bookingDate ? formatDistance(chat.bookingDate, new Date()) : ""
+            chat.bookingDate
+              ? formatDistance(
+                  chat.bookingDate &&
+                    (chat.bookingDate as unknown) instanceof Timestamp
+                    ? (chat.bookingDate as unknown as Timestamp).toDate()
+                    : chat.bookingDate,
+                  new Date()
+                )
+              : ""
           }
         />
         <Messages
@@ -94,9 +103,9 @@ const Messages: FC<{
   loadingMessages: boolean;
   messagesLoaded: () => void;
 }> = ({ chatId, companyName, loadingMessages, messagesLoaded }) => {
-  const [messages, setMessages] = useState<(ChatMessage & { id: string })[]>(
-    []
-  );
+  const [messages, setMessages] = useState<
+    Partial<ChatMessage & { id: string }>[]
+  >([]);
 
   const scrollMessagesToBottom = useCallback(() => {
     setTimeout(() => {
@@ -120,6 +129,8 @@ const Messages: FC<{
             {
               id: change.doc.id,
               ...change.doc.data(),
+              timestamp:
+                change.doc.data().timestamp ?? new Date().toISOString(),
             } as unknown as ChatMessage & { id: string },
           ]);
           scrollMessagesToBottom();
@@ -152,7 +163,15 @@ const Messages: FC<{
               <div className="w-max justify-self-end max-w-[75%]">
                 <div className="whitespace-nowrap flex justify-between items-center gap-4 text-sm pr-[72px] pl-4 text-[#8A898E]">
                   <span>{!isPreviousMessageClient ? "Me" : ""}</span>{" "}
-                  <span>{format(message.timestamp, "HH:mm")}</span>
+                  <span>
+                    {message.timestamp &&
+                      format(
+                        message.timestamp instanceof Timestamp
+                          ? message.timestamp.toDate()
+                          : message.timestamp,
+                        "HH:mm"
+                      )}
+                  </span>
                 </div>
                 <div
                   className={twMerge(
@@ -191,7 +210,15 @@ const Messages: FC<{
             <div className="w-max max-w-[75%]">
               <div className="whitespace-nowrap flex justify-between items-center gap-4 text-sm pl-[72px] pr-4 text-[#8A898E]">
                 <span>{!isPreviousMessageCompany ? companyName : ""}</span>{" "}
-                <span>{format(message.timestamp, "HH:mm")}</span>
+                <span>
+                  {message.timestamp &&
+                    format(
+                      message.timestamp instanceof Timestamp
+                        ? message.timestamp.toDate()
+                        : message.timestamp,
+                      "HH:mm"
+                    )}
+                </span>
               </div>
               <div
                 className={twMerge(
@@ -245,7 +272,6 @@ const MessageInput: FC<{ chatId: string }> = ({ chatId }) => {
       text: messageContent.trim(),
       fromClient: true,
       chatId,
-      timestamp: new Date().toISOString(),
     });
     setMessageContent("");
   };

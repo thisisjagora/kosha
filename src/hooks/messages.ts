@@ -25,7 +25,7 @@ export const useGetChat = ({ id }: { id: string }) => {
 };
 
 export const useSendMessage = () => {
-  return useMutation<unknown, unknown, ChatMessage>({
+  return useMutation<unknown, unknown, Omit<ChatMessage, 'timestamp'>>({
     mutationFn: (newMessage) => addToChatMessages(newMessage),
     retry: false,
   });
