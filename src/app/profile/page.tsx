@@ -32,7 +32,7 @@ const Page = () => {
                                                 content="Change Photo"
                                           /> */}
                                           <Avatar className="w-[70px] h-[70px] bg-[#F6DF9C]">
-                                                <AvatarImage src={ user?.photoURL || "https://images.unsplash.com/photo-1715005881129-266ccdd75e43?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={(user?.fullName || user?.displayName) ?? ""}/>
+                                                <AvatarImage src={ user?.photoURL ?? ""} alt={(user?.fullName || user?.displayName) ?? ""}/>
                                                 <AvatarFallback>{generateAcronym((user?.fullName || user?.displayName) ?? "")}</AvatarFallback>
                                           </Avatar>
                                     </span>
@@ -108,9 +108,9 @@ const Page = () => {
                                     <p className="text-primary-foreground text-base">Here you can find all your transactions on this account and you can print them out as a .pdf or .csv file</p>  
                               </Column>
                               <Column>
+                                    {/* <MoveHistory status="Pending" type="Hire labor" />
                                     <MoveHistory status="Pending" type="Hire labor" />
-                                    <MoveHistory status="Pending" type="Hire labor" />
-                                    <MoveHistory status="Pending" type="Hire labor" />
+                                    <MoveHistory status="Pending" type="Hire labor" /> */}
                               </Column>
                         </Column>
                         <Column className="flex-1 font-dm-sans p-4 bg-white-100 shadow-xs rounded-lg">
