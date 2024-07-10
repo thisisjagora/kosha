@@ -54,7 +54,7 @@ export const AddCardFrom = () => {
                                                 </FormItem>
                                           )}
                                     />
-                              <Row>
+                              <Row className="gap-4">
                                     <FormField 
                                           control={form.control}
                                           name="expiryDate"
