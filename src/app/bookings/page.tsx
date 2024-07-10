@@ -14,12 +14,17 @@ import {
   QuotesTitle,
   QuotesVehicle,
   QuotesTime,
+  QuotesRatings,
 } from "@/components/quotations/quotes";
 import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 const Page = () => {
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
+
+  const isToday =
+    format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
 
   return (
     <Row className="gap-8 flex-col md:flex-row">
@@ -56,7 +61,7 @@ const Page = () => {
 
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">
-            Todays Activities
+            {isToday ? "Today" : format(date, "do MMMM, yyyy")}
           </H>
           {isLoading && (
             <Row className="flex flex-wrap gap-4">
@@ -70,25 +75,49 @@ const Page = () => {
               Could not fetch bookings. Kindly reload or try again later.
             </p>
           )}
+          {bookings && bookings.length === 0 && (
+            <p className="p-3 py-12 text-center text-[#2B3674] text-xl">
+              You have no bookings{" "}
+              {isToday ? "today" : ` on ${format(date, "do MMMM, yyyy")}`}
+            </p>
+          )}
           <Row className="flex-wrap gap-4">
             {bookings &&
               bookings.map((booking) => (
                 <Quotes key={booking.bookingId}>
-                  <QuotesImage src="" type="Hire labor" />
+                  <QuotesImage src="" type={booking.requestType!} />
                   <QuotesContent>
                     <Row className="items-start justify-between gap-6 flex-wrap">
                       <Column>
                         <QuotesTitle
                           title={booking.quote?.companyName ?? ""}
                         ></QuotesTitle>
-                        <QuotesMovers>3 Movers</QuotesMovers>
+                        {typeof booking.quote?.movers === "number" && (
+                          <QuotesMovers>
+                            {booking.quote?.movers}{" "}
+                            {booking.requestType === "RegularMove"
+                              ? "movers"
+                              : "laborers"}
+                          </QuotesMovers>
+                        )}
                       </Column>
-                      <QuotesTime className="mt-[4px]">
-                        12:00pm - 4:00pm
-                      </QuotesTime>
+                      {!!NaN && (
+                        <QuotesTime className="mt-[1px]">
+                          12:00pm - 4:00pm
+                        </QuotesTime>
+                      )}
                     </Row>
                     <Row className="justify-between items-center">
-                      <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
+                      <Column className="gap-1">
+                        <QuotesVehicle>
+                          {booking.quote?.movingTruck}
+                        </QuotesVehicle>
+                        {typeof booking.quote?.averageRating === "number" && (
+                          <QuotesRatings
+                            rating={booking.quote?.averageRating}
+                          />
+                        )}
+                      </Column>
                       <QuotesAmount amount={80} />
                     </Row>
                   </QuotesContent>

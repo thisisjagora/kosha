@@ -7,11 +7,11 @@ import {
   where,
   query,
   serverTimestamp,
+  orderBy,
 } from "firebase/firestore";
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 import { Booking } from "@/types/structs";
-import { format } from "date-fns";
 
 export const db = getFirestore(firebaseApp);
 
@@ -50,11 +50,13 @@ export const getBookings = async (inputDate: Date) => {
       collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
       where("bookingDate", ">=", startOfDay),
       where("bookingDate", "<=", endOfDay),
-      where("clientId", "==", userId)
+      where("clientId", "==", userId),
+      where("requestType", "in", ["RegularMove", "LabourOnly"]), // Get only move and labour booking for now
+      orderBy("bookingDate", "desc")
     );
 
     const querySnapshot = await getDocs(q);
-    
+
     const bookings = querySnapshot.docs
       .map(
         (doc) =>

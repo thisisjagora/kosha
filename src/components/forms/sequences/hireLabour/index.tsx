@@ -565,7 +565,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   <Column className="items-center justify-center gap-8 md:px-24">
                     <Check className="w-[80px] h-[100px]" />
                     <Column className="items-center">
-                      <P className="text-center font-semibold text-2xl text-grey-300">Move Request Sent!</P>
+                      <P className="text-center font-semibold text-2xl text-grey-300">Labour Request Sent!</P>
                     </Column>
                     <Link
                       className="w-full py-2 text-white-100 bg-primary text-center rounded-sm"
