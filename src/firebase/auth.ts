@@ -3,7 +3,7 @@ import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import firebaseApp from "./config";
 import { db } from "./firestore";
 import { IUser } from "@/types/structs";
-import { ResetPasswordDto, SignInDto, SignUpDto } from "@/types/dtos";
+import { ForgotPasswordDto, SignInDto, SignUpDto } from "@/types/dtos";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 
 export const auth = getAuth(firebaseApp);
@@ -49,7 +49,8 @@ export const auth = getAuth(firebaseApp);
           await setDoc(doc(db, FIREBASE_COLLECTIONS.USERS, res.user.uid), {
             fullName: name,
             email,
-            phoneNumber: phone
+            phoneNumber: phone,
+            hasCreditCard: false
           });
         } catch (err) {
           await deleteUser(res.user);
@@ -84,7 +85,7 @@ export const auth = getAuth(firebaseApp);
       }
     };
 
-    const resetPassword = async (payload: ResetPasswordDto) => {
+    const forgotPassword = async (payload: ForgotPasswordDto) => {
       try{
         await sendPasswordResetEmail(auth, payload.email)
       }catch (err) {
@@ -99,5 +100,5 @@ export {
       signUp,
       signOutUser,
       deleteUserAccount,
-      resetPassword
+      forgotPassword
 }

@@ -10,7 +10,7 @@ export interface SignUpDto {
       password: string
 }
 
-export interface ResetPasswordDto {
+export interface ForgotPasswordDto {
       email: string
 }
 
@@ -47,9 +47,8 @@ export interface BookMoveDto {
         hasElevator: string;
         id: string;
       }>;
-      requestType: "RegularMove" | "LabourOnly" | "LongDelivery";
+      requestType: "RegularMove" | "LabourOnly" | "Delivery";
 }
-
 export interface GoogleAutoCompleteDto {
   input: string,
   location?: {

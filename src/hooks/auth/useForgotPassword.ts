@@ -1,30 +1,25 @@
 import { toast } from "@/components/toast/use-toast";
-import { SUCCESS_MESSAGE } from "@/constants/enums";
 import { Routes } from "@/core/routing";
-import { addToBookings as addToBookingsMethod } from "@/firebase/firestore";
+import { forgotPassword as _forgotPassword } from "@/firebase/auth"
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { wait } from "@/lib/utils";
-import useShowQuotes from "@/stores/show-quotes.store";
-import { Booking } from "@/types/structs";
+import { ForgotPasswordDto } from "@/types/dtos";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export const useAddToBookings = () => {
-      const {reset} = useShowQuotes((state) => state);
+export const useForgotPassword = () => {
       const router = useRouter();
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState(null);
 
-      const addToBookings = (payload: Booking) => {
+      const forgotPassword = (payload: ForgotPasswordDto) => {
             setLoading(true);
             setError(null);
 
-            addToBookingsMethod(payload)
+            _forgotPassword(payload)
             .then(() => {
-                  localStorage.clear()
-                  reset()
-                  toast({description: SUCCESS_MESSAGE.BOOKINGS_COMPLETE, variant: "success"})
-                  wait(1000).then(() => router.push(Routes.bookings))
+                  toast({title: "Success", description: "We sent a reset link to your mail!", variant: "success"})
+                  wait(1000).then(() => router.push(Routes.signIn))
             })
             .catch((err) => {
                   setError(err);
@@ -39,7 +34,7 @@ export const useAddToBookings = () => {
             })
       }
       return {
-            addToBookings,
+            forgotPassword,
             loading,
             error
       }

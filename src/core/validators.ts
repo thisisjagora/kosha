@@ -23,6 +23,29 @@ export const signUpSchema = z.object({
   acceptTerms: z.boolean(),
 })
 
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+const creditCardNumberPattern = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9]{2})[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+export const addCardSchema = z.object({
+  name:z.string()
+  .trim()
+  .refine(value => {
+    const names = value.split(/\s+/);
+    return names.length === 2 && names.every(name => name.length >= 2);
+  }, {
+    message: "Full name should include both first name and last name"
+  }),
+  cardNumber: z.string().regex(creditCardNumberPattern, {
+    message: "Invalid credit card number",
+  }),
+  expiryDate: z.string().min(1, {message: "required"}),
+  cvv: z.string()
+  .min(3, { message: "CVV must be exactly 3 digits" })
+  .max(3, { message: "CVV must be exactly 3 digits" })
+
+})
+
 const locationSchema = z.object({
   location: z.string().min(1, {message: "Location is required"}),
   apartmentNumber: z.string().optional(),
@@ -71,7 +94,8 @@ export const hireLabourSequenceStep1Schema = z.object({
   date: z.date({message: "Move date is required"}),
   time: z.string().min(1, {message: "Time is required"}),
   serviceLocation: z.string().min(1, {message: "Location is required"}),
-  apartment: z.string().min(1, {message: "Apartment/Unit number is required"})
+  apartmentNumber: z.string().optional(),
+  googlePlaceId: z.string().optional()
 }).extend(pickUpDetailSchema.shape);
 
 export const hireLabourSequenceStep2Schema = bookMoveSequenceStep3Schema;
