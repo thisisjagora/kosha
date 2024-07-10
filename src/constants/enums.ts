@@ -32,4 +32,6 @@ export enum ErrorMessage {
 
 export enum CacheKey {
 	CHATS_STATE = 'CHATS_STATE',
+	CHAT_STATE = 'CHAT_STATE',
+	CHAT_MESSAGES_STATE = 'CHAT_MESSAGES_STATE',
 }

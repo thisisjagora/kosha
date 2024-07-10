@@ -7,12 +7,10 @@ import { Routes } from "@/core/routing";
 import { useParams } from "next/navigation";
 import { useGetChats } from "@/hooks/messages";
 import { Skeleton } from "@/components/ui/skeleton";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 export const ChatList = () => {
   const { data, isLoading } = useGetChats();
-  console.log("loading: ", isLoading);
-  console.log("data: ", data);
   const type = "Book a move";
   const params = useParams();
   return (
@@ -65,14 +63,21 @@ export const ChatList = () => {
                   <P className="font-dm-sans text-primary font-bold text-sm leading-[16px]">
                     {chat.quote?.companyName}
                   </P>
-                  <P className="font-dm-sans text-primary-foreground text-xs">{chat.bookingDate && format(chat.bookingDate, 'MMM dd, yyyy')}</P>
+                  <P className="font-dm-sans text-primary-foreground text-xs">
+                    {chat.bookingDate &&
+                      format(chat.bookingDate, "MMM dd, yyyy")}
+                  </P>
                 </Column>
               </Row>
               <Column className="items-center">
-                <P className="text-sm text-grey-100 font-dm-sans">09:46</P>
-                <span className="bg-orange-100 min-w-[1.2rem] min-h-[1.2rem] p-[2px] rounded-full text-white-100 text-center flex items-center justify-center">
-                  <p className="text-xs text-center">3</p>
-                </span>
+                <P className="text-sm text-grey-100 font-dm-sans">
+                  {chat.bookingDate ? format(chat.bookingDate, "HH:mm") : ""}
+                </P>
+                {!!NaN && (
+                  <span className="bg-orange-100 min-w-[1.2rem] min-h-[1.2rem] p-[2px] rounded-full text-white-100 text-center flex items-center justify-center">
+                    <p className="text-xs text-center">3</p>
+                  </span>
+                )}
               </Column>
             </Row>
           </Link>

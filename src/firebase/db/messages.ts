@@ -1,7 +1,15 @@
 import { getAuth } from "firebase/auth";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  where,
+  query,
+  addDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
-import { Booking } from "@/types/structs";
+import { ChatMessage, Chat } from "@/types/structs";
 import { db } from ".";
 
 export const getChats = async () => {
@@ -19,10 +27,58 @@ export const getChats = async () => {
           ({
             id: doc.id,
             ...doc.data(),
-          } as Partial<Booking & { id: string }>)
+          } as Partial<Chat>)
       )
       .filter((booking) => booking.quote);
     return chats;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getChat = async (id: string) => {
+  try {
+    const querySnapshot = await getDoc(
+      doc(db, FIREBASE_COLLECTIONS.BOOKINGS, id)
+    );
+    if (!querySnapshot.exists()) throw new Error("No chat found", { cause: 404 });
+    const chat = {
+      id: querySnapshot.id,
+      ...querySnapshot.data(),
+    } as Partial<Chat>;
+    return chat;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const addToChatMessages = async (payload: ChatMessage) => {
+  try {
+    const res = await addDoc(
+      collection(db, FIREBASE_COLLECTIONS.CHAT_MESSAGES),
+      payload
+    );
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getChatMessages = async (chatId: string) => {
+  try {
+    const q = query(
+      collection(db, FIREBASE_COLLECTIONS.CHAT_MESSAGES),
+      where("chatId", "==", chatId)
+    );
+    const querySnapshot = await getDocs(q);
+    const chatMessages = querySnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as Partial<ChatMessage>)
+    );
+    return chatMessages;
   } catch (err) {
     throw err;
   }
