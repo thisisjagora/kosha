@@ -119,3 +119,15 @@ export interface QuoteDetailsRate {
 export interface IUser extends User {
       fullName: string
 }
+
+
+export type DocUser = Record<'id' | 'email' | 'fullName' | 'phoneNumber', string>;
+
+export type Chat = Booking & { id: string };
+
+export interface ChatMessage {
+  chatId: string; // NOTE: Booking doc ID
+  fromClient: boolean;
+  timestamp: Date | string;
+  text: string;
+}
