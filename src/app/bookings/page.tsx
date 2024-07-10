@@ -16,10 +16,14 @@ import {
   QuotesTime,
 } from "@/components/quotations/quotes";
 import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 const Page = () => {
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
+
+  const isToday =
+    format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
 
   return (
     <Row className="gap-8 flex-col md:flex-row">
@@ -56,7 +60,7 @@ const Page = () => {
 
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">
-            Todays Activities
+            {isToday ? "Today" : format(date, "do MMMM, yyyy")}
           </H>
           {isLoading && (
             <Row className="flex flex-wrap gap-4">
@@ -68,6 +72,12 @@ const Page = () => {
           {error && (
             <p className="p-3 py-12 text-center text-red-400">
               Could not fetch bookings. Kindly reload or try again later.
+            </p>
+          )}
+          {bookings && bookings.length === 0 && (
+            <p className="p-3 py-12 text-center text-[#2B3674] text-xl">
+              You have no bookings{" "}
+              {isToday ? "today" : ` on ${format(date, "do MMMM, yyyy")}`}
             </p>
           )}
           <Row className="flex-wrap gap-4">
