@@ -12,7 +12,6 @@ import {
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
 import { Booking } from "@/types/structs";
-import { format } from "date-fns";
 
 export const db = getFirestore(firebaseApp);
 
