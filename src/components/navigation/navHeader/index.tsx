@@ -38,7 +38,7 @@ export const NavHeader = () => {
                   <Row className="flex-1 bg-white-100 p-4 items-center justify-between max-w-[120px] max-h-[60px] rounded-[30px]">
                         <Notification />
                         <Avatar className="w-[40px] h-[40px] bg-[#F6DF9C]">
-                            <AvatarImage src={ user?.photoURL || "https://images.unsplash.com/photo-1715005881129-266ccdd75e43?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={(user?.fullName || user?.displayName) ?? ""}/>
+                            <AvatarImage src={ user?.photoURL || ""} alt={(user?.fullName || user?.displayName) ?? ""}/>
                             <AvatarFallback>{generateAcronym((user?.fullName || user?.displayName) ?? "")}</AvatarFallback>
                         </Avatar>
                   </Row>
