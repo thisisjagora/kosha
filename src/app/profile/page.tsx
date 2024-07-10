@@ -1,8 +1,10 @@
 "use client"
 import { VirtualCard } from "@/components/VirtualCard";
-import { Button, H, P } from "@/components/atoms";
+import { Button, H, P, Picture } from "@/components/atoms";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/dialog";
 import { DeleteAccount } from "@/components/dialogs";
+import { AddCardFrom } from "@/components/forms/addCardForm";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
 import { UserProfileItem } from "@/components/userProfile";
@@ -12,6 +14,7 @@ import useUserStore from "@/stores/user.store";
 
 const Page = () => {
       const {user} =  useUserStore((state) => state);
+      const hasCreditCard = user?.hasCreditCard;
       const {loading, signOut} = useSignOut();
       return (
             <Column className="gap-4">
@@ -50,13 +53,50 @@ const Page = () => {
                         <div className="flex-1">
                               <H className="m-0 ml-6 text-primary text-xl md:hidden">Payment Methods</H>
                               <Row className="bg-white-100 shadow-xs flex-1 p-6 rounded-lg gap-4 flex-col md:flex-row items-center w-full h-full">
-                                    <VirtualCard />
+                                    {
+                                          hasCreditCard ? (
+                                                <VirtualCard />
+                                          ): (
+                                                <Picture 
+                                                container={{
+                                                  className: "w-full max-w-[350px] h-[150px]"
+                                                }}
+                                                image={{
+                                                  alt: "",
+                                                  src: "/images/profile-bg.png"
+                                                }}
+                                              />
+                                          )
+                                    }
                                     <Column className="gap-8 md:max-w-[200px] p-4">
                                           <Column className="gap-1">
-                                                <H className="m-0 text-primary hidden md:block">Payment Methods</H>
-                                                <P className="m-0 text-primary-foreground">Change /Update your payment methods here</P>
+                                                <H className="m-0 text-primary hidden md:block">
+                                                      {
+                                                            hasCreditCard? "Payment Methods" : "No Credit/Debit card"
+                                                      }
+                                                </H>
+                                                <P className="m-0 text-primary-foreground">
+                                                      {
+                                                            hasCreditCard? "Change /Update your payment methods here" : "Please add your card here"
+                                                      }
+                                                </P>
                                           </Column>
-                                          <Button className="w-full md:max-w-[140px]">Update</Button>
+                                          {
+                                                hasCreditCard? (
+                                                      <Button className="w-full md:max-w-[140px]">Update</Button>
+                                                ): (
+                                                      <Dialog>
+                                                            <DialogTrigger><Button className="w-full md:max-w-[140px]">Add New Card</Button></DialogTrigger>
+                                                            <DialogContent className="w-full max-w-[700px] flex flex-col gap-6">
+                                                                  <DialogHeader>
+                                                                        <DialogTitle className="text-center">Add your Card Details</DialogTitle>
+                                                                  </DialogHeader>
+                                                                  <AddCardFrom />
+                                                            </DialogContent>
+                                                      </Dialog>
+                                                      
+                                                )
+                                          }
                                     </Column>
                               </Row>
                         </div>
