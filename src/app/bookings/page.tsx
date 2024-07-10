@@ -21,6 +21,7 @@ import { format } from "date-fns";
 const Page = () => {
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
+  console.log('error: ', error);
 
   const isToday =
     format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
@@ -84,7 +85,7 @@ const Page = () => {
             {bookings &&
               bookings.map((booking) => (
                 <Quotes key={booking.bookingId}>
-                  <QuotesImage src="" type="Hire labor" />
+                  <QuotesImage src="" type={booking.requestType!} />
                   <QuotesContent>
                     <Row className="items-start justify-between gap-6 flex-wrap">
                       <Column>
