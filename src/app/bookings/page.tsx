@@ -14,6 +14,7 @@ import {
   QuotesTitle,
   QuotesVehicle,
   QuotesTime,
+  QuotesRatings,
 } from "@/components/quotations/quotes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
@@ -21,7 +22,6 @@ import { format } from "date-fns";
 const Page = () => {
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
-  console.log('error: ', error);
 
   const isToday =
     format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
@@ -92,14 +92,32 @@ const Page = () => {
                         <QuotesTitle
                           title={booking.quote?.companyName ?? ""}
                         ></QuotesTitle>
-                        <QuotesMovers>3 Movers</QuotesMovers>
+                        {typeof booking.quote?.movers === "number" && (
+                          <QuotesMovers>
+                            {booking.quote?.movers}{" "}
+                            {booking.requestType === "RegularMove"
+                              ? "movers"
+                              : "laborers"}
+                          </QuotesMovers>
+                        )}
                       </Column>
-                      <QuotesTime className="mt-[4px]">
-                        12:00pm - 4:00pm
-                      </QuotesTime>
+                      {!!NaN && (
+                        <QuotesTime className="mt-[1px]">
+                          12:00pm - 4:00pm
+                        </QuotesTime>
+                      )}
                     </Row>
                     <Row className="justify-between items-center">
-                      <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
+                      <Column className="gap-1">
+                        <QuotesVehicle>
+                          {booking.quote?.movingTruck}
+                        </QuotesVehicle>
+                        {typeof booking.quote?.averageRating === "number" && (
+                          <QuotesRatings
+                            rating={booking.quote?.averageRating}
+                          />
+                        )}
+                      </Column>
                       <QuotesAmount amount={80} />
                     </Row>
                   </QuotesContent>
