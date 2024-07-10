@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "@/components/toast/use-toast";
-import { getChats as getChatsMethod } from "@/firebase/firestore";
+import { getChats as getChatsMethod } from "@/firebase/db/messages";
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import { useState } from "react";
 import type { FirebaseError } from "firebase/app";
@@ -15,7 +15,6 @@ export const useGetChats = () => {
     setError(null);
     try {
       const data = await getChatsMethod();
-      console.log("data: ", data);
       setData(data as unknown as null);
     } catch (e) {
       setError(e);
