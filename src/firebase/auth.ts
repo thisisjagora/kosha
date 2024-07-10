@@ -49,7 +49,8 @@ export const auth = getAuth(firebaseApp);
           await setDoc(doc(db, FIREBASE_COLLECTIONS.USERS, res.user.uid), {
             fullName: name,
             email,
-            phoneNumber: phone
+            phoneNumber: phone,
+            hasCreditCard: false
           });
         } catch (err) {
           await deleteUser(res.user);
