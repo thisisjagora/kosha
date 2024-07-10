@@ -1,35 +1,13 @@
-import { toast } from "@/components/toast/use-toast";
-import { getBookings as getBookingsMethod } from "@/firebase/firestore";
-import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getBookings } from "@/firebase/firestore";
+import { CacheKey } from "@/constants/enums";
+import { format } from "date-fns";
 
-export const useGetBookings = () => {
-      const [loading, setLoading] = useState(false);
-      const [error, setError] = useState(null);
+export const useGetBookingsByDate = (date: Date) => {
+  return useQuery({
+    queryKey: [CacheKey.BOOKINGS_STATE, format(date, "MM-dd-yyyy")],
+    queryFn: () => getBookings(date),
+    retry: false,
+  });
+};
 
-      const getBookings = (payload: Date) => {
-            setLoading(true);
-            setError(null);
-
-            getBookingsMethod(payload)
-            .then((res) => {
-                  console.log(res, "form the hook")
-            })
-            .catch((err) => {
-                  setError(err);
-                  toast({
-                        title:"Oops!",
-                        description: getFirebaseErrorMessage(err),
-                        variant:"destructive"
-                  })
-            })            
-            .finally(() => {
-                  setLoading(false);
-            })
-      }
-      return {
-            getBookings,
-            loading,
-            error
-      }
-} 
