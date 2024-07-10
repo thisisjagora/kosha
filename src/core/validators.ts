@@ -23,6 +23,10 @@ export const signUpSchema = z.object({
   acceptTerms: z.boolean(),
 })
 
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+
 const locationSchema = z.object({
   location: z.string().min(1, {message: "Location is required"}),
   apartmentNumber: z.string().optional(),
