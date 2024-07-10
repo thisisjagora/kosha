@@ -18,6 +18,7 @@ export const useForgotPassword = () => {
 
             _forgotPassword(payload)
             .then(() => {
+                  toast({title: "Success", description: "We sent a reset link to your mail!", variant: "success"})
                   wait(1000).then(() => router.push(Routes.signIn))
             })
             .catch((err) => {
