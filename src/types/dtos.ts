@@ -10,7 +10,7 @@ export interface SignUpDto {
       password: string
 }
 
-export interface ResetPasswordDto {
+export interface ForgotPasswordDto {
       email: string
 }
 
