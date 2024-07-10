@@ -10,4 +10,3 @@ export const useGetBookingsByDate = (date: Date) => {
     retry: false,
   });
 };
-
