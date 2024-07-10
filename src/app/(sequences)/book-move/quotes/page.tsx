@@ -23,7 +23,7 @@ const Page = () => {
                               }} 
                               key={item.companyName + index}
                         >
-                              <QuotesImage src="" type="Book a move" />
+                              <QuotesImage src="" type="RegularMove" />
                               <QuotesContent>
                                     <Row className="items-start justify-between gap-6 flex-wrap">
                                           <Column>
