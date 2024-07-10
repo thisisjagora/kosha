@@ -4,12 +4,25 @@ import { Button, H, P, Picture } from "@/components/atoms";
 import { Calendar } from "@/components/calendar";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
-// import { Quotes, QuotesAmount, QuotesContent, QuotesImage, QuotesMovers, QuotesTime, QuotesTitle, QuotesVehicle } from "@/components/quotations/quotes";
+import {
+  Quotes,
+  QuotesAmount,
+  QuotesContent,
+  QuotesImage,
+  QuotesMovers,
+  QuotesTime,
+  QuotesTitle,
+  QuotesVehicle,
+  QuotesRatings,
+} from "@/components/quotations/quotes";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import { Booking } from "@/types/structs";
+import { useGetBookingsByDate } from "@/hooks/fireStore/useGetBookings";
+import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
   type: Booking["requestType"];
@@ -35,7 +48,11 @@ const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
 ];
 
 export default function Home() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
+  const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
+
+  const isToday =
+    format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
   return (
     <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
@@ -114,57 +131,70 @@ export default function Home() {
           </Row>
         </Column>
         <Column className="gap-4">
-          {/* <H level={3} className="text-primary text-2xl">Todays Activities</H> */}
-          {/* <Row className="flex-wrap gap-4">
-            <Quotes>
-              <QuotesImage src="" type="Hire labor" />
-              <QuotesContent>
-                <Row className="items-start justify-between gap-6 flex-wrap">
-                  <Column>
-                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
-                    <QuotesMovers>3 Movers</QuotesMovers>
-                  </Column>
-                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
-                </Row>
-                <Row className="justify-between items-center">
-                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
-                  <QuotesAmount amount="80"/>
-                </Row>
-              </QuotesContent>
-            </Quotes>
-            <Quotes>
-              <QuotesImage src="" type="Hire labor" />
-              <QuotesContent>
-                <Row className="items-start justify-between gap-6 flex-wrap">
-                  <Column>
-                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
-                    <QuotesMovers>3 Movers</QuotesMovers>
-                  </Column>
-                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
-                </Row>
-                <Row className="justify-between items-center">
-                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
-                  <QuotesAmount amount="80"/>
-                </Row>
-              </QuotesContent>
-            </Quotes>
-            <Quotes>
-              <QuotesImage src="" type="Hire labor" />
-              <QuotesContent>
-                <Row className="items-start justify-between gap-6 flex-wrap">
-                  <Column>
-                    <QuotesTitle>Tiyendi Movers</QuotesTitle>
-                    <QuotesMovers>3 Movers</QuotesMovers>
-                  </Column>
-                  <QuotesTime className="mt-[4px]">12:00pm - 4:00pm</QuotesTime>
-                </Row>
-                <Row className="justify-between items-center">
-                  <QuotesVehicle>Pickup, Van, 16ft Truck...</QuotesVehicle>
-                  <QuotesAmount amount="80"/>
-                </Row>
-              </QuotesContent>
-            </Quotes>
-          </Row> */}
+          <H level={3} className="text-primary text-2xl">
+            {isToday ? "Today" : format(date, "do MMMM, yyyy")}
+          </H>
+          {isLoading && (
+            <Row className="flex flex-wrap gap-4">
+              <Skeleton className="w-[270px] h-[350px]" />
+              <Skeleton className="w-[270px] h-[350px]" />
+              <Skeleton className="w-[270px] h-[350px]" />
+            </Row>
+          )}
+          {error && (
+            <p className="p-3 py-12 text-center text-red-400">
+              Could not fetch bookings. Kindly reload or try again later.
+            </p>
+          )}
+          {bookings && bookings.length === 0 && (
+            <p className="p-3 py-12 text-center text-[#2B3674] text-xl">
+              You have no bookings{" "}
+              {isToday ? "today" : ` on ${format(date, "do MMMM, yyyy")}`}
+            </p>
+          )}
+          <Row className="flex-wrap gap-4">
+            {bookings &&
+              bookings.map((booking) => (
+                <Quotes key={booking.bookingId}>
+                  <QuotesImage src="" type={booking.requestType!} />
+                  <QuotesContent>
+                    <Row className="items-start justify-between gap-6 flex-wrap">
+                      <Column>
+                        <QuotesTitle
+                          title={booking.quote?.companyName ?? ""}
+                        ></QuotesTitle>
+                        {typeof booking.quote?.movers === "number" && (
+                          <QuotesMovers>
+                            {booking.quote?.movers}{" "}
+                            {booking.requestType === "RegularMove"
+                              ? "movers"
+                              : "laborers"}
+                          </QuotesMovers>
+                        )}
+                      </Column>
+                      {!!NaN && (
+                        <QuotesTime className="mt-[1px]">
+                          12:00pm - 4:00pm
+                        </QuotesTime>
+                      )}
+                    </Row>
+                    <Row className="justify-between items-center">
+                      <Column className="gap-1">
+                        <QuotesVehicle>
+                          {booking.quote?.movingTruck}
+                        </QuotesVehicle>
+                        {typeof booking.quote?.averageRating === "number" && (
+                          <QuotesRatings
+                            rating={booking.quote?.averageRating}
+                          />
+                        )}
+                      </Column>
+                      <QuotesAmount amount={80} />
+                    </Row>
+                  </QuotesContent>
+                </Quotes>
+              ))}
+          </Row>
         </Column>
       </Column>
       <Column className="flex-1 sm:max-w-[500px] md:max-w-[350px] gap-8">
@@ -172,7 +202,7 @@ export default function Home() {
           mode="single"
           captionLayout="dropdown-buttons"
           selected={date}
-          onSelect={setDate}
+          onSelect={(date) => date && setDate(date)}
           disabled={(date: Date) => date < new Date("1900-01-01")}
           initialFocus
           className="rounded-xl shadow-custom bg-white-100 w-full"
