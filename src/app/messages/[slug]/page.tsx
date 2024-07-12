@@ -32,7 +32,7 @@ import { ChatMessage } from "@/types/structs";
 import { ChatBoxTail } from "@/components/Icons";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
-import { Timestamp } from "firebase/firestore";
+import { safeParseDate } from "@/lib/utils";
 
 export default function MessagePage({ params }: { params: { slug: string } }) {
   const {
@@ -73,10 +73,7 @@ export default function MessagePage({ params }: { params: { slug: string } }) {
           time={
             chat.bookingDate
               ? formatDistance(
-                  chat.bookingDate &&
-                    (chat.bookingDate as unknown) instanceof Timestamp
-                    ? (chat.bookingDate as unknown as Timestamp).toDate()
-                    : chat.bookingDate,
+                  safeParseDate(chat.bookingDate) as Date,
                   new Date()
                 )
               : ""
@@ -129,8 +126,7 @@ const Messages: FC<{
             {
               id: change.doc.id,
               ...change.doc.data(),
-              timestamp:
-                change.doc.data().timestamp ?? new Date().toISOString(),
+              timestamp: change.doc.data().timestamp ?? new Date().getTime(),
             } as unknown as ChatMessage & { id: string },
           ]);
           scrollMessagesToBottom();
@@ -165,12 +161,7 @@ const Messages: FC<{
                   <span>{!isPreviousMessageClient ? "Me" : ""}</span>{" "}
                   <span>
                     {message.timestamp &&
-                      format(
-                        message.timestamp instanceof Timestamp
-                          ? message.timestamp.toDate()
-                          : message.timestamp,
-                        "HH:mm"
-                      )}
+                      format(safeParseDate(message.timestamp) as Date, "HH:mm")}
                   </span>
                 </div>
                 <div
@@ -212,12 +203,7 @@ const Messages: FC<{
                 <span>{!isPreviousMessageCompany ? companyName : ""}</span>{" "}
                 <span>
                   {message.timestamp &&
-                    format(
-                      message.timestamp instanceof Timestamp
-                        ? message.timestamp.toDate()
-                        : message.timestamp,
-                      "HH:mm"
-                    )}
+                    format(safeParseDate(message.timestamp) as Date, "HH:mm")}
                 </span>
               </div>
               <div

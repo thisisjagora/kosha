@@ -6,7 +6,6 @@ import {
   getDocs,
   where,
   query,
-  serverTimestamp,
   orderBy,
 } from "firebase/firestore";
 import firebaseApp from "./config";
@@ -30,7 +29,7 @@ export const addToBookings = async (payload: Booking) => {
 
     const res = await addDoc(collection(db, FIREBASE_COLLECTIONS.BOOKINGS), {
       ...payload,
-      bookingDate: serverTimestamp(),
+      bookingDate: new Date().getTime(),
     });
     return res;
   } catch (err) {
@@ -48,8 +47,8 @@ export const getBookings = async (inputDate: Date) => {
 
     const q = query(
       collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
-      where("bookingDate", ">=", startOfDay),
-      where("bookingDate", "<=", endOfDay),
+      where("bookingDate", ">=", startOfDay.getTime()),
+      where("bookingDate", "<=", endOfDay.getTime()),
       where("clientId", "==", userId),
       where("requestType", "in", ["RegularMove", "LabourOnly"]), // Get only move and labour booking for now
       orderBy("bookingDate", "desc")
