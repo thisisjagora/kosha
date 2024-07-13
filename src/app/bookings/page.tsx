@@ -34,7 +34,7 @@ const Page = () => {
   return (
     <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
-        <Activity>
+        {/* <Activity>
           <LeftColumn className="gap-8">
             <H level={3} className="text-2xl md:text-3xl">
               Delivery Quote received!
@@ -62,7 +62,7 @@ const Page = () => {
               }}
             />
           </RightColumn>
-        </Activity>
+        </Activity> */}
 
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">

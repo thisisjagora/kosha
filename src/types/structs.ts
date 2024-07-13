@@ -118,7 +118,8 @@ export interface QuoteDetailsRate {
 }
 
 export interface IUser extends User {
-      fullName: string
+      fullName: string,
+      hasCreditCard: boolean
 }
 
 
