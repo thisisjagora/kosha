@@ -382,7 +382,6 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
       setGottenVoucher(null);
     },
   });
-  console.log("formData: ", formData);
 
   if (!formData || !quoteDetailsData) {
     toast({
@@ -621,7 +620,6 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
               services: selectedBooking.serviceAddOns ?? [],
             });
           } else if (type === "LabourOnly") {
-            console.log('updated hiring')
             updateHireLabour({
               date: new Date(selectedBooking.movingDate ?? new Date()),
               time: selectedBooking.movingDate
