@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Source_Sans_3 } from "next/font/google";
+import { DM_Sans, Source_Sans_3, Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/toast/toaster";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Footer, NavHeader, SideNav } from "@/components/navigation";
 import { Layout } from "@/components/layout";
+import { cn } from "@/lib/utils";
 
 const dmSans = DM_Sans({ 
   subsets: ["latin"],
@@ -17,6 +16,12 @@ const sourceSans3 = Source_Sans_3({
   variable: '--font-source-sans',
 });
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  display: 'swap',
+  variable: '--font-poppins',
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -27,16 +32,14 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-title: "KoshaMoves | Schedule a move",
-description: "KoshaMoves - ",
-applicationName: 'MyMedHub',
-referrer: 'origin-when-cross-origin',
-authors: [{ name: 'Nelson Michael', url: '' }],
-creator: 'Nelson Michael',
-publisher: 'Nelson Michael',
+  title: "KoshaMoves | Schedule a move",
+  description: "KoshaMoves - ",
+  applicationName: 'MyMedHub',
+  referrer: 'origin-when-cross-origin',
+  authors: [{ name: 'Nelson Michael', url: '' }],
+  creator: 'Nelson Michael',
+  publisher: 'Nelson Michael',
 };
-
-const queryClient = new QueryClient()
 
 export default function RootLayout({
   children,
@@ -45,11 +48,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${dmSans.className} ${sourceSans3.className}`}>
-        <Layout>
-          {children}
-        </Layout>
-        <Toaster />
+      <body className={cn(dmSans.variable, sourceSans3.variable, poppins.variable)}>
+          <Layout>
+            {children}
+          </Layout>
+          <Toaster />
       </body>
     </html>
   );

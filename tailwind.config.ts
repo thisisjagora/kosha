@@ -21,6 +21,10 @@ const config = {
       fontFamily:{
         "dm-sans": ['var(--font-dm-sans)'],
         "source-sans": ['var(--font-source-sans)'],
+        "poppins": ['var(--font-poppins)']
+      },
+      screens: {
+        'custom-496': '496px',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -56,6 +60,13 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        white: {
+          100: "#FFFFFF",
+          200: "#FAFBFC",
+          300: "#F0F0F2",
+          400: "#E0E5F2",
+          500: "#FAFCFE"
+        },
         blue: {
           100: "#27446E",
           200: "#2B3674",
@@ -63,13 +74,27 @@ const config = {
         },
         grey: {
           100: "#A3AED0",
-          200: "#A6A6A6"
+          200: "#A6A6A6",
+          300: "#7D7D7D",
+          400: "#AAAAAA",
+          500: "#DFDFDF",
+          600: "#858B94",
+          700: "#E9E9E9",
+          800: "#C4C4C4"
+        },
+        green: {
+          100: "#19B000",
+          200: "#34A853"
+        },
+        orange: {
+          100: "#C29C80"
         }
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "4xl": "calc(var(--radius) + 120px)"
       },
       keyframes: {
         "accordion-down": {
@@ -84,6 +109,13 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        'yellow-gradient': 'linear-gradient(180deg, #FFFFFF 10%, #F6DF9C 100%)',
+        'virtual-card': "url('/images/virtual-card-pg.png')"
+      },
+      boxShadow: {
+        'custom': '14px 17px 40px 4px #7090B014',
       },
     },
   },

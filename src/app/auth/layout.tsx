@@ -1,11 +1,14 @@
+import { Row } from "@/components/layout";
 import { FC, PropsWithChildren } from "react";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
       return (
-            <div className="flex">
+            <Row className="flex justify-center items-center h-full pb-24">
                   {children}
-                  <p>Auth pages</p>
-            </div>
+                  <div className="flex-1 hidden md:block">
+
+                  </div>
+            </Row>
       )
 }
 
