@@ -13,6 +13,7 @@ export { default as Edit } from "./Edit";
 export { default as FlightOfStairs } from "./FlightOfStairs";
 export { default as Google } from "./Google";
 export { default as Home } from "./Home";
+export { default as InfoCircle } from "./InfoCircle";
 export { default as NotificationsNone } from "./NotificationsNone";
 export { default as Piano } from "./Piano";
 export { default as Send } from "./Send";

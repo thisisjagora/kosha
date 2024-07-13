@@ -1,22 +1,20 @@
-// import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { getQuote } from "@/core/api/quote";
+import { BookMoveDto } from "@/types/dtos";
 
-// export const useGetQuote = () => {
-// 	const queryClient = useQueryClient();
+export const useGetQuote = ({ payload }: { payload?: BookMoveDto } = {}) => {
+  const { mutate, ...others } = useMutation({
+    mutationFn: async (payload: BookMoveDto) => {
+      try {
+        const quote = getQuote(payload);
+        return quote;
+      } catch (err) {
+        throw err;
+      }
+    },
+    retry: false,
+  });
+  payload && mutate(payload);
+  return { mutate, ...others };
+};
 
-// 	const methods = useQuery<FilteredResponse<IBrand[]>, any>({
-// 		enabled: true,
-// 		queryFn: () => fetchFavouriteBrands(),
-// 		queryKey: [QueryKeys.FETCH_FAVOURITE_BRANDS]
-// 	});
-
-// 	const refetchData = async () => {
-// 		await queryClient.invalidateQueries();
-// 		await methods.refetch();
-// 	};
-
-// 	return {
-// 		...methods,
-// 		data: methods.data?.data ?? [],
-// 		refetchData
-// 	};
-// }
