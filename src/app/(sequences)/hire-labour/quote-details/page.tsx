@@ -33,17 +33,11 @@ const Page = () => {
   const selectedBooking = useBookingStore.use.selectedBooking();
   const finishing = searchParams.get("action") === "finish",
     updating = searchParams.get("action") === "finish";
-  // const finishing = searchParams.action === "finish",
-  //   updating = searchParams.action === "update";
   const iconSizes = {
     width: 21,
     height: 21,
   };
   const { quoteDetailsData } = useQuoteDetailsData();
-  console.log("quoteDetailsData: ", quoteDetailsData);
-  console.log("selectedBooking: ", selectedBooking);
-  console.log("searchParams action : ", searchParams.get("action"));
-  console.log({ finishing, updating });
   const {
     companyName,
     numberOfReviews,

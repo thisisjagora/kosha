@@ -66,11 +66,7 @@ export const SideNav: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
         />
       </div>
       <div className="py-6 flex flex-col gap-4">
-        {SIDE_NAV_MENU_DATA.filter((item) => {
-          if (!nonAuth) return true;
-          if (nonAuth && item.title === "Dashboard") return true;
-          return false;
-        }).map((item, indx) => (
+        {SIDE_NAV_MENU_DATA.map((item, indx) => (
           <NavItem
             key={item.title + indx}
             data={{
@@ -86,4 +82,3 @@ export const SideNav: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
     </aside>
   );
 };
-
