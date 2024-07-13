@@ -1,6 +1,6 @@
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cva } from 'class-variance-authority';
+import { cn } from "@/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -17,9 +17,51 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         {...props}
       />
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
+Input.displayName = "Input";
 
-export { Input }
+const inputStyles = (className?: string) =>
+  cva(
+    cn(
+      `block w-full rounded-md border p-4 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-inset focus-visible:border-blue-500 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-blue-300 sm:text-sm sm:leading-6 ${
+        className ?? ""
+      }`
+    ),
+    {
+      variants: {},
+    }
+  );
+
+export const DebouncedInput = React.forwardRef<
+  HTMLInputElement,
+  {
+    debounce?: number;
+  } & InputProps
+>(
+  (
+    { onChange, debounce = 800, className, value: initialValue, ...props },
+    ref
+  ) => {
+    const [value, setValue] = React.useState(initialValue);
+    const timerRef = React.useRef<NodeJS.Timeout>();
+    return (
+      <input
+        ref={ref}
+        value={value}
+        className={inputStyles(className)({})}
+        {...props}
+        onChange={(...arg) => {
+          setValue(arg[0].target.value);
+          clearTimeout(timerRef.current);
+          timerRef.current = setTimeout(() => {
+            onChange && onChange(...arg);
+          }, debounce);
+        }}
+      />
+    );
+  }
+);
+DebouncedInput.displayName = "DebouncedInput";
+export { Input };

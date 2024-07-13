@@ -1,35 +1,46 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { Timestamp } from "firebase/firestore";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const truncateWithEllipsis = (text: string, maxLength: number) => {
-  if (typeof text !== 'string') throw new TypeError('Expected a string as the first argument');
-  if (typeof maxLength !== 'number' || maxLength < 0) throw new TypeError('Expected a non-negative number as the second argument');
+  if (typeof text !== "string")
+    throw new TypeError("Expected a string as the first argument");
+  if (typeof maxLength !== "number" || maxLength < 0)
+    throw new TypeError(
+      "Expected a non-negative number as the second argument"
+    );
 
-  if (text.length > maxLength) return text.slice(0, maxLength - 3) + '...';
+  if (text.length > maxLength) return text.slice(0, maxLength - 3) + "...";
   return text;
-}
+};
 
 export const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export function mergeArrays(...arrays: any[]) {
-  const length = arrays.reduce((minLength, arr) => Math.min(minLength, arr.length), Infinity);
+  const length = arrays.reduce(
+    (minLength, arr) => Math.min(minLength, arr.length),
+    Infinity
+  );
 
   return Array.from({ length }, (_, index) =>
-    arrays.reduce((mergedObj, arr) => ({
-      ...mergedObj,
-      ...arr[index]
-    }), {})
+    arrays.reduce(
+      (mergedObj, arr) => ({
+        ...mergedObj,
+        ...arr[index],
+      }),
+      {}
+    )
   );
 }
 
 function abbreviateNumber(value: number): string {
-  const suffixes = ['', 'K', 'M', 'B', 'T'];
+  const suffixes = ["", "K", "M", "B", "T"];
   let suffixIndex = 0;
   let num = value;
 
@@ -41,9 +52,13 @@ function abbreviateNumber(value: number): string {
   return `${num.toFixed(2)}${suffixes[suffixIndex]}`;
 }
 
-export function formatCurrency(value: number, locale: string = 'en-US', currency: string = 'USD'): string {
+export function formatCurrency(
+  value: number,
+  locale: string = "en-US",
+  currency: string = "USD"
+): string {
   const formattedValue = new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -57,9 +72,20 @@ export function formatCurrency(value: number, locale: string = 'en-US', currency
 }
 
 export function trimTextAtPeriod(text: string) {
-  const periodIndex = text.indexOf('.');
+  const periodIndex = text.indexOf(".");
   if (periodIndex === -1) {
     return text;
   }
   return text.substring(0, periodIndex);
 }
+export const isValidDate = (dateString: unknown) => {
+  const date = new Date(dateString as string);
+  return !isNaN(date.getTime());
+};
+
+export const safeParseDate = (value: unknown): Date | null => {
+  if (value instanceof Timestamp) return value.toDate();
+  if (isValidDate(value)) return new Date(value as string);
+  return null;
+};
+
