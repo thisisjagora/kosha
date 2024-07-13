@@ -23,6 +23,7 @@ import { Booking } from "@/types/structs";
 import { useGetBookingsByDate } from "@/hooks/fireStore/useGetBookings";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import { getAuth } from "firebase/auth";
 
 const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
   type: Booking["requestType"];
@@ -48,6 +49,7 @@ const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
 ];
 
 export default function Home() {
+  const user = getAuth().currentUser;
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
 
@@ -56,33 +58,35 @@ export default function Home() {
   return (
     <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
-        <Activity>
-          <LeftColumn>
-            <H
-              level={3}
-              className="text-2xl md:text-3xl text-center md:text-left"
-            >
-              Delivery Quote received!
-            </H>
-            <P className="font-dm-sans text-sm text-center md:text-left">
-              You have received an estimate for your delivery request
-            </P>
-            <Button className="bg-white-100 w-full md:max-w-[120px] text-primary">
-              View
-            </Button>
-          </LeftColumn>
-          <RightColumn>
-            <Picture
-              container={{
-                className: "w-full h-full",
-              }}
-              image={{
-                alt: "",
-                src: "/images/send.png",
-              }}
-            />
-          </RightColumn>
-        </Activity>
+        {user && (
+          <Activity>
+            <LeftColumn>
+              <H
+                level={3}
+                className="text-2xl md:text-3xl text-center md:text-left"
+              >
+                Delivery Quote received!
+              </H>
+              <P className="font-dm-sans text-sm text-center md:text-left">
+                You have received an estimate for your delivery request
+              </P>
+              <Button className="bg-white-100 w-full md:max-w-[120px] text-primary">
+                View
+              </Button>
+            </LeftColumn>
+            <RightColumn>
+              <Picture
+                container={{
+                  className: "w-full h-full",
+                }}
+                image={{
+                  alt: "",
+                  src: "/images/send.png",
+                }}
+              />
+            </RightColumn>
+          </Activity>
+        )}
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">
             Select a Service
@@ -130,100 +134,104 @@ export default function Home() {
             ))}
           </Row>
         </Column>
-        <Column className="gap-4">
-          <H level={3} className="text-primary text-2xl">
-            {isToday ? "Today" : format(date, "do MMMM, yyyy")}
-          </H>
-          {isLoading && (
-            <Row className="flex flex-wrap gap-4">
-              <Skeleton className="w-[270px] h-[350px]" />
-              <Skeleton className="w-[270px] h-[350px]" />
-              <Skeleton className="w-[270px] h-[350px]" />
-            </Row>
-          )}
-          {error && (
-            <p className="p-3 py-12 text-center text-red-400">
-              Could not fetch bookings. Kindly reload or try again later.
-            </p>
-          )}
-          {bookings && bookings.length === 0 && (
-            <p className="p-3 py-12 text-center text-[#2B3674] text-xl">
-              You have no bookings{" "}
-              {isToday ? "today" : ` on ${format(date, "do MMMM, yyyy")}`}
-            </p>
-          )}
-          <Row className="flex-wrap gap-4">
-            {bookings &&
-              bookings.map((booking) => (
-                <Quotes key={booking.bookingId}>
-                  <QuotesImage src="" type={booking.requestType!} />
-                  <QuotesContent>
-                    <Row className="items-start justify-between gap-6 flex-wrap">
-                      <Column>
-                        <QuotesTitle
-                          title={booking.quote?.companyName ?? ""}
-                        ></QuotesTitle>
-                        {typeof booking.quote?.movers === "number" && (
-                          <QuotesMovers>
-                            {booking.quote?.movers}{" "}
-                            {booking.requestType === "RegularMove"
-                              ? "movers"
-                              : "laborers"}
-                          </QuotesMovers>
-                        )}
-                      </Column>
-                      {!!NaN && (
-                        <QuotesTime className="mt-[1px]">
-                          12:00pm - 4:00pm
-                        </QuotesTime>
-                      )}
-                    </Row>
-                    <Row className="justify-between items-center">
-                      <Column className="gap-1">
-                        <QuotesVehicle>
-                          {booking.quote?.movingTruck}
-                        </QuotesVehicle>
-                        {typeof booking.quote?.averageRating === "number" && (
-                          <QuotesRatings
-                            rating={booking.quote?.averageRating}
-                          />
-                        )}
-                      </Column>
-                      {typeof booking.quote?.minimumAmount === "number" && (
-                        <QuotesAmount amount={booking.quote?.minimumAmount} />
-                      )}
-                    </Row>
-                  </QuotesContent>
-                </Quotes>
-              ))}
-          </Row>
-        </Column>
-      </Column>
-      <Column className="flex-1 sm:max-w-[500px] md:max-w-[350px] gap-8">
-        <Calendar
-          mode="single"
-          captionLayout="dropdown-buttons"
-          selected={date}
-          onSelect={(date) => date && setDate(date)}
-          disabled={(date: Date) => date < new Date("1900-01-01")}
-          initialFocus
-          className="rounded-xl shadow-custom bg-white-100 w-full"
-        />
-        <Column className="bg-white-100 shadow-custom rounded-xl p-4 gap-8">
-          <Column className="gap-2">
-            <H level={3} className="m-0 p-0 text-primary font-bold text-2xl">
-              Move History
+        {user && (
+          <Column className="gap-4">
+            <H level={3} className="text-primary text-2xl">
+              {isToday ? "Today" : format(date, "do MMMM, yyyy")}
             </H>
-            <P className="m-0 p-0 text-primary-foreground">
-              Here you can find all your transactions on this account and you
-              can print them out as .pdf or .csv file
-            </P>
+            {isLoading && (
+              <Row className="flex flex-wrap gap-4">
+                <Skeleton className="w-[270px] h-[350px]" />
+                <Skeleton className="w-[270px] h-[350px]" />
+                <Skeleton className="w-[270px] h-[350px]" />
+              </Row>
+            )}
+            {error && (
+              <p className="p-3 py-12 text-center text-red-400">
+                Could not fetch bookings. Kindly reload or try again later.
+              </p>
+            )}
+            {bookings && bookings.length === 0 && (
+              <p className="p-3 py-12 text-center text-[#2B3674] text-xl">
+                You have no bookings{" "}
+                {isToday ? "today" : ` on ${format(date, "do MMMM, yyyy")}`}
+              </p>
+            )}
+            <Row className="flex-wrap gap-4">
+              {bookings &&
+                bookings.map((booking) => (
+                  <Quotes key={booking.bookingId}>
+                    <QuotesImage src="" type={booking.requestType!} />
+                    <QuotesContent>
+                      <Row className="items-start justify-between gap-6 flex-wrap">
+                        <Column>
+                          <QuotesTitle
+                            title={booking.quote?.companyName ?? ""}
+                          ></QuotesTitle>
+                          {typeof booking.quote?.movers === "number" && (
+                            <QuotesMovers>
+                              {booking.quote?.movers}{" "}
+                              {booking.requestType === "RegularMove"
+                                ? "movers"
+                                : "laborers"}
+                            </QuotesMovers>
+                          )}
+                        </Column>
+                        {!!NaN && (
+                          <QuotesTime className="mt-[1px]">
+                            12:00pm - 4:00pm
+                          </QuotesTime>
+                        )}
+                      </Row>
+                      <Row className="justify-between items-center">
+                        <Column className="gap-1">
+                          <QuotesVehicle>
+                            {booking.quote?.movingTruck}
+                          </QuotesVehicle>
+                          {typeof booking.quote?.averageRating === "number" && (
+                            <QuotesRatings
+                              rating={booking.quote?.averageRating}
+                            />
+                          )}
+                        </Column>
+                        {typeof booking.quote?.minimumAmount === "number" && (
+                          <QuotesAmount amount={booking.quote?.minimumAmount} />
+                        )}
+                      </Row>
+                    </QuotesContent>
+                  </Quotes>
+                ))}
+            </Row>
           </Column>
-          <Column>
-            <MoveHistory status="Pending" type="Hire labor" />
+        )}
+      </Column>
+      {user && (
+        <Column className="flex-1 sm:max-w-[500px] md:max-w-[350px] gap-8">
+          <Calendar
+            mode="single"
+            captionLayout="dropdown-buttons"
+            selected={date}
+            onSelect={(date) => date && setDate(date)}
+            disabled={(date: Date) => date < new Date("1900-01-01")}
+            initialFocus
+            className="rounded-xl shadow-custom bg-white-100 w-full"
+          />
+          <Column className="bg-white-100 shadow-custom rounded-xl p-4 gap-8">
+            <Column className="gap-2">
+              <H level={3} className="m-0 p-0 text-primary font-bold text-2xl">
+                Move History
+              </H>
+              <P className="m-0 p-0 text-primary-foreground">
+                Here you can find all your transactions on this account and you
+                can print them out as .pdf or .csv file
+              </P>
+            </Column>
+            <Column>
+              <MoveHistory status="Pending" type="Hire labor" />
+            </Column>
           </Column>
         </Column>
-      </Column>
+      )}
     </Row>
   );
 }

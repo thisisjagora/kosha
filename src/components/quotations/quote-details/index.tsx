@@ -29,9 +29,10 @@ import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import useBookMoveStore from "@/stores/book-move.store";
 import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
+import { getAuth } from "firebase/auth";
 
 const QuoteDetails: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => (
   <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -359,6 +360,8 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   const quoteDetailsData = JSON.parse(
     localStorage.getItem(StorageKeys.QUOTE_DETAIL) || "{}"
   );
+  const router = useRouter();
+  const pathname = usePathname();
 
   if (!formData || !quoteDetailsData) {
     toast({
@@ -422,6 +425,7 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   };
   //TODO: how the voucher code works
   if (!selectedBooking && updating) return null;
+  const currentUser = getAuth().currentUser;
   return (
     <Column
       {...props}
@@ -439,18 +443,25 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
 
         {!finishing && (
           <>
-            <Input
-              placeholder="Input Discount Code"
-              className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400"
-            />
+            {currentUser && (
+              <Input
+                placeholder="Input Discount Code"
+                className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400"
+              />
+            )}
             <Button
               disabled={loading || isPending}
               loading={loading || isPending}
               onClick={() => {
-                if (!(!formData || !quoteDetailsData)) handleBook();
+                if (!currentUser)
+                  router.push(`${Routes.signIn}?returnUrl=${pathname}`);
+                if (!(!formData || !quoteDetailsData) && currentUser)
+                  handleBook();
               }}
             >
-              {updating
+              {!currentUser
+                ? "Sign in to complete booking"
+                : updating
                 ? isPending
                   ? "Updating..."
                   : "Update Booking"
