@@ -18,7 +18,7 @@ const Page = () => {
                               </TabsTrigger>
                               <TabsTrigger className="flex gap-2" value="itm" >
                                     <TabsCount count="2" isActive={activeTab === "itm"} />
-                                    <P className="hidden md:block"> Items to Move</P>
+                                    <P className="hidden md:block">Additional Items</P>
                               </TabsTrigger>
                               <TabsTrigger className="flex gap-2" value="generalInfo">
                                     <TabsCount count="3" isActive={activeTab === "generalInfo"} />
@@ -46,7 +46,7 @@ const getMobileTitle = (active: string): string => {
                         return "Date, Location & Time"
                   break;
             case "itm":
-                        return "Items to move"
+                        return "Additional Items"
                   break;
             case "generalInfo":
                         return "Service Requirements"

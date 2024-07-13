@@ -2,13 +2,12 @@
 import Link from "next/link";
 import { P, Picture } from "../atoms";
 import { Column, Row } from "../layout";
-import { cn } from "@/lib/utils";
+import { cn, safeParseDate } from "@/lib/utils";
 import { Routes } from "@/core/routing";
 import { useParams } from "next/navigation";
 import { useGetChats } from "@/hooks/messages";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
-import { Timestamp } from "firebase/firestore";
 
 export const ChatList = () => {
   const { data, isLoading } = useGetChats();
@@ -67,10 +66,7 @@ export const ChatList = () => {
                   <P className="font-dm-sans text-primary-foreground text-xs">
                     {chat.bookingDate &&
                       format(
-                        chat.bookingDate &&
-                          (chat.bookingDate as unknown) instanceof Timestamp
-                          ? (chat.bookingDate as unknown as Timestamp).toDate()
-                          : chat.bookingDate,
+                        safeParseDate(chat.bookingDate) as Date,
                         "MMM dd, yyyy"
                       )}
                   </P>
@@ -79,13 +75,7 @@ export const ChatList = () => {
               <Column className="items-center">
                 <P className="text-sm text-grey-100 font-dm-sans">
                   {chat.bookingDate
-                    ? format(
-                        chat.bookingDate &&
-                          (chat.bookingDate as unknown) instanceof Timestamp
-                          ? (chat.bookingDate as unknown as Timestamp).toDate()
-                          : chat.bookingDate,
-                        "HH:mm"
-                      )
+                    ? format(safeParseDate(chat.bookingDate) as Date, "HH:mm")
                     : ""}
                 </P>
                 {!!NaN && (

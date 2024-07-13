@@ -7,7 +7,6 @@ import {
   addDoc,
   doc,
   getDoc,
-  serverTimestamp,
 } from "firebase/firestore";
 import {} from "firebase/database";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
@@ -61,7 +60,7 @@ export const addToChatMessages = async (payload: Omit<ChatMessage, 'timestamp'>)
       collection(db, FIREBASE_COLLECTIONS.CHAT_MESSAGES),
       {
         ...payload,
-        timestamp: serverTimestamp(),
+        timestamp: new Date().getTime(),
       }
     );
     return res;

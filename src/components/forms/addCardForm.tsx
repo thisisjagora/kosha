@@ -19,7 +19,7 @@ export const AddCardFrom = () => {
             }
       })
       const onSubmit = (data: z.infer<typeof addCardSchema>) => {
-            console.log(data);
+            // console.log(data);
       }
       return (
             <Form {...form}>
