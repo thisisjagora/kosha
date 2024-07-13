@@ -1,5 +1,6 @@
 import { bookMoveSequenceStep1Schema, bookMoveSequenceStep2Schema, bookMoveSequenceStep3Schema, bookMoveSequenceStep4Schema, hireLabourSequenceStep1Schema, hireLabourSequenceStep2Schema, hireLabourSequenceStep3Schema, bookDeliverySequenceStep1Schema, bookDeliverySequenceStep2Schema, bookDeliverySequenceStep3Schema } from "@/core/validators";
 import { User } from "firebase/auth";
+import { Timestamp } from "firebase/firestore";
 import { ReactNode } from "react";
 import { z } from "zod";
 
@@ -130,4 +131,13 @@ export interface ChatMessage {
   fromClient: boolean;
   timestamp: Date | string;
   text: string;
+}
+
+export interface Voucher {
+  clientDiscount: number;
+  code: string;
+  discountType: 'Amount' | 'Percentage',
+  endDate: string | Date | Timestamp,
+  promoterDiscount: number;
+  startDate: string | Date | Timestamp;
 }

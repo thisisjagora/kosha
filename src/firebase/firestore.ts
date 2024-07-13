@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
-import { Booking, Quote } from "@/types/structs";
+import { Booking, Quote, Voucher } from "@/types/structs";
 import { toast } from "@/components/toast/use-toast";
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import type { FirebaseError } from "firebase/app";
@@ -177,6 +177,29 @@ export const deleteBooking = async (bookingId: string) => {
   }
 };
 
+export const getVoucher = async (code: string) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, FIREBASE_COLLECTIONS.VOUCHERS),
+        where("code", "==", code)
+      )
+    );
+    if (querySnapshot.empty)
+      throw new Error("Voucher not found", { cause: 404 });
+    return querySnapshot.docs[0].data() as Voucher;
+  } catch (err) {
+    toast({
+      title: "Oops!",
+      description:
+        err instanceof Error && err.cause === 404
+          ? err.message || err.name
+          : getFirebaseErrorMessage(err as FirebaseError),
+      variant: "destructive",
+    });
+    throw err;
+  }
+};
 // For conversations
 // - Fetch conversations from chat collections
 // - Filter by currentUserLoggedIn user id

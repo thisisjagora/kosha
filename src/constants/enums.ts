@@ -18,6 +18,7 @@ export enum FIREBASE_COLLECTIONS {
 	BOOKINGS = "bookings",
 	CHATS = "chats",
 	CHAT_MESSAGES = "chat_messages",
+	VOUCHERS = "vouchers",
 }
 
 export enum SUCCESS_MESSAGE {
