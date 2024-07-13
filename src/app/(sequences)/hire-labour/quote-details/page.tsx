@@ -26,15 +26,15 @@ import { CircleAlert } from "lucide-react";
 import Link from "next/link";
 import useBookingStore from "@/stores/booking.store";
 import type { Quote } from "@/types/structs";
+import { useSearchParams } from "next/navigation";
 
-const Page = ({
-  searchParams,
-}: {
-  searchParams: { action?: "update" | "finish" | string };
-}) => {
+const Page = () => {
+  const searchParams = useSearchParams();
   const selectedBooking = useBookingStore.use.selectedBooking();
-  const finishing = searchParams.action === "finish",
-    updating = searchParams.action === "update";
+  const finishing = searchParams.get("action") === "finish",
+    updating = searchParams.get("action") === "finish";
+  // const finishing = searchParams.action === "finish",
+  //   updating = searchParams.action === "update";
   const iconSizes = {
     width: 21,
     height: 21,
@@ -174,4 +174,3 @@ const Page = ({
 };
 
 export default Page;
-
