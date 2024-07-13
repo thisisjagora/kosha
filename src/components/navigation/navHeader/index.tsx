@@ -7,13 +7,19 @@ import { Routes } from "@/core/routing";
 import { generateAcronym } from "@/lib/helpers/generateAcronym";
 import useShowQuotes from "@/stores/show-quotes.store";
 import useUserStore from "@/stores/user.store";
-import { MenuIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { ArrowBigLeftDash, ArrowLeft, MenuIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MobileNav } from "../mobileNav";
 import Link from "next/link";
+import { useValidRoute } from "@/hooks/useValidRoute";
 
 export const NavHeader: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
+  const { isValidRoute } = useValidRoute([
+    Routes.bookMoveQuoteDetails,
+    Routes.hireLabourQuoteDetails
+  ]);
+  const router = useRouter();
   const { user } = useUserStore((state) => state);
   const path = usePathname();
   const showQuote = useShowQuotes((state) => state.showQuote);
@@ -39,10 +45,20 @@ export const NavHeader: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
           </Button>
         }
       />
-      <Column className="flex-1 hidden lg:block">
+      <Row className="flex-1 items-center gap-4">
+      <Column className="hidden lg:block">
         <P className="text-blue-300 text-sm">{headerContent.title}</P>
         <H className="text-blue-200 text-4xl">{headerContent.description}</H>
       </Column>
+      {
+        isValidRoute && (
+          <Row onClick={() => router.back()} className="items-center border p-2 rounded-md hover:cursor-pointer">
+          <ArrowLeft className="text-primary text-sm" />
+          <P className="text-primary text-sm">Go back</P>
+        </Row>
+        )
+      }
+      </Row>
       {nonAuth ? (
         <Column>
           <Link href="/auth/sign-in" className="border bg-primary text-white-500 p-2 px-4 rounded-lg">

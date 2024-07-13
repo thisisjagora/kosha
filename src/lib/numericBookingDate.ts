@@ -23,7 +23,7 @@ export async function updateFieldFormat(
 
   // Commit the batch
   await batch.commit();
-  console.log("Field format updated for all documents.");
+  // console.log("Field format updated for all documents.");
 }
 
 export function transformToNumericTimestamp(oldDate: unknown) {

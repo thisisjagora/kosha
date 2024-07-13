@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { SERVICES, SequenceStepsProps } from "..";
 import {
   Form,
@@ -47,14 +47,12 @@ import {
 import { Checkbox } from "@/components/checkbox";
 import { bookMoveFactory } from "@/core/models/bookMoveFactory";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
-import { Dialog, DialogContent, DialogTitle } from "@/components/dialog";
-import { Routes } from "@/core/routing";
-import Link from "next/link";
 import {
   LocationInput,
   StopsLocationInput,
 } from "@/components/locationAutoCompleteInput";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Routes } from "@/core/routing";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const { update, formData, removeStop } = useBookMoveStore((state) => state);
@@ -151,6 +149,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.pickUpLocation.apartmentNumber}
+                      placeholder="0"
                     />
                   </FormControl>
                   <FormMessage />
@@ -209,7 +208,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       <FormItem className="flex-1">
                         <FormLabel>Apartment/Unit</FormLabel>
                         <FormControl>
-                          <Input {...field} {...InputDirectives.numbersOnly} />
+                          <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -257,6 +256,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.finalDestination.apartmentNumber}
+                      placeholder="0"
                     />
                   </FormControl>
                   <FormMessage />
@@ -315,17 +315,17 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="text-grey-300">
         <div>
           <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-            <Column>
+            <Column className="flex-1 max-w-[250px]">
               <P className="font-semibold text-lg">Pickup Location</P>
               <P className="font-bold text-primary text-xl">
                 {formData.pickUpLocation.location}
               </P>
             </Column>
-            <Row className="gap-4 w-full">
+            <Row className="gap-4 flex-1 items-center sm:min-w-[300px]">
               <div className="md:flex items-center hidden">
                 <div className="mt-8 w-[80px] border border-dotted" />
               </div>
-              <Row className="gap-4 flex-col sm:flex-row w-full">
+              <Row className="gap-4 flex-col sm:flex-row sm:items-end w-full">
                 <FormField
                   control={form.control}
                   name="PUDPickUpLocation.buildingType"
@@ -346,7 +346,11 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         <SelectContent>
                           <SelectItem value="Condo">Condo</SelectItem>
                           <SelectItem value="Apartment">Apartment</SelectItem>
-                          <SelectItem value="Penthouse">Penthouse</SelectItem>
+                          <SelectItem value="House">House</SelectItem>
+                          <SelectItem value="Office">Office</SelectItem>
+                          <SelectItem value="TownHouse">TownHouse</SelectItem>
+                          <SelectItem value="Storage">Storage</SelectItem>
+                          <SelectItem value="Store">Store</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-destructive" />
@@ -391,6 +395,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         <FormControl>
                           <Input
                             className="h-10 rounded-lg"
+                            placeholder="0"
                             {...field}
                             {...InputDirectives.numbersOnly}
                           />
@@ -409,14 +414,14 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
         </div>
         {formData.stops.map((stop, index) => (
           <div key={stop.location + index}>
-            <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-wrap">
-              <Column>
+            <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
+              <Column className="flex-1 max-w-[250px]">
                 <P className="font-semibold text-lg">Stop {index + 1}</P>
                 <P className="font-bold text-primary text-xl">
                   {stop.location}
                 </P>
               </Column>
-              <Row className="gap-4 w-full">
+              <Row className="gap-4 flex-1 items-center">
                 <div className="hidden sm:flex items-center">
                   <div className="mt-8 w-[80px] border border-dotted" />
                 </div>
@@ -441,7 +446,11 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                           <SelectContent>
                             <SelectItem value="Condo">Condo</SelectItem>
                             <SelectItem value="Apartment">Apartment</SelectItem>
-                            <SelectItem value="Penthouse">Penthouse</SelectItem>
+                            <SelectItem value="House">House</SelectItem>
+                            <SelectItem value="Office">Office</SelectItem>
+                            <SelectItem value="TownHouse">TownHouse</SelectItem>
+                            <SelectItem value="Storage">Storage</SelectItem>
+                            <SelectItem value="Store">Store</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage className="text-destructive" />
@@ -475,24 +484,25 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     )}
                   />
                   <FormField
-                    control={form.control}
-                    name={`PUDStops.${index}.flightOfStairs`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel className="text-grey-300">
-                          Flight of Stairs
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            className="h-10 rounded-lg"
-                            {...field}
-                            {...InputDirectives.numbersOnly}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-destructive" />
-                      </FormItem>
-                    )}
-                  />
+                      control={form.control}
+                      name={`PUDStops.${index}.flightOfStairs`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel className="text-grey-300">
+                            Flight of Stairs
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="h-10 rounded-lg"
+                              {...field}
+                              {...InputDirectives.numbersOnly}
+                              defaultValue={0}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-destructive" />
+                        </FormItem>
+                      )}
+                    />
                 </Row>
               </Row>
             </Row>
@@ -503,17 +513,17 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
         ))}
         <div>
           <Row className="bg-white-100 justify-between shadow-sm rounded-xl gap-6 p-6 sm:p-12 flex-col sm:flex-row">
-            <Column>
+            <Column className="flex-1 max-w-[250px]">
               <P className="font-semibold text-lg">Final Destination</P>
               <P className="font-bold text-primary text-xl">
                 {formData.finalDestination.location}
               </P>
             </Column>
-            <Row className="gap-4">
+            <Row className="gap-4 flex-1 items-center sm:min-w-[300px]">
               <div className="hidden sm:flex items-center">
                 <div className="mt-8 w-[80px] border border-dotted" />
               </div>
-              <Row className="gap-4 flex-col sm:flex-row w-full">
+              <Row className="gap-4 flex-col sm:flex-row sm:items-end w-full">
                 <FormField
                   control={form.control}
                   name="PUDFinalDestination.buildingType"
@@ -534,7 +544,11 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         <SelectContent>
                           <SelectItem value="Condo">Condo</SelectItem>
                           <SelectItem value="Apartment">Apartment</SelectItem>
-                          <SelectItem value="Penthouse">Penthouse</SelectItem>
+                          <SelectItem value="House">House</SelectItem>
+                          <SelectItem value="Office">Office</SelectItem>
+                          <SelectItem value="TownHouse">TownHouse</SelectItem>
+                          <SelectItem value="Storage">Storage</SelectItem>
+                          <SelectItem value="Store">Store</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-destructive" />
@@ -667,7 +681,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Major Appliances
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
               </FormItem>
             )}
@@ -681,7 +695,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Workout Equipment
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -696,7 +710,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pianos</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -709,7 +723,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Hot Tubs</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -724,7 +738,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pool Tables</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -737,7 +751,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Number of Boxes</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -1031,7 +1045,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
             type="submit"
             className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
           >
-            Send Request
+            Search
           </Button>
         </Row>
       </form>

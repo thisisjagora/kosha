@@ -63,7 +63,6 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     elevatorAccess,
     flightOfStairs,
   } = formData;
-  console.log("formData: ", formData);
   const form = useForm<z.infer<typeof hireLabourSequenceStep1Schema>>({
     resolver: zodResolver(hireLabourSequenceStep1Schema),
     defaultValues: {
@@ -157,7 +156,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     Apartment/Unit
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} {...InputDirectives.numbersOnly} />
+                    <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                   </FormControl>
                   <FormMessage className="text-destructive" />
                 </FormItem>
@@ -312,7 +311,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Major Appliances
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -327,7 +326,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Workout Equipment
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -342,7 +341,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pianos</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -355,7 +354,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Hot Tubs</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -370,7 +369,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pool Tables</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -383,7 +382,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Number of Boxes</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} />
+                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
