@@ -9,20 +9,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/tabs";
-// import { BookMoveMock } from "@/mocks";
 import { useEffect, useState } from "react";
 import useBookingStore from "@/stores/booking.store";
 import { CircleAlert } from "lucide-react";
 import { Column, Row } from "@/components/layout";
 import Link from "next/link";
 import { Routes } from "@/core/routing";
+import { useSearchParams } from "next/navigation";
 
-const Page = ({
-  searchParams,
-}: {
-  searchParams: { action?: "update" | "finish" | string };
-}) => {
-  const updating = searchParams.action === "update";
+const Page = () => {
+  const searchParams = useSearchParams();
+  const updating = searchParams.get("action") === "update";
   const [activeTab, setActiveTab] = useState<string>("dateAndTime");
   const selectedBooking = useBookingStore.use.selectedBooking();
 

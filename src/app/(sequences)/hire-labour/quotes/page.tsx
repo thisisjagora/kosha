@@ -21,17 +21,15 @@ import useBookingStore from "@/stores/booking.store";
 import { P } from "@/components/atoms";
 import { CircleAlert } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const Page = ({
-  searchParams,
-}: {
-  searchParams: { action?: "update" | "finish" | string };
-}) => {
+const Page = () => {
+  const searchParams = useSearchParams();
   const selectedBooking = useBookingStore.use.selectedBooking();
   const router = useRouter();
   const { setQuoteDetailsData } = useQuoteDetailsData();
   const { quotesResult } = useShowQuotes((state) => state);
-  const updating = searchParams.action === "update";
+  const updating = searchParams.get("action") === "update";
   if (!selectedBooking && updating) {
     return (
       <Row className="w-full h-full items-center justify-center">
