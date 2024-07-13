@@ -40,6 +40,10 @@ const Page = () => {
     height: 21,
   };
   const { quoteDetailsData } = useQuoteDetailsData();
+  console.log("quoteDetailsData: ", quoteDetailsData);
+  console.log("selectedBooking: ", selectedBooking);
+  console.log("searchParams action : ", searchParams.get("action"));
+  console.log({ finishing, updating });
   const {
     companyName,
     numberOfReviews,
