@@ -23,7 +23,7 @@ import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
 import useBookingStore from "@/stores/booking.store";
 import useUserStore from "@/stores/user.store";
-import { Booking, QuoteDetailsRate } from "@/types/structs";
+import { BookMove, Booking, QuoteDetailsRate } from "@/types/structs";
 import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
@@ -33,6 +33,7 @@ import { useRouter, usePathname } from "next/navigation";
 import useBookMoveStore from "@/stores/book-move.store";
 import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
 import { getAuth } from "firebase/auth";
+import { useDeleteBooking } from "@/hooks/fireStore/useDeleteBooking";
 
 const QuoteDetails: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => (
   <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -362,6 +363,8 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   );
   const router = useRouter();
   const pathname = usePathname();
+  const { isPending: isDeletePending, mutate: deleteBooking } =
+    useDeleteBooking();
 
   if (!formData || !quoteDetailsData) {
     toast({
@@ -469,10 +472,20 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
             </Button>
           </>
         )}
-        {finishing && (
+        {finishing && currentUser && (
           <>
             <Button className="bg-[#19B000]">Make Payment</Button>
-            <Button className="bg-[#CD1A1A33] text-[#DB3434]">
+            <Button
+              disabled={isDeletePending}
+              loading={isDeletePending}
+              className="bg-[#CD1A1A33] text-[#DB3434]"
+              onClick={() => {
+                if (!selectedBooking?.bookingId) return;
+                deleteBooking({
+                  bookingId: selectedBooking.bookingId,
+                });
+              }}
+            >
               Cancel Request
             </Button>
           </>
@@ -542,7 +555,8 @@ const QuoteDetailsEditRequest = () => {
             instructions: "",
             images: [],
             services: selectedBooking.serviceAddOns ?? [],
-          });
+            serviceLocation: selectedBooking.fromAddress?.address ?? "",
+          } as unknown as BookMove);
           router.push(
             `${
               selectedBooking.requestType === "RegularMove"
@@ -561,10 +575,11 @@ const QuoteDetailsEditRequest = () => {
 interface QuoteDetailsServiceRequirementProps
   extends HTMLAttributes<HTMLDivElement> {
   services: Array<String>;
+  disabled?: boolean;
 }
 const QuoteDetailsServiceRequirement: FC<
   QuoteDetailsServiceRequirementProps
-> = ({ ...props }) => {
+> = ({ disabled, ...props }) => {
   const services = [
     "reassembly",
     "disassembly",
@@ -621,8 +636,10 @@ const QuoteDetailsServiceRequirement: FC<
                       <Checkbox
                         className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
                         id={checkboxId}
+                        disabled={disabled}
                         checked={isChecked}
                         onCheckedChange={(checked) => {
+                          if (disabled) return;
                           const updatedServices = checked
                             ? [...(field.value || []), item]
                             : field.value?.filter((value) => value !== item);

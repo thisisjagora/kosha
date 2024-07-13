@@ -8,6 +8,7 @@ import {
   query,
   orderBy,
   updateDoc,
+  deleteDoc,
   doc,
 } from "firebase/firestore";
 import firebaseApp from "./config";
@@ -128,6 +129,35 @@ export const updateBooking = async (bookingId: string, booking: Booking) => {
       bookingId,
     });
     return booking;
+  } catch (err) {
+    toast({
+      title: "Oops!",
+      description:
+        err instanceof Error && err.cause === 404
+          ? err.message || err.name
+          : getFirebaseErrorMessage(err as FirebaseError),
+      variant: "destructive",
+    });
+    throw err;
+  }
+};
+
+export const deleteBooking = async (bookingId: string) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
+        where("bookingId", "==", bookingId)
+      )
+    );
+    if (querySnapshot.empty)
+      throw new Error("Booking not found", { cause: 404 });
+    const docRef = doc(
+      db,
+      FIREBASE_COLLECTIONS.BOOKINGS,
+      querySnapshot.docs[0].id
+    );
+    await deleteDoc(docRef);
   } catch (err) {
     toast({
       title: "Oops!",
