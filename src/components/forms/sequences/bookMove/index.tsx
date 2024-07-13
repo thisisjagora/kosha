@@ -54,7 +54,7 @@ import {
   LocationInput,
   StopsLocationInput,
 } from "@/components/locationAutoCompleteInput";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const { update, formData, removeStop } = useBookMoveStore((state) => state);
@@ -887,12 +887,18 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
 };
 
 const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const updating = searchParams.get("action") === "update";
   const { update, formData } = useBookMoveStore((state) => state);
-  const { isPending, isSuccess, getQuotes } = useGetQuotes();
+  const { isPending, getQuotes } = useGetQuotes({
+    onSuccess: () => {
+      router.push(
+        `${Routes.bookMoveQuotes}${updating ? "?action=update" : ""}`
+      );
+    },
+  });
   const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess);
 
   const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
     resolver: zodResolver(bookMoveSequenceStep4Schema),
@@ -900,10 +906,6 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
       services: formData.services,
     },
   });
-
-  useEffect(() => {
-    setIsDialogOpen(isSuccess);
-  }, [isSuccess]);
 
   const onSubmit = (data: z.infer<typeof bookMoveSequenceStep4Schema>) => {
     const updatedFormData = { ...formData, ...data };
@@ -1031,28 +1033,6 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           >
             Send Request
           </Button>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="sm:max-w-[600px]">
-              <DialogTitle className="sr-only">Move Request Sent!</DialogTitle>
-              <Column className="items-center justify-center gap-8 md:px-24">
-                <Check className="w-[80px] h-[100px]" />
-                <Column className="items-center">
-                  <P className="text-center font-semibold text-2xl text-grey-300">
-                    Move Request Sent!
-                  </P>
-                  {/* <P className="text-center text-grey-300"></P> */}
-                </Column>
-                <Link
-                  className="w-full py-2 text-white-100 bg-primary text-center rounded-sm"
-                  href={`${Routes.bookMoveQuotes}${
-                    updating ? "?action=update" : ""
-                  }`}
-                >
-                  View Vendor Quotes
-                </Link>
-              </Column>
-            </DialogContent>
-          </Dialog>
         </Row>
       </form>
     </Form>
@@ -1065,4 +1045,3 @@ export const BookMoveSequence = {
   Step3,
   Step4,
 };
-

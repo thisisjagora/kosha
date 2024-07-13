@@ -50,7 +50,7 @@ import Link from "next/link";
 import { Routes } from "@/core/routing";
 import { useGetQuotes } from "@/hooks/quote/useGetQuotes";
 import { hireLabourFactory } from "@/core/models/hireLabourFactory";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const { update, formData } = useHireLabourStore((state) => state);
@@ -533,12 +533,18 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
 };
 
 const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const updating = searchParams.get("action") === "update";
   const { update, formData } = useHireLabourStore((state) => state);
-  const { isPending, isSuccess, getQuotes } = useGetQuotes();
+  const { isPending, getQuotes } = useGetQuotes({
+    onSuccess: () => {
+      router.push(
+        `${Routes.hireLabourQuotes}${updating ? "?action=update" : ""}`
+      );
+    },
+  });
   const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(isSuccess);
 
   const form = useForm<z.infer<typeof hireLabourSequenceStep3Schema>>({
     resolver: zodResolver(hireLabourSequenceStep3Schema),
@@ -546,10 +552,6 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
       services: formData.services,
     },
   });
-
-  useEffect(() => {
-    setIsDialogOpen(isSuccess);
-  }, [isSuccess]);
 
   const onSubmit = (data: z.infer<typeof hireLabourSequenceStep3Schema>) => {
     const updatedFormData = { ...formData, ...data };
@@ -674,29 +676,6 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           >
             Send Request
           </Button>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="sm:max-w-[600px]">
-              <DialogTitle className="sr-only">
-                Labour Request Sent!
-              </DialogTitle>
-              <Column className="items-center justify-center gap-8 md:px-24">
-                <Check className="w-[80px] h-[100px]" />
-                <Column className="items-center">
-                  <P className="text-center font-semibold text-2xl text-grey-300">
-                    Labour Request Sent!
-                  </P>
-                </Column>
-                <Link
-                  className="w-full py-2 text-white-100 bg-primary text-center rounded-sm"
-                  href={`${Routes.hireLabourQuotes}${
-                    updating ? "?action=update" : ""
-                  }`}
-                >
-                  View Vendor Quotes
-                </Link>
-              </Column>
-            </DialogContent>
-          </Dialog>
         </Row>
       </form>
     </Form>
