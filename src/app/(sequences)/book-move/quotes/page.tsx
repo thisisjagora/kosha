@@ -17,8 +17,6 @@ import { Routes } from "@/core/routing";
 import useShowQuotes from "@/stores/show-quotes.store";
 import { Quote } from "@/types/structs";
 import { useRouter } from "next/navigation";
-// import { Loader } from "lucide-react";
-// import { useUpdateQuote } from "@/hooks/quote/useUpdateQuote";
 import { CircleAlert } from "lucide-react";
 import useBookingStore from "@/stores/booking.store";
 import { P } from "@/components/atoms";
@@ -29,19 +27,9 @@ const Page = ({
 }: {
   searchParams: { action?: "update" | "finish" | string };
 }) => {
-  // const updated
   const selectedBooking = useBookingStore.use.selectedBooking();
-  // const updateSelectedBookingQuote =
-  //   useBookingStore.use.updateSelectedBookingQuote();
   const router = useRouter();
   const { setQuoteDetailsData } = useQuoteDetailsData();
-  // const { isPending, mutate: updateQuote } = useUpdateQuote({
-  //   onSuccess: (data) => {
-  //     setQuoteDetailsData(data);
-  //     updateSelectedBookingQuote(data);
-  //     router.push(`${Routes.bookMoveQuoteDetails}?action=finish`);
-  //   },
-  // });
   const { quotesResult } = useShowQuotes((state) => state);
   const updating = searchParams.action === "update";
   if (!selectedBooking && updating) {
@@ -61,27 +49,11 @@ const Page = ({
   }
   return (
     <>
-      {/*isPending && (
-        <div className="bg-[#C29C80] text-white-500  px-4 py-4 rounded-xl fixed left-1/2 top-1/2 -translate-x-1/2 z-50 flex gap-2 flex-wrap">
-          <Loader className="animate-spin text-white-500" />
-          <p>Updating quote...</p>
-        </div>
-      )*/}
       <Quotations<Quote>
         list={quotesResult}
         renderItem={({ index, item }) => (
           <Quotes
             onClick={() => {
-              // if (updating) {
-              //   if (isPending || !selectedBooking?.bookingId) return;
-              //   updateQuote({
-              //     bookingId: selectedBooking.bookingId,
-              //     quote: item,
-              //   });
-              // } else {
-              //   setQuoteDetailsData(item);
-              //   router.push(Routes.bookMoveQuoteDetails);
-              // }
               setQuoteDetailsData(item);
               router.push(
                 `${Routes.bookMoveQuoteDetails}${

@@ -24,6 +24,8 @@ import { useGetBookingsByDate } from "@/hooks/fireStore/useGetBookings";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { getAuth } from "firebase/auth";
+import useBookingStore from "@/stores/booking.store";
+import { useRouter } from "next/navigation";
 
 const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
   type: Booking["requestType"];
@@ -50,8 +52,10 @@ const SEQUENCES: (Record<"route" | "icon" | "label", string> & {
 
 export default function Home() {
   const user = getAuth().currentUser;
+  const router = useRouter();
   const [date, setDate] = useState<Date>(new Date());
   const { isLoading, data: bookings, error } = useGetBookingsByDate(date);
+  const setSelectedBooking = useBookingStore.use.setSelectedBooking();
 
   const isToday =
     format(date, "MM-dd-yyyy") === format(new Date(), "MM-dd-yyyy");
@@ -160,7 +164,25 @@ export default function Home() {
             <Row className="flex-wrap gap-4">
               {bookings &&
                 bookings.map((booking) => (
-                  <Quotes key={booking.bookingId}>
+                  <Quotes
+                    key={booking.bookingId}
+                    onClick={() => {
+                      if (
+                        /^(RegularMove|LabourOnly)$/.test(
+                          booking.requestType ?? ""
+                        )
+                      ) {
+                        setSelectedBooking(booking);
+                        router.push(
+                          `${
+                            booking.requestType === "RegularMove"
+                              ? Routes.bookMoveQuoteDetails
+                              : Routes.hireLabourQuoteDetails
+                          }?action=finish`
+                        );
+                      }
+                    }}
+                  >
                     <QuotesImage src="" type={booking.requestType!} />
                     <QuotesContent>
                       <Row className="items-start justify-between gap-6 flex-wrap">

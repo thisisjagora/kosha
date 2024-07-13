@@ -1,4 +1,4 @@
-import { Booking, Quote } from "@/types/structs";
+import { Booking } from "@/types/structs";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -8,9 +8,6 @@ import { createSelectorFunctions } from "auto-zustand-selectors-hook";
 interface State {
   selectedBooking: Partial<Booking> | null;
   setSelectedBooking: (booking: Partial<Booking> | null) => void;
-  newQuote: Quote | null;
-  setNewQuote: (quote: Quote | null) => void;
-  updateSelectedBookingQuote: (quote: Quote) => void;
 }
 
 const whiteList: (keyof State)[] = ["selectedBooking"];
@@ -24,19 +21,6 @@ const useBookingStore = createSelectorFunctions(
           set((state) => {
             state.selectedBooking = booking;
           }),
-        newQuote: null,
-        setNewQuote: (quote) => {
-          set((state) => {
-            state.newQuote = quote;
-          });
-        },
-        updateSelectedBookingQuote: (quote) => {
-          set((state) => {
-            if (state.selectedBooking) {
-              state.selectedBooking.quote = quote;
-            }
-          });
-        },
       })),
       {
         name: "96yo_41vhxp840s9bxqv6",
