@@ -163,7 +163,7 @@ export default function Home() {
             )}
             <Row className="flex-wrap gap-4">
               {bookings &&
-                bookings.map((booking) => (
+                bookings.slice(0, 3).map((booking) => (
                   <Quotes
                     key={booking.bookingId}
                     onClick={() => {
