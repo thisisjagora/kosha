@@ -167,7 +167,7 @@ const Page = ({
           finishing={finishing}
           updating={updating}
         />
-        {finishing && <QuoteDetailsEditRequest />}
+        {finishing && <QuoteDetailsEditRequest type="LabourOnly" />}
       </Column>
     </QuoteDetails>
   );
