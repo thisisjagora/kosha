@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <Row className="gap-8 flex-col md:flex-row">
       <Column className="flex-1 gap-8">
-        {user && (
+        {/* {user && (
           <Activity>
             <LeftColumn>
               <H
@@ -90,7 +90,7 @@ export default function Home() {
               />
             </RightColumn>
           </Activity>
-        )}
+        )} */}
         <Column className="gap-4">
           <H level={3} className="text-primary text-2xl">
             Select a Service
@@ -248,9 +248,9 @@ export default function Home() {
                 can print them out as .pdf or .csv file
               </P>
             </Column>
-            <Column>
+            {/* <Column>
               <MoveHistory status="Pending" type="Hire labor" />
-            </Column>
+            </Column> */}
           </Column>
 
         </Column>

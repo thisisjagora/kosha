@@ -33,16 +33,7 @@ export const ChatList = () => {
             >
               <Row className="items-center flex-1">
                 <div className="max-w-[50px] h-[50px] flex-1 relative">
-                  <Picture
-                    container={{
-                      className: "w-full h-full rounded-xl",
-                    }}
-                    image={{
-                      alt: "",
-                      src: "https://images.unsplash.com/photo-1715005881129-266ccdd75e43?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      className: "object-cover rounded-xl",
-                    }}
-                  />
+                  <div className="w-full h-full rounded-xl bg-slate-700"></div>
                   <Picture
                     container={{
                       className:
