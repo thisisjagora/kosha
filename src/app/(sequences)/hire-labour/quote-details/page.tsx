@@ -32,7 +32,7 @@ const Page = () => {
   const searchParams = useSearchParams();
   const selectedBooking = useBookingStore.use.selectedBooking();
   const finishing = searchParams.get("action") === "finish",
-    updating = searchParams.get("action") === "finish";
+    updating = searchParams.get("action") === "update";
   const iconSizes = {
     width: 21,
     height: 21,

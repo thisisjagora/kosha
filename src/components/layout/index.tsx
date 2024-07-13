@@ -17,9 +17,8 @@ import { User, deleteUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firestore";
 import useUserStore from "@/stores/user.store";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/query";
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { updateUser } = useUserStore((state) => state);
