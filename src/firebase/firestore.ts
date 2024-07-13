@@ -7,10 +7,15 @@ import {
   where,
   query,
   orderBy,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
-import { Booking } from "@/types/structs";
+import { Booking, Quote } from "@/types/structs";
+import { toast } from "@/components/toast/use-toast";
+import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
+import type { FirebaseError } from "firebase/app";
 
 export const db = getFirestore(firebaseApp);
 
@@ -67,6 +72,71 @@ export const getBookings = async (inputDate: Date) => {
       .filter((booking) => booking.quote);
     return bookings;
   } catch (err) {
+    throw err;
+  }
+};
+
+export const updateQuote = async (bookingId: string, quote: Quote) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
+        where("bookingId", "==", bookingId)
+      )
+    );
+    if (querySnapshot.empty)
+      throw new Error("Booking not found", { cause: 404 });
+    const docRef = doc(
+      db,
+      FIREBASE_COLLECTIONS.BOOKINGS,
+      querySnapshot.docs[0].id
+    );
+    await updateDoc(docRef, {
+      quote,
+    });
+    return quote;
+  } catch (err) {
+    toast({
+      title: "Oops!",
+      description:
+        err instanceof Error && err.cause === 404
+          ? err.message || err.name
+          : getFirebaseErrorMessage(err as FirebaseError),
+      variant: "destructive",
+    });
+    throw err;
+  }
+};
+
+export const updateBooking = async (bookingId: string, booking: Booking) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
+        where("bookingId", "==", bookingId)
+      )
+    );
+    if (querySnapshot.empty)
+      throw new Error("Booking not found", { cause: 404 });
+    const docRef = doc(
+      db,
+      FIREBASE_COLLECTIONS.BOOKINGS,
+      querySnapshot.docs[0].id
+    );
+    await updateDoc(docRef, {
+      ...booking,
+      bookingId,
+    });
+    return booking;
+  } catch (err) {
+    toast({
+      title: "Oops!",
+      description:
+        err instanceof Error && err.cause === 404
+          ? err.message || err.name
+          : getFirebaseErrorMessage(err as FirebaseError),
+      variant: "destructive",
+    });
     throw err;
   }
 };
