@@ -23,7 +23,13 @@ import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
 import useBookingStore from "@/stores/booking.store";
 import useUserStore from "@/stores/user.store";
-import { BookMove, Booking, QuoteDetailsRate, Voucher } from "@/types/structs";
+import {
+  BookMove,
+  Booking,
+  HireLabour,
+  QuoteDetailsRate,
+  Voucher,
+} from "@/types/structs";
 import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
@@ -35,6 +41,7 @@ import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
 import { getAuth } from "firebase/auth";
 import { useDeleteBooking } from "@/hooks/fireStore/useDeleteBooking";
 import { useGetVoucher } from "@/hooks/misc/useGetVoucher";
+import useHireLabourStore from "@/stores/hire-labour.store";
 
 const QuoteDetails: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => (
   <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -375,6 +382,7 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
       setGottenVoucher(null);
     },
   });
+  console.log("formData: ", formData);
 
   if (!formData || !quoteDetailsData) {
     toast({
@@ -542,9 +550,12 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   );
 };
 
-const QuoteDetailsEditRequest = () => {
+const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
+  type,
+}) => {
   const router = useRouter();
-  const { update } = useBookMoveStore((state) => state);
+  const { update: updateBookMove } = useBookMoveStore((state) => state);
+  const { update: updateHireLabour } = useHireLabourStore((state) => state);
   const selectedBooking = useBookingStore.use.selectedBooking();
   if (!selectedBooking) return null;
   return (
@@ -558,52 +569,87 @@ const QuoteDetailsEditRequest = () => {
       <Button
         className="bg-white-500 text-black-500"
         onClick={() => {
-          update({
-            moveDate: new Date(selectedBooking.movingDate ?? new Date()),
-            time: selectedBooking.movingDate
-              ? format(selectedBooking.movingDate, "HH:mm")
-              : "",
-            pickUpLocation: {
-              location: selectedBooking.fromAddress?.address ?? "",
-              apartmentNumber:
-                selectedBooking.fromAddress?.apartmentNumber ?? "",
-              googlePlaceId: selectedBooking.fromAddress?.googlePlaceId ?? "",
-            },
-            stops: (selectedBooking.additionalStops as []) ?? [],
-            finalDestination: {
-              location: selectedBooking.toAddress?.address ?? "",
-              apartmentNumber: selectedBooking.toAddress?.apartmentNumber ?? "",
-              googlePlaceId: selectedBooking.toAddress?.googlePlaceId ?? "",
-            },
-            PUDFinalDestination: {
-              elevatorAccess: selectedBooking.toAddress?.hasElevator ?? "Yes",
-              flightOfStairs: `${
-                selectedBooking.toAddress?.flightOfStairs ?? "0"
+          if (type === "RegularMove") {
+            updateBookMove({
+              moveDate: new Date(selectedBooking.movingDate ?? new Date()),
+              time: selectedBooking.movingDate
+                ? format(selectedBooking.movingDate, "HH:mm")
+                : "",
+              pickUpLocation: {
+                location: selectedBooking.fromAddress?.address ?? "",
+                apartmentNumber:
+                  selectedBooking.fromAddress?.apartmentNumber ?? "",
+                googlePlaceId: selectedBooking.fromAddress?.googlePlaceId ?? "",
+              },
+              stops: (selectedBooking.additionalStops as []) ?? [],
+              finalDestination: {
+                location: selectedBooking.toAddress?.address ?? "",
+                apartmentNumber:
+                  selectedBooking.toAddress?.apartmentNumber ?? "",
+                googlePlaceId: selectedBooking.toAddress?.googlePlaceId ?? "",
+              },
+              PUDFinalDestination: {
+                elevatorAccess: selectedBooking.toAddress?.hasElevator ?? "Yes",
+                flightOfStairs: `${
+                  selectedBooking.toAddress?.flightOfStairs ?? "0"
+                }`,
+                buildingType:
+                  selectedBooking.toAddress?.buildingType ?? "Condo",
+              },
+              PUDPickUpLocation: {
+                elevatorAccess:
+                  selectedBooking.fromAddress?.hasElevator ?? "Yes",
+                flightOfStairs: `${
+                  selectedBooking.fromAddress?.flightOfStairs ?? "0"
+                }`,
+                buildingType:
+                  selectedBooking.fromAddress?.buildingType ?? "Condo",
+              },
+              PUDStops: [],
+              majorAppliances: `${
+                selectedBooking.majorAppliancesQuantity ?? ""
               }`,
-              buildingType: selectedBooking.toAddress?.buildingType ?? "Condo",
-            },
-            PUDPickUpLocation: {
+              workOutEquipment: `${
+                selectedBooking.workoutEquipmentsQuantity ?? ""
+              }`,
+              pianos: `${selectedBooking.pianosQuantity ?? ""}`,
+              hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
+              poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
+              numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
+              instructions: "",
+              images: [],
+              services: selectedBooking.serviceAddOns ?? [],
+            });
+          } else if (type === "LabourOnly") {
+            console.log('updated hiring')
+            updateHireLabour({
+              date: new Date(selectedBooking.movingDate ?? new Date()),
+              time: selectedBooking.movingDate
+                ? format(selectedBooking.movingDate, "HH:mm")
+                : "",
+              serviceLocation: selectedBooking.fromAddress?.address ?? "",
+              googlePlaceId: selectedBooking.fromAddress?.googlePlaceId ?? "",
+              apartmentNumber: selectedBooking.fromAddress?.apartmentNumber ?? "",
               elevatorAccess: selectedBooking.fromAddress?.hasElevator ?? "Yes",
               flightOfStairs: `${
                 selectedBooking.fromAddress?.flightOfStairs ?? "0"
               }`,
-              buildingType:
-                selectedBooking.fromAddress?.buildingType ?? "Condo",
-            },
-            PUDStops: [],
-            majorAppliances: `${selectedBooking.majorAppliancesQuantity ?? ""}`,
-            workOutEquipment: `${
-              selectedBooking.workoutEquipmentsQuantity ?? ""
-            }`,
-            pianos: `${selectedBooking.pianosQuantity ?? ""}`,
-            hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
-            poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
-            numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
-            instructions: "",
-            images: [],
-            services: selectedBooking.serviceAddOns ?? [],
-            serviceLocation: selectedBooking.fromAddress?.address ?? "",
-          } as unknown as BookMove);
+              buildingType: selectedBooking.fromAddress?.buildingType ?? "Condo",
+              majorAppliances: `${
+                selectedBooking.majorAppliancesQuantity ?? ""
+              }`,
+              workOutEquipment: `${
+                selectedBooking.workoutEquipmentsQuantity ?? ""
+              }`,
+              pianos: `${selectedBooking.pianosQuantity ?? ""}`,
+              hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
+              poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
+              numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
+              instructions: "",
+              images: [],
+              services: selectedBooking.serviceAddOns ?? [],
+            });
+          }
           router.push(
             `${
               selectedBooking.requestType === "RegularMove"

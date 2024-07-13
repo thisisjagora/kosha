@@ -160,7 +160,7 @@ const Page = ({
           finishing={finishing}
           updating={updating}
         />
-        {finishing && <QuoteDetailsEditRequest />}
+        {finishing && <QuoteDetailsEditRequest type="RegularMove" />}
       </Column>
     </QuoteDetails>
   );
