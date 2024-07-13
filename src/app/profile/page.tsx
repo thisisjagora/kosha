@@ -1,8 +1,10 @@
 "use client"
 import { VirtualCard } from "@/components/VirtualCard";
-import { Button, H, P } from "@/components/atoms";
+import { Button, H, P, Picture } from "@/components/atoms";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/dialog";
 import { DeleteAccount } from "@/components/dialogs";
+import { AddCardFrom } from "@/components/forms/addCardForm";
 import { Column, Row } from "@/components/layout";
 import { MoveHistory } from "@/components/moveHistory";
 import { UserProfileItem } from "@/components/userProfile";
@@ -12,6 +14,7 @@ import useUserStore from "@/stores/user.store";
 
 const Page = () => {
       const {user} =  useUserStore((state) => state);
+      const hasCreditCard = user?.hasCreditCard;
       const {loading, signOut} = useSignOut();
       return (
             <Column className="gap-4">
@@ -29,7 +32,7 @@ const Page = () => {
                                                 content="Change Photo"
                                           /> */}
                                           <Avatar className="w-[70px] h-[70px] bg-[#F6DF9C]">
-                                                <AvatarImage src={ user?.photoURL || "https://images.unsplash.com/photo-1715005881129-266ccdd75e43?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={(user?.fullName || user?.displayName) ?? ""}/>
+                                                <AvatarImage src={ user?.photoURL ?? ""} alt={(user?.fullName || user?.displayName) ?? ""}/>
                                                 <AvatarFallback>{generateAcronym((user?.fullName || user?.displayName) ?? "")}</AvatarFallback>
                                           </Avatar>
                                     </span>
@@ -50,13 +53,50 @@ const Page = () => {
                         <div className="flex-1">
                               <H className="m-0 ml-6 text-primary text-xl md:hidden">Payment Methods</H>
                               <Row className="bg-white-100 shadow-xs flex-1 p-6 rounded-lg gap-4 flex-col md:flex-row items-center w-full h-full">
-                                    <VirtualCard />
+                                    {
+                                          hasCreditCard ? (
+                                                <VirtualCard />
+                                          ): (
+                                                <Picture 
+                                                container={{
+                                                  className: "w-full max-w-[350px] h-[150px]"
+                                                }}
+                                                image={{
+                                                  alt: "",
+                                                  src: "/images/profile-bg.png"
+                                                }}
+                                              />
+                                          )
+                                    }
                                     <Column className="gap-8 md:max-w-[200px] p-4">
                                           <Column className="gap-1">
-                                                <H className="m-0 text-primary hidden md:block">Payment Methods</H>
-                                                <P className="m-0 text-primary-foreground">Change /Update your payment methods here</P>
+                                                <H className="m-0 text-primary hidden md:block">
+                                                      {
+                                                            hasCreditCard? "Payment Methods" : "No Credit/Debit card"
+                                                      }
+                                                </H>
+                                                <P className="m-0 text-primary-foreground">
+                                                      {
+                                                            hasCreditCard? "Change /Update your payment methods here" : "Please add your card here"
+                                                      }
+                                                </P>
                                           </Column>
-                                          <Button className="w-full md:max-w-[140px]">Update</Button>
+                                          {
+                                                hasCreditCard? (
+                                                      <Button className="w-full md:max-w-[140px]">Update</Button>
+                                                ): (
+                                                      <Dialog>
+                                                            <DialogTrigger><Button className="w-full md:max-w-[140px]">Add New Card</Button></DialogTrigger>
+                                                            <DialogContent className="w-full max-w-[700px] flex flex-col gap-6">
+                                                                  <DialogHeader>
+                                                                        <DialogTitle className="text-center">Add your Card Details</DialogTitle>
+                                                                  </DialogHeader>
+                                                                  <AddCardFrom />
+                                                            </DialogContent>
+                                                      </Dialog>
+                                                      
+                                                )
+                                          }
                                     </Column>
                               </Row>
                         </div>
@@ -68,9 +108,9 @@ const Page = () => {
                                     <p className="text-primary-foreground text-base">Here you can find all your transactions on this account and you can print them out as a .pdf or .csv file</p>  
                               </Column>
                               <Column>
+                                    {/* <MoveHistory status="Pending" type="Hire labor" />
                                     <MoveHistory status="Pending" type="Hire labor" />
-                                    <MoveHistory status="Pending" type="Hire labor" />
-                                    <MoveHistory status="Pending" type="Hire labor" />
+                                    <MoveHistory status="Pending" type="Hire labor" /> */}
                               </Column>
                         </Column>
                         <Column className="flex-1 font-dm-sans p-4 bg-white-100 shadow-xs rounded-lg">

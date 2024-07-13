@@ -252,6 +252,7 @@ export default function Home() {
               <MoveHistory status="Pending" type="Hire labor" />
             </Column>
           </Column>
+
         </Column>
       )}
     </Row>
