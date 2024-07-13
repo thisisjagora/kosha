@@ -79,10 +79,12 @@ export const getBookings = async (inputDate: Date) => {
 
 export const updateQuote = async (bookingId: string, quote: Quote) => {
   try {
+    const userId = getAuth().currentUser?.uid;
     const querySnapshot = await getDocs(
       query(
         collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
-        where("bookingId", "==", bookingId)
+        where("bookingId", "==", bookingId),
+        where("clientId", "==", userId)
       )
     );
     if (querySnapshot.empty)
@@ -111,10 +113,12 @@ export const updateQuote = async (bookingId: string, quote: Quote) => {
 
 export const updateBooking = async (bookingId: string, booking: Booking) => {
   try {
+    const userId = getAuth().currentUser?.uid;
     const querySnapshot = await getDocs(
       query(
         collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
-        where("bookingId", "==", bookingId)
+        where("bookingId", "==", bookingId),
+        where("clientId", "==", userId)
       )
     );
     if (querySnapshot.empty)
@@ -144,10 +148,12 @@ export const updateBooking = async (bookingId: string, booking: Booking) => {
 
 export const deleteBooking = async (bookingId: string) => {
   try {
+    const userId = getAuth().currentUser?.uid;
     const querySnapshot = await getDocs(
       query(
         collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
-        where("bookingId", "==", bookingId)
+        where("bookingId", "==", bookingId),
+        where("clientId", "==", userId)
       )
     );
     if (querySnapshot.empty)
