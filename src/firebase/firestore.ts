@@ -10,6 +10,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  queryEqual,
 } from "firebase/firestore";
 import firebaseApp from "./config";
 import { FIREBASE_COLLECTIONS } from "@/constants/enums";
@@ -17,6 +18,8 @@ import { Booking, Quote, Voucher } from "@/types/structs";
 import { toast } from "@/components/toast/use-toast";
 import { getFirebaseErrorMessage } from "@/lib/helpers/getErrorMessage";
 import type { FirebaseError } from "firebase/app";
+import { safeParseDate } from "@/lib/utils";
+import { current } from "immer";
 
 export const db = getFirestore(firebaseApp);
 
@@ -187,7 +190,17 @@ export const getVoucher = async (code: string) => {
     );
     if (querySnapshot.empty)
       throw new Error("Voucher not found", { cause: 404 });
-    return querySnapshot.docs[0].data() as Voucher;
+    const vouchers = querySnapshot.docs.filter((item, idx) => {
+      const voucher = item.data() as Voucher,
+        startDate = safeParseDate(voucher.startDate)?.getTime(),
+        endDate = safeParseDate(voucher.endDate)?.getTime(),
+        currentDate = new Date().getTime(),
+        valid = currentDate > startDate! && currentDate < endDate!;
+      return valid;
+    });
+    if (vouchers.length === 0)
+      throw new Error("Voucher not found", { cause: 404 });
+    return vouchers[0].data() as Voucher;
   } catch (err) {
     toast({
       title: "Oops!",

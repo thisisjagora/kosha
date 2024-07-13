@@ -8,7 +8,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/form";
-import { Input } from "@/components/input";
+import { DebouncedInput, Input } from "@/components/input";
 import { Column, Row } from "@/components/layout";
 import { toast } from "@/components/toast/use-toast";
 import { ErrorMessage, StorageKeys } from "@/constants/enums";
@@ -23,7 +23,7 @@ import { generateDoodles } from "@/lib/helpers/generateDoodle";
 import { cn, formatCurrency } from "@/lib/utils";
 import useBookingStore from "@/stores/booking.store";
 import useUserStore from "@/stores/user.store";
-import { BookMove, Booking, QuoteDetailsRate } from "@/types/structs";
+import { BookMove, Booking, QuoteDetailsRate, Voucher } from "@/types/structs";
 import { format } from "date-fns";
 import { CircleAlert } from "lucide-react";
 import { FC, HTMLAttributes, useEffect, useMemo, useState } from "react";
@@ -34,6 +34,7 @@ import useBookMoveStore from "@/stores/book-move.store";
 import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
 import { getAuth } from "firebase/auth";
 import { useDeleteBooking } from "@/hooks/fireStore/useDeleteBooking";
+import { useGetVoucher } from "@/hooks/misc/useGetVoucher";
 
 const QuoteDetails: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => (
   <Row {...props} className={cn("flex gap-4", props.className)} />
@@ -363,8 +364,17 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   );
   const router = useRouter();
   const pathname = usePathname();
+  const [gottenVoucher, setGottenVoucher] = useState<Voucher | null>(null);
   const { isPending: isDeletePending, mutate: deleteBooking } =
     useDeleteBooking();
+  const { isPending: isGettingVoucher, mutate: getVoucher } = useGetVoucher({
+    onSuccess: (data) => {
+      setGottenVoucher(data);
+    },
+    onError: () => {
+      setGottenVoucher(null);
+    },
+  });
 
   if (!formData || !quoteDetailsData) {
     toast({
@@ -405,7 +415,7 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
       poolTablesQuantity: formData.poolTables
         ? parseInt(formData.poolTables)
         : 0,
-      quote: quoteDetailsData,
+      quote: { ...quoteDetailsData, voucherCode: gottenVoucher?.code ?? "" },
       additionalNotes: formData.instructions,
       serviceAddOns: formData.services,
       estimatedNumberOfBoxes: formData.numberOfBoxes
@@ -437,7 +447,35 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
       <H level={2} className="text-primary font-dm-sans text-lg">
         Total minimum charge
       </H>
-      <H className="text-3xl font-bold">{amount}</H>
+      {gottenVoucher ? (
+        <div className="flex flex-wrap gap-2">
+          <H level={3} className="text-3xl font-bold line-through">
+            {amount}
+          </H>
+          <H className="text-3xl font-bold">
+            {((amt: number) => {
+              const { discountType: type, clientDiscount } = gottenVoucher;
+              if (type === "Amount") {
+                return amt - clientDiscount;
+              } else {
+                return amt - (clientDiscount / 100) * amt;
+              }
+            })(Number(amount.substring(1)))}
+          </H>
+        </div>
+      ) : (
+        <H className="text-3xl font-bold">{amount}</H>
+      )}
+      {gottenVoucher && (
+        <>
+          <p className="mt-[-2.5rem]">
+            Discount applied: -
+            {gottenVoucher.discountType === "Amount" ? "$" : ""}
+            {gottenVoucher.clientDiscount}
+            {gottenVoucher.discountType === "Percentage" ? "%" : ""}
+          </p>
+        </>
+      )}
       <Column className="gap-6">
         <P className="text-grey-600 text-sm">
           Note: After Minimum Charge Billing Cost {hourlyRate} After Every
@@ -447,10 +485,19 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
         {!finishing && (
           <>
             {currentUser && (
-              <Input
-                placeholder="Input Discount Code"
-                className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400"
-              />
+              <>
+                <DebouncedInput
+                  placeholder="Input Discount Code"
+                  className="bg-white-400 border-dashed border-2 border-white-500 placeholder:text-grey-400"
+                  debounce={1500}
+                  onChange={(e) => {
+                    getVoucher({ code: e.target.value });
+                  }}
+                />
+                {isGettingVoucher && (
+                  <p className="text-sm italic">Checking voucher...</p>
+                )}
+              </>
             )}
             <Button
               disabled={loading || isPending}
