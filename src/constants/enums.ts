@@ -22,7 +22,8 @@ export enum FIREBASE_COLLECTIONS {
 
 export enum SUCCESS_MESSAGE {
       USER_SIGNUP = "Account created successfully!",
-	BOOKINGS_COMPLETE = "Booking request completed!"
+	BOOKINGS_COMPLETE = "Booking request completed!",
+	BOOKING_UPDATED = "Booking updated successfully!"
 }
 
 export enum ErrorMessage {
@@ -35,4 +36,5 @@ export enum CacheKey {
 	CHATS_STATE = 'CHATS_STATE',
 	CHAT_STATE = 'CHAT_STATE',
 	CHAT_MESSAGES_STATE = 'CHAT_MESSAGES_STATE',
+	QUOTE_STATE = 'QUOTE_STATE',
 }

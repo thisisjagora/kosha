@@ -189,7 +189,9 @@ export default function Home() {
                           />
                         )}
                       </Column>
-                      <QuotesAmount amount={80} />
+                      {typeof booking.quote?.minimumAmount === "number" && (
+                        <QuotesAmount amount={booking.quote?.minimumAmount} />
+                      )}
                     </Row>
                   </QuotesContent>
                 </Quotes>
