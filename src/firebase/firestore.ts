@@ -213,6 +213,40 @@ export const getVoucher = async (code: string) => {
     throw err;
   }
 };
+
+export const cancelBooking = async (bookingId: string) => {
+  try {
+    const userId = getAuth().currentUser?.uid;
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, FIREBASE_COLLECTIONS.BOOKINGS),
+        where("bookingId", "==", bookingId),
+        where("clientId", "==", userId)
+      )
+    );
+    if (querySnapshot.empty)
+      throw new Error("Booking not found", { cause: 404 });
+    const docRef = doc(
+      db,
+      FIREBASE_COLLECTIONS.BOOKINGS,
+      querySnapshot.docs[0].id
+    );
+    await updateDoc(docRef, {
+      status: "Cancelled",
+    });
+  } catch (err) {
+    toast({
+      title: "Oops!",
+      description:
+        err instanceof Error && err.cause === 404
+          ? err.message || err.name
+          : getFirebaseErrorMessage(err as FirebaseError),
+      variant: "destructive",
+    });
+    throw err;
+  }
+};
+
 // For conversations
 // - Fetch conversations from chat collections
 // - Filter by currentUserLoggedIn user id
