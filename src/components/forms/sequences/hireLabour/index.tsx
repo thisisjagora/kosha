@@ -156,7 +156,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     Apartment/Unit
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                    <Input {...field} {...InputDirectives.numbersOnly} placeholder="" />
                   </FormControl>
                   <FormMessage className="text-destructive" />
                 </FormItem>
