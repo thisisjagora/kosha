@@ -157,15 +157,19 @@ const Page = () => {
       <Column className="gap-4 max-w-[400px]">
         <QuoteDetailsServiceRequirement
           services={formData.services}
-          disabled={finishing}
+          disabled={finishing || selectedBooking?.status === "Cancelled"}
         />
-        <QuoteDetailsCharge
-          amount={formatCurrency(minimumAmount)}
-          hourlyRate={formatCurrency(hourlyRate)}
-          finishing={finishing}
-          updating={updating}
-        />
-        {finishing && <QuoteDetailsEditRequest type="LabourOnly" />}
+        {selectedBooking?.status !== "Cancelled" && (
+          <>
+            <QuoteDetailsCharge
+              amount={formatCurrency(minimumAmount)}
+              hourlyRate={formatCurrency(hourlyRate)}
+              finishing={finishing}
+              updating={updating}
+            />
+            {finishing && <QuoteDetailsEditRequest type="LabourOnly" />}
+          </>
+        )}
       </Column>
     </QuoteDetails>
   );
