@@ -149,7 +149,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.pickUpLocation.apartmentNumber}
-                      placeholder="0"
+                      placeholder=""
                     />
                   </FormControl>
                   <FormMessage />
@@ -208,7 +208,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       <FormItem className="flex-1">
                         <FormLabel>Apartment/Unit</FormLabel>
                         <FormControl>
-                          <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                          <Input {...field} {...InputDirectives.numbersOnly} placeholder="" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -256,7 +256,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.finalDestination.apartmentNumber}
-                      placeholder="0"
+                      placeholder=""
                     />
                   </FormControl>
                   <FormMessage />
