@@ -39,7 +39,7 @@ import { useRouter, usePathname } from "next/navigation";
 import useBookMoveStore from "@/stores/book-move.store";
 import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
 import { getAuth } from "firebase/auth";
-import { useDeleteBooking } from "@/hooks/fireStore/useDeleteBooking";
+import { useCancelBooking } from "@/hooks/fireStore/useCancelBooking";
 import { useGetVoucher } from "@/hooks/misc/useGetVoucher";
 import useHireLabourStore from "@/stores/hire-labour.store";
 
@@ -373,7 +373,7 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   const pathname = usePathname();
   const [gottenVoucher, setGottenVoucher] = useState<Voucher | null>(null);
   const { isPending: isDeletePending, mutate: deleteBooking } =
-    useDeleteBooking();
+    useCancelBooking();
   const { isPending: isGettingVoucher, mutate: getVoucher } = useGetVoucher({
     onSuccess: (data) => {
       setGottenVoucher(data);
