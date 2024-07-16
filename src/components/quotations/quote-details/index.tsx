@@ -455,19 +455,19 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
         Total minimum charge
       </H>
       {gottenVoucher ? (
-        <div className="flex flex-wrap gap-2">
-          <H level={3} className="text-3xl font-bold line-through">
+        <div className="flex flex-wrap gap-2 items-end leading-[100%]">
+          <H level={3} className="text-xl font-bold line-through">
             {amount}
           </H>
           <H className="text-3xl font-bold">
-            {((amt: number) => {
+            ${((amt: number) => {
               const { discountType: type, clientDiscount } = gottenVoucher;
               if (type === "Amount") {
                 return amt - clientDiscount;
               } else {
                 return amt - (clientDiscount / 100) * amt;
               }
-            })(Number(amount.substring(1)))}
+            })(Number(amount.replace(/[^\d.-]+/g, "")))}
           </H>
         </div>
       ) : (
@@ -627,12 +627,14 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
                 : "",
               serviceLocation: selectedBooking.fromAddress?.address ?? "",
               googlePlaceId: selectedBooking.fromAddress?.googlePlaceId ?? "",
-              apartmentNumber: selectedBooking.fromAddress?.apartmentNumber ?? "",
+              apartmentNumber:
+                selectedBooking.fromAddress?.apartmentNumber ?? "",
               elevatorAccess: selectedBooking.fromAddress?.hasElevator ?? "Yes",
               flightOfStairs: `${
                 selectedBooking.fromAddress?.flightOfStairs ?? "0"
               }`,
-              buildingType: selectedBooking.fromAddress?.buildingType ?? "Condo",
+              buildingType:
+                selectedBooking.fromAddress?.buildingType ?? "Condo",
               majorAppliances: `${
                 selectedBooking.majorAppliancesQuantity ?? ""
               }`,
