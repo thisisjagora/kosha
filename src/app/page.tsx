@@ -165,11 +165,6 @@ export default function Home() {
               {bookings &&
                 bookings.slice(0, 3).map((booking) => (
                   <Quotes
-                    className={
-                      booking.status === "Cancelled"
-                        ? "hover:cursor-default"
-                        : ""
-                    }
                     key={booking.bookingId}
                     onClick={() => {
                       if (
@@ -177,7 +172,6 @@ export default function Home() {
                           booking.requestType ?? ""
                         )
                       ) {
-                        if (booking.status === "Cancelled") return;
                         setSelectedBooking(booking);
                         router.push(
                           `${

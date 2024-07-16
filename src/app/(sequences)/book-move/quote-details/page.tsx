@@ -151,14 +151,21 @@ const Page = () => {
         />
       </Column>
       <Column className="gap-4 max-w-[400px]">
-        <QuoteDetailsVehicle truckType={movingTruck} disabled={finishing} />
-        <QuoteDetailsCharge
-          amount={formatCurrency(minimumAmount)}
-          hourlyRate={formatCurrency(hourlyRate)}
-          finishing={finishing}
-          updating={updating}
+        <QuoteDetailsVehicle
+          truckType={movingTruck}
+          disabled={finishing || selectedBooking?.status === "Cancelled"}
         />
-        {finishing && <QuoteDetailsEditRequest type="RegularMove" />}
+        {selectedBooking?.status !== "Cancelled" && (
+          <>
+            <QuoteDetailsCharge
+              amount={formatCurrency(minimumAmount)}
+              hourlyRate={formatCurrency(hourlyRate)}
+              finishing={finishing}
+              updating={updating}
+            />
+            {finishing && <QuoteDetailsEditRequest type="RegularMove" />}
+          </>
+        )}
       </Column>
     </QuoteDetails>
   );
