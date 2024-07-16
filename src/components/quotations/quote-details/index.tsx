@@ -96,7 +96,7 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
           </Column>
           <Column className="gap-0 flex-1">
             <P className="text-primary font-bold font-dm-sans text-lg">
-              {movesCompleted}
+              {+movesCompleted || 0}
             </P>
             <P className="text-sm font-dm-sans text-grey-300">
               moves completed
