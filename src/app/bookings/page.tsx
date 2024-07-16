@@ -90,9 +90,6 @@ const Page = () => {
             {bookings &&
               bookings.map((booking) => (
                 <Quotes
-                  className={
-                    booking.status === "Cancelled" ? "hover:cursor-default" : ""
-                  }
                   key={booking.bookingId}
                   onClick={() => {
                     if (
@@ -100,7 +97,6 @@ const Page = () => {
                         booking.requestType ?? ""
                       )
                     ) {
-                      if (booking.status === "Cancelled") return;
                       setSelectedBooking(booking);
                       router.push(
                         `${
