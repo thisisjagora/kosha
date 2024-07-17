@@ -96,6 +96,7 @@ export interface Quote  {
       serviceAddOns?: string[];
       estimatedNumberOfBoxes?: number;
       feeAdjustments?: FeeAdjustment[];
+      images?: string[];
     }
     
 

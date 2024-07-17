@@ -645,7 +645,7 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
               hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
               poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
               numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
-              instructions: "",
+              instructions: selectedBooking.additionalNotes ?? '',
               images: [],
               services: selectedBooking.serviceAddOns ?? [],
             });
