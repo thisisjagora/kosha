@@ -30,8 +30,8 @@ export const useGetQuotes = (
     methods
       .mutateAsync(payload)
       .then((res) => {
-        const { formData, reset } = bookMoveStore.getState();
-        const { formData: hireLabourFormData, reset: resetHireLabour } =
+        const { formData } = bookMoveStore.getState();
+        const { formData: hireLabourFormData } =
           hireLabourStore.getState();
         if (isHireLabourRoute) {
           localStorage.setItem(
@@ -39,11 +39,9 @@ export const useGetQuotes = (
             JSON.stringify(hireLabourFormData)
           );
           setQuotesResult(res.result as Array<Quote>);
-          resetHireLabour();
         } else {
           localStorage.setItem(StorageKeys.FORM_DATA, JSON.stringify(formData));
           setQuotesResult(res.result as Array<Quote>);
-          reset();
         }
       })
       .catch(() => {

@@ -159,7 +159,8 @@ const Page = () => {
           services={formData.services}
           disabled={finishing || selectedBooking?.status === "Cancelled"}
         />
-        {selectedBooking?.status !== "Cancelled" && (
+        {((!updating && !finishing) ||
+          selectedBooking?.status !== "Cancelled") && (
           <>
             <QuoteDetailsCharge
               amount={formatCurrency(minimumAmount)}

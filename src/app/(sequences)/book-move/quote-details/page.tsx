@@ -33,6 +33,9 @@ const Page = () => {
   const finishing = searchParams.get("action") === "finish",
     updating = searchParams.get("action") === "update";
 
+  console.log("finishing: ", finishing);
+  console.log("updating: ", updating);
+
   const iconSizes = {
     width: 21,
     height: 21,
@@ -155,7 +158,8 @@ const Page = () => {
           truckType={movingTruck}
           disabled={finishing || selectedBooking?.status === "Cancelled"}
         />
-        {selectedBooking?.status !== "Cancelled" && (
+        {((!updating && !finishing) ||
+          selectedBooking?.status !== "Cancelled") && (
           <>
             <QuoteDetailsCharge
               amount={formatCurrency(minimumAmount)}
