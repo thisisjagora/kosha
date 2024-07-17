@@ -39,7 +39,7 @@ import { useRouter, usePathname } from "next/navigation";
 import useBookMoveStore from "@/stores/book-move.store";
 import { useUpdateBooking } from "@/hooks/fireStore/useUpdateBooking";
 import { getAuth } from "firebase/auth";
-import { useDeleteBooking } from "@/hooks/fireStore/useDeleteBooking";
+import { useCancelBooking } from "@/hooks/fireStore/useCancelBooking";
 import { useGetVoucher } from "@/hooks/misc/useGetVoucher";
 import useHireLabourStore from "@/stores/hire-labour.store";
 
@@ -96,7 +96,7 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
           </Column>
           <Column className="gap-0 flex-1">
             <P className="text-primary font-bold font-dm-sans text-lg">
-              {movesCompleted}
+              {+movesCompleted || 0}
             </P>
             <P className="text-sm font-dm-sans text-grey-300">
               moves completed
@@ -344,7 +344,7 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
   );
 };
 interface QuoteDetailsChargeProps extends HTMLAttributes<HTMLDivElement> {
-  amount: string;
+  amount: number;
   hourlyRate: string;
   finishing?: boolean;
   updating?: boolean;
@@ -373,7 +373,7 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
   const pathname = usePathname();
   const [gottenVoucher, setGottenVoucher] = useState<Voucher | null>(null);
   const { isPending: isDeletePending, mutate: deleteBooking } =
-    useDeleteBooking();
+    useCancelBooking();
   const { isPending: isGettingVoucher, mutate: getVoucher } = useGetVoucher({
     onSuccess: (data) => {
       setGottenVoucher(data);
@@ -455,23 +455,26 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
         Total minimum charge
       </H>
       {gottenVoucher ? (
-        <div className="flex flex-wrap gap-2">
-          <H level={3} className="text-3xl font-bold line-through">
+        <div className="flex flex-wrap gap-2 items-end leading-[100%]">
+          <H level={3} className="text-xl font-bold line-through">
             {amount}
           </H>
           <H className="text-3xl font-bold">
-            {((amt: number) => {
-              const { discountType: type, clientDiscount } = gottenVoucher;
-              if (type === "Amount") {
-                return amt - clientDiscount;
-              } else {
-                return amt - (clientDiscount / 100) * amt;
-              }
-            })(Number(amount.substring(1)))}
+            {formatCurrency(
+              ((amt: number) => {
+                const { discountType: type, clientDiscount } = gottenVoucher;
+                if (type === "Amount") {
+                  return amt - clientDiscount;
+                } else {
+                  return amt - (clientDiscount / 100) * amt;
+                }
+                // })(Number(amount.replace(/[^\d.-]+/g, "")))}
+              })(amount)
+            )}
           </H>
         </div>
       ) : (
-        <H className="text-3xl font-bold">{amount}</H>
+        <H className="text-3xl font-bold">{formatCurrency(amount)}</H>
       )}
       {gottenVoucher && (
         <>
@@ -627,12 +630,14 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
                 : "",
               serviceLocation: selectedBooking.fromAddress?.address ?? "",
               googlePlaceId: selectedBooking.fromAddress?.googlePlaceId ?? "",
-              apartmentNumber: selectedBooking.fromAddress?.apartmentNumber ?? "",
+              apartmentNumber:
+                selectedBooking.fromAddress?.apartmentNumber ?? "",
               elevatorAccess: selectedBooking.fromAddress?.hasElevator ?? "Yes",
               flightOfStairs: `${
                 selectedBooking.fromAddress?.flightOfStairs ?? "0"
               }`,
-              buildingType: selectedBooking.fromAddress?.buildingType ?? "Condo",
+              buildingType:
+                selectedBooking.fromAddress?.buildingType ?? "Condo",
               majorAppliances: `${
                 selectedBooking.majorAppliancesQuantity ?? ""
               }`,
@@ -643,7 +648,7 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
               hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
               poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
               numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
-              instructions: "",
+              instructions: selectedBooking.additionalNotes ?? "",
               images: [],
               services: selectedBooking.serviceAddOns ?? [],
             });

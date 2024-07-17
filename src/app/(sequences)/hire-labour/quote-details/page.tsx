@@ -27,6 +27,7 @@ import Link from "next/link";
 import useBookingStore from "@/stores/booking.store";
 import type { Quote } from "@/types/structs";
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -59,6 +60,53 @@ const Page = () => {
   const formData = JSON.parse(
     localStorage.getItem(StorageKeys.FORM_DATA) || "{}"
   );
+
+  const amount = useMemo(() => {
+    const majorAppliancesAmount =
+      (+formData.majorAppliances! || 0) * majorAppliancesFee;
+    const workoutEquipmentsAmount =
+      (+formData.workOutEquipment! || 0) * workoutEquipmentsFee;
+    const pianosAmount = (+formData.pianos! || 0) * pianosFee;
+    const hotTubsAmount = (+formData.hotTubs! || 0) * hotTubsFee;
+    const poolTablesAmount = (+formData.poolTables! || 0) * poolTablesFee;
+    const stopsAmount = (formData.stops?.length || 0) * stopOverFee;
+    const flightOfStairsAmount =
+      ((+formData.PUDPickUpLocation?.flightOfStairs! || 0) +
+        (+formData.PUDFinalDestination?.flightOfStairs! || 0) +
+        (formData.PUDStops?.reduce(
+          (acc: number, curr: { flightOfStairs: number }) =>
+            acc + (+curr?.flightOfStairs! || 0),
+          0
+        ) ?? 0) ?? 0) * flightOfStairsFee;
+    return (
+      minimumAmount +
+      majorAppliancesAmount +
+      workoutEquipmentsAmount +
+      pianosAmount +
+      hotTubsAmount +
+      poolTablesAmount +
+      stopsAmount +
+      flightOfStairsAmount
+    );
+  }, [
+    minimumAmount,
+    formData.majorAppliances,
+    majorAppliancesFee,
+    formData.workOutEquipment,
+    workoutEquipmentsFee,
+    formData.pianos,
+    pianosFee,
+    formData.hotTubs,
+    hotTubsFee,
+    formData.poolTables,
+    poolTablesFee,
+    formData.stops?.length,
+    stopOverFee,
+    formData.PUDPickUpLocation?.flightOfStairs,
+    formData.PUDFinalDestination?.flightOfStairs,
+    formData.PUDStops,
+    flightOfStairsFee,
+  ]);
 
   if (companyName === "") {
     return (
@@ -114,6 +162,9 @@ const Page = () => {
               icon: <Appliances {...iconSizes} />,
               label: "Appliances",
               rate: majorAppliancesFee,
+              ...(+(formData.majorAppliances ?? 0)
+                ? { count: +(formData.majorAppliances ?? 0) }
+                : {}),
             },
             {
               icon: <FlightOfStairs {...iconSizes} />,
@@ -124,6 +175,9 @@ const Page = () => {
               icon: <Piano {...iconSizes} />,
               label: "Piano",
               rate: pianosFee,
+              ...(+(formData.pianos ?? 0)
+                ? { count: +(formData.pianos ?? 0) }
+                : {}),
             },
             {
               icon: <AdditionalStops {...iconSizes} />,
@@ -134,16 +188,25 @@ const Page = () => {
               icon: <Appliances {...iconSizes} />,
               label: "Hot Tub",
               rate: hotTubsFee,
+              ...(+(formData.hotTubs ?? 0)
+                ? { count: +(formData.hotTubs ?? 0) }
+                : {}),
             },
             {
               icon: <Appliances {...iconSizes} />,
               label: "Pool Table",
               rate: poolTablesFee,
+              ...(+(formData.poolTables ?? 0)
+                ? { count: +(formData.poolTables ?? 0) }
+                : {}),
             },
             {
               icon: <Appliances {...iconSizes} />,
               label: "Workout Equipments",
               rate: workoutEquipmentsFee,
+              ...(+(formData.workOutEquipment ?? 0)
+                ? { count: +(formData.workOutEquipment ?? 0) }
+                : {}),
             },
             {
               icon: <Alarm {...iconSizes} />,
@@ -157,15 +220,20 @@ const Page = () => {
       <Column className="gap-4 max-w-[400px]">
         <QuoteDetailsServiceRequirement
           services={formData.services}
-          disabled={finishing}
+          disabled={finishing || selectedBooking?.status === "Cancelled"}
         />
-        <QuoteDetailsCharge
-          amount={formatCurrency(minimumAmount)}
-          hourlyRate={formatCurrency(hourlyRate)}
-          finishing={finishing}
-          updating={updating}
-        />
-        {finishing && <QuoteDetailsEditRequest type="LabourOnly" />}
+        {((!updating && !finishing) ||
+          selectedBooking?.status !== "Cancelled") && (
+          <>
+            <QuoteDetailsCharge
+              amount={amount}
+              hourlyRate={formatCurrency(hourlyRate)}
+              finishing={finishing}
+              updating={updating}
+            />
+            {finishing && <QuoteDetailsEditRequest type="LabourOnly" />}
+          </>
+        )}
       </Column>
     </QuoteDetails>
   );
