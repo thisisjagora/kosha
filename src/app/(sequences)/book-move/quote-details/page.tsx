@@ -181,6 +181,9 @@ const Page = () => {
               icon: <AdditionalStops {...iconSizes} />,
               label: "Additional Stops",
               rate: stopOverFee,
+              ...(formData.PUDStops?.length
+                ? { count: formData.PUDStops.length }
+                : {}),
             },
             {
               icon: <Appliances {...iconSizes} />,
