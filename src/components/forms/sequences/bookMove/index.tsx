@@ -316,8 +316,6 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     ) as "PUDStops"[],
   });
 
-  console.log("checks: ", stopsElevatorAccess);
-
   const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
     onChangeStep("generalInfo");
     update(data);

@@ -24,17 +24,17 @@ import { formatCurrency } from "@/lib/utils";
 import { CircleAlert } from "lucide-react";
 import Link from "next/link";
 import useBookingStore from "@/stores/booking.store";
+import useBookMoveStore from "@/stores/book-move.store";
 import type { Quote } from "@/types/structs";
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
 const Page = () => {
   const searchParams = useSearchParams();
+  const formData = useBookMoveStore((store) => store.formData);
   const selectedBooking = useBookingStore.use.selectedBooking();
   const finishing = searchParams.get("action") === "finish",
     updating = searchParams.get("action") === "update";
-
-  console.log("finishing: ", finishing);
-  console.log("updating: ", updating);
 
   const iconSizes = {
     width: 21,
@@ -61,6 +61,53 @@ const Page = () => {
   } = finishing
     ? (selectedBooking?.quote as Quote) ?? {}
     : quoteDetailsData || {};
+
+  const amount = useMemo(() => {
+    const majorAppliancesAmount =
+      (+formData.majorAppliances! || 0) * majorAppliancesFee;
+    const workoutEquipmentsAmount =
+      (+formData.workOutEquipment! || 0) * workoutEquipmentsFee;
+    const pianosAmount = (+formData.pianos! || 0) * pianosFee;
+    const hotTubsAmount = (+formData.hotTubs! || 0) * hotTubsFee;
+    const poolTablesAmount = (+formData.poolTables! || 0) * poolTablesFee;
+    const stopsAmount = formData.stops.length * stopOverFee;
+    const flightOfStairsAmount =
+      ((+formData.PUDPickUpLocation.flightOfStairs! || 0) +
+        (+formData.PUDFinalDestination.flightOfStairs! || 0) +
+        (formData.PUDStops?.reduce(
+          (acc, curr) => acc + (+curr.flightOfStairs! || 0),
+          0
+        ) ?? 0) ?? 0) * flightOfStairsFee;
+    return (
+      minimumAmount +
+      majorAppliancesAmount +
+      workoutEquipmentsAmount +
+      pianosAmount +
+      hotTubsAmount +
+      poolTablesAmount +
+      stopsAmount +
+      flightOfStairsAmount
+    );
+  }, [
+    minimumAmount,
+    formData.majorAppliances,
+    majorAppliancesFee,
+    formData.workOutEquipment,
+    workoutEquipmentsFee,
+    formData.pianos,
+    pianosFee,
+    formData.hotTubs,
+    hotTubsFee,
+    formData.poolTables,
+    poolTablesFee,
+    formData.stops.length,
+    stopOverFee,
+    formData.PUDPickUpLocation.flightOfStairs,
+    formData.PUDFinalDestination.flightOfStairs,
+    formData.PUDStops,
+    flightOfStairsFee,
+  ]);
+
   if (companyName === "") {
     return (
       <Row className="w-full h-full items-center justify-center">
@@ -113,6 +160,9 @@ const Page = () => {
               icon: <Appliances {...iconSizes} />,
               label: "Appliances",
               rate: majorAppliancesFee,
+              ...(+(formData.majorAppliances ?? 0)
+                ? { count: +(formData.majorAppliances ?? 0) }
+                : {}),
             },
             {
               icon: <FlightOfStairs {...iconSizes} />,
@@ -123,6 +173,9 @@ const Page = () => {
               icon: <Piano {...iconSizes} />,
               label: "Piano",
               rate: pianosFee,
+              ...(+(formData.pianos ?? 0)
+                ? { count: +(formData.pianos ?? 0) }
+                : {}),
             },
             {
               icon: <AdditionalStops {...iconSizes} />,
@@ -133,16 +186,25 @@ const Page = () => {
               icon: <Appliances {...iconSizes} />,
               label: "Hot Tub",
               rate: hotTubsFee,
+              ...(+(formData.hotTubs ?? 0)
+                ? { count: +(formData.hotTubs ?? 0) }
+                : {}),
             },
             {
               icon: <Appliances {...iconSizes} />,
               label: "Pool Table",
               rate: poolTablesFee,
+              ...(+(formData.poolTables ?? 0)
+                ? { count: +(formData.poolTables ?? 0) }
+                : {}),
             },
             {
               icon: <Appliances {...iconSizes} />,
               label: "Workout Equipments",
               rate: workoutEquipmentsFee,
+              ...(+(formData.workOutEquipment ?? 0)
+                ? { count: +(formData.workOutEquipment ?? 0) }
+                : {}),
             },
             {
               icon: <Alarm {...iconSizes} />,
@@ -162,7 +224,7 @@ const Page = () => {
           selectedBooking?.status !== "Cancelled") && (
           <>
             <QuoteDetailsCharge
-              amount={formatCurrency(minimumAmount)}
+              amount={amount}
               hourlyRate={formatCurrency(hourlyRate)}
               finishing={finishing}
               updating={updating}
