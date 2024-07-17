@@ -62,51 +62,51 @@ const Page = () => {
     ? (selectedBooking?.quote as Quote) ?? {}
     : quoteDetailsData || {};
 
-  const amount = useMemo(() => {
-    const majorAppliancesAmount =
-      (+formData.majorAppliances! || 0) * majorAppliancesFee;
-    const workoutEquipmentsAmount =
-      (+formData.workOutEquipment! || 0) * workoutEquipmentsFee;
-    const pianosAmount = (+formData.pianos! || 0) * pianosFee;
-    const hotTubsAmount = (+formData.hotTubs! || 0) * hotTubsFee;
-    const poolTablesAmount = (+formData.poolTables! || 0) * poolTablesFee;
-    const stopsAmount = formData.stops.length * stopOverFee;
-    const flightOfStairsAmount =
-      ((+formData.PUDPickUpLocation.flightOfStairs! || 0) +
-        (+formData.PUDFinalDestination.flightOfStairs! || 0) +
-        (formData.PUDStops?.reduce(
-          (acc, curr) => acc + (+curr.flightOfStairs! || 0),
-          0
-        ) ?? 0) ?? 0) * flightOfStairsFee;
-    return (
-      minimumAmount +
-      majorAppliancesAmount +
-      workoutEquipmentsAmount +
-      pianosAmount +
-      hotTubsAmount +
-      poolTablesAmount +
-      stopsAmount +
-      flightOfStairsAmount
-    );
-  }, [
-    minimumAmount,
-    formData.majorAppliances,
-    majorAppliancesFee,
-    formData.workOutEquipment,
-    workoutEquipmentsFee,
-    formData.pianos,
-    pianosFee,
-    formData.hotTubs,
-    hotTubsFee,
-    formData.poolTables,
-    poolTablesFee,
-    formData.stops.length,
-    stopOverFee,
-    formData.PUDPickUpLocation.flightOfStairs,
-    formData.PUDFinalDestination.flightOfStairs,
-    formData.PUDStops,
-    flightOfStairsFee,
-  ]);
+  // const amount = useMemo(() => {
+  //   const majorAppliancesAmount =
+  //     (+formData.majorAppliances! || 0) * majorAppliancesFee;
+  //   const workoutEquipmentsAmount =
+  //     (+formData.workOutEquipment! || 0) * workoutEquipmentsFee;
+  //   const pianosAmount = (+formData.pianos! || 0) * pianosFee;
+  //   const hotTubsAmount = (+formData.hotTubs! || 0) * hotTubsFee;
+  //   const poolTablesAmount = (+formData.poolTables! || 0) * poolTablesFee;
+  //   const stopsAmount = formData.stops.length * stopOverFee;
+  //   const flightOfStairsAmount =
+  //     ((+formData.PUDPickUpLocation.flightOfStairs! || 0) +
+  //       (+formData.PUDFinalDestination.flightOfStairs! || 0) +
+  //       (formData.PUDStops?.reduce(
+  //         (acc, curr) => acc + (+curr.flightOfStairs! || 0),
+  //         0
+  //       ) ?? 0) ?? 0) * flightOfStairsFee;
+  //   return (
+  //     minimumAmount +
+  //     majorAppliancesAmount +
+  //     workoutEquipmentsAmount +
+  //     pianosAmount +
+  //     hotTubsAmount +
+  //     poolTablesAmount +
+  //     stopsAmount +
+  //     flightOfStairsAmount
+  //   );
+  // }, [
+  //   minimumAmount,
+  //   formData.majorAppliances,
+  //   majorAppliancesFee,
+  //   formData.workOutEquipment,
+  //   workoutEquipmentsFee,
+  //   formData.pianos,
+  //   pianosFee,
+  //   formData.hotTubs,
+  //   hotTubsFee,
+  //   formData.poolTables,
+  //   poolTablesFee,
+  //   formData.stops.length,
+  //   stopOverFee,
+  //   formData.PUDPickUpLocation.flightOfStairs,
+  //   formData.PUDFinalDestination.flightOfStairs,
+  //   formData.PUDStops,
+  //   flightOfStairsFee,
+  // ]);
 
   if (companyName === "") {
     return (
@@ -224,7 +224,7 @@ const Page = () => {
           selectedBooking?.status !== "Cancelled") && (
           <>
             <QuoteDetailsCharge
-              amount={amount}
+              amount={minimumAmount}
               hourlyRate={formatCurrency(hourlyRate)}
               finishing={finishing}
               updating={updating}
