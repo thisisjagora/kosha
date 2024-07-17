@@ -51,10 +51,10 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
             updateUser({ ...user, ...userDoc.data() });
           } else {
             await deleteUser(user);
-            router.push(Routes.signIn);
+            router.replace(Routes.signIn);
           }
         } catch (err) {
-          router.push(Routes.signIn);
+          router.replace(Routes.signIn);
         }
       }
       setIsLoading(false);
@@ -65,7 +65,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!isLoading && !user && !isValidRoute && !isNonAuthRoute) {
-      router.push(Routes.signIn);
+      router.replace(Routes.signIn);
     }
   }, [isLoading, user, isValidRoute, router, isNonAuthRoute]);
 

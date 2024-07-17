@@ -3,30 +3,25 @@ import { CacheKey, SUCCESS_MESSAGE } from "@/constants/enums";
 import { Routes } from "@/core/routing";
 import { wait } from "@/lib/utils";
 import useShowQuotes from "@/stores/show-quotes.store";
-import { Booking } from "@/types/structs";
 import { useRouter } from "next/navigation";
 import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
-import { updateBooking } from "@/firebase/firestore";
+import { cancelBooking } from "@/firebase/firestore";
 import useBookingStore from "@/stores/booking.store";
 import { queryClient } from "@/lib/query";
-import useBookMoveStore from "@/stores/book-move.store";
-import useHireLabourStore from "@/stores/hire-labour.store";
 
-type MutationInput = { bookingId: string; booking: Booking };
+type MutationInput = { bookingId: string };
 
-export const useUpdateBooking = (
+export const useCancelBooking = (
   useMutationOptions: Omit<
-    UseMutationOptions<Booking, unknown, MutationInput>,
+    UseMutationOptions<void, unknown, MutationInput>,
     "mutationFn"
   > = {}
 ) => {
   const router = useRouter();
   const setSelectedBooking = useBookingStore.use.setSelectedBooking();
   const { reset } = useShowQuotes.getState();
-  const { reset: resetBookMove } = useBookMoveStore.getState();
-  const { reset: resetHireLabour } = useHireLabourStore.getState();
-  return useMutation<Booking, unknown, MutationInput>({
-    mutationFn: ({ bookingId, booking }) => updateBooking(bookingId, booking),
+  return useMutation<void, unknown, MutationInput>({
+    mutationFn: ({ bookingId }) => cancelBooking(bookingId),
     retry: false,
     ...useMutationOptions,
     onSuccess: (...args) => {
@@ -35,10 +30,8 @@ export const useUpdateBooking = (
       localStorage.clear();
       setSelectedBooking(null);
       reset();
-      resetHireLabour();
-      resetBookMove();
       toast({
-        description: SUCCESS_MESSAGE.BOOKING_UPDATED,
+        description: SUCCESS_MESSAGE.BOOKING_CANCELLED,
         variant: "success",
       });
       wait(0).then(() => router.push(Routes.bookings));
