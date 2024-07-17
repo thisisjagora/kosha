@@ -17,7 +17,7 @@ import { useValidRoute } from "@/hooks/useValidRoute";
 export const NavHeader: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
   const { isValidRoute } = useValidRoute([
     Routes.bookMoveQuoteDetails,
-    Routes.hireLabourQuoteDetails
+    Routes.hireLabourQuoteDetails,
   ]);
   const router = useRouter();
   const { user } = useUserStore((state) => state);
@@ -46,39 +46,43 @@ export const NavHeader: FC<{ nonAuth?: boolean }> = ({ nonAuth }) => {
         }
       />
       <Row className="flex-1 items-center gap-4">
-      <Column className="hidden lg:block">
-        <P className="text-blue-300 text-sm">{headerContent.title}</P>
-        <H className="text-blue-200 text-4xl">{headerContent.description}</H>
-      </Column>
-      {
-        isValidRoute && (
-          <Row onClick={() => router.back()} className="items-center border p-2 rounded-md hover:cursor-pointer">
-          <ArrowLeft className="text-primary text-sm" />
-          <P className="text-primary text-sm">Go back</P>
-        </Row>
-        )
-      }
+        <Column className="hidden lg:block">
+          <P className="text-blue-300 text-sm">{headerContent.title}</P>
+          <H className="text-blue-200 text-4xl">{headerContent.description}</H>
+        </Column>
+        {isValidRoute && (
+          <Row
+            onClick={() => router.back()}
+            className="items-center border p-2 rounded-md hover:cursor-pointer"
+          >
+            <ArrowLeft className="text-primary text-sm" />
+            <P className="text-primary text-sm">Go back</P>
+          </Row>
+        )}
       </Row>
       {nonAuth ? (
         <Column>
-          <Link href="/auth/sign-in" className="border bg-primary text-white-500 p-2 px-4 rounded-lg">
+          <Link
+            href="/auth/sign-in"
+            className="border bg-primary text-white-500 p-2 px-4 rounded-lg"
+          >
             Sign In
           </Link>
         </Column>
       ) : (
         <Row className="flex-1 bg-white-100 p-4 items-center justify-between max-w-[120px] max-h-[60px] rounded-[30px]">
           <Notification />
-          <Avatar className="w-[40px] h-[40px] bg-[#F6DF9C]">
-            <AvatarImage
-              src={
-                user?.photoURL ?? ""
-              }
-              alt={(user?.fullName || user?.displayName) ?? ""}
-            />
-            <AvatarFallback>
-              {generateAcronym((user?.fullName || user?.displayName) ?? "")}
-            </AvatarFallback>
-          </Avatar>
+          <Link href="/profile">
+            <Avatar className="w-[40px] h-[40px] bg-[#F6DF9C]">
+              <AvatarImage
+                src={user?.photoURL ?? ""}
+                alt={(user?.fullName || user?.displayName) ?? ""}
+              />
+              <AvatarFallback>
+                {generateAcronym((user?.fullName || user?.displayName) ?? "")}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
         </Row>
       )}
     </Row>

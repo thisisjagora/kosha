@@ -25,7 +25,8 @@ export enum SUCCESS_MESSAGE {
       USER_SIGNUP = "Account created successfully!",
 	BOOKINGS_COMPLETE = "Booking request completed!",
 	BOOKING_UPDATED = "Booking updated successfully!",
-	BOOKING_DELETED = "Booking deleted successfully!"
+	BOOKING_DELETED = "Booking deleted successfully!",
+	BOOKING_CANCELLED = "Booking cancelled successfully!",
 }
 
 export enum ErrorMessage {
