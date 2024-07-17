@@ -34,7 +34,7 @@ import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { safeParseDate } from "@/lib/utils";
 
-export default function MessagePage({ params, test }: { params: { slug: string } }) {
+export default function MessagePage({ params }: { params: { slug: string } }) {
   const {
     data: chat,
     isLoading: isLoadingChat,
@@ -42,7 +42,6 @@ export default function MessagePage({ params, test }: { params: { slug: string }
   } = useGetChat({
     id: params.slug,
   });
-  console.log('test: ', test);
   const chatId = params.slug;
   const [loadingMessages, setLoadingMessages] = useState(true);
 
