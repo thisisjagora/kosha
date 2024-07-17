@@ -208,7 +208,11 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       <FormItem className="flex-1">
                         <FormLabel>Apartment/Unit</FormLabel>
                         <FormControl>
-                          <Input {...field} {...InputDirectives.numbersOnly} placeholder="" />
+                          <Input
+                            {...field}
+                            {...InputDirectives.numbersOnly}
+                            placeholder=""
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -484,25 +488,25 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     )}
                   />
                   <FormField
-                      control={form.control}
-                      name={`PUDStops.${index}.flightOfStairs`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormLabel className="text-grey-300">
-                            Flight of Stairs
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              className="h-10 rounded-lg"
-                              {...field}
-                              {...InputDirectives.numbersOnly}
-                              defaultValue={0}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-destructive" />
-                        </FormItem>
-                      )}
-                    />
+                    control={form.control}
+                    name={`PUDStops.${index}.flightOfStairs`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel className="text-grey-300">
+                          Flight of Stairs
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="h-10 rounded-lg"
+                            {...field}
+                            {...InputDirectives.numbersOnly}
+                            defaultValue={0}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-destructive" />
+                      </FormItem>
+                    )}
+                  />
                 </Row>
               </Row>
             </Row>
@@ -681,7 +685,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Major Appliances
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -695,7 +703,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Workout Equipment
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -710,7 +722,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pianos</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -723,7 +739,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Hot Tubs</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -738,7 +758,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pool Tables</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -751,7 +775,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Number of Boxes</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
