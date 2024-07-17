@@ -1,4 +1,4 @@
-"use client";
+import type { FC } from "react";
 import Link from "next/link";
 import { P, Picture } from "../atoms";
 import { Column, Row } from "../layout";
@@ -9,7 +9,7 @@ import { useGetChats } from "@/hooks/messages";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 
-export const ChatList = () => {
+export const ChatList: FC<{ closeList: () => void }> = ({ closeList }) => {
   const { data, isLoading } = useGetChats();
   const type = "Book a move";
   const params = useParams();
@@ -25,7 +25,11 @@ export const ChatList = () => {
       {!isLoading &&
         data &&
         data.map((chat) => (
-          <Link href={`${Routes.messages}/${chat.id}`} key={chat.id!}>
+          <Link
+            href={`${Routes.messages}/${chat.id}`}
+            key={chat.id!}
+            onClick={closeList}
+          >
             <Row
               className={cn("items-center justify-between p-4 bg-transparent", {
                 "bg-white-100 shadow-sm rounded-l-xl": params.slug === chat.id,

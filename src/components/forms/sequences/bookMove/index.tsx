@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SERVICES, SequenceStepsProps } from "..";
 import {
   Form,
@@ -149,7 +149,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.pickUpLocation.apartmentNumber}
-                      placeholder="0"
+                      placeholder=""
                     />
                   </FormControl>
                   <FormMessage />
@@ -208,7 +208,11 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       <FormItem className="flex-1">
                         <FormLabel>Apartment/Unit</FormLabel>
                         <FormControl>
-                          <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                          <Input
+                            {...field}
+                            {...InputDirectives.numbersOnly}
+                            placeholder=""
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -256,7 +260,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       {...field}
                       {...InputDirectives.numbersOnly}
                       defaultValue={formData.finalDestination.apartmentNumber}
-                      placeholder="0"
+                      placeholder=""
                     />
                   </FormControl>
                   <FormMessage />
@@ -303,6 +307,13 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const pickUpLocationElevatorAccess = useWatch({
     control: form.control,
     name: "PUDPickUpLocation.elevatorAccess",
+  });
+
+  const stopsElevatorAccess = useWatch({
+    control: form.control,
+    name: formData.stops.map(
+      (_, index) => `PUDStops.${index}.elevatorAccess`
+    ) as "PUDStops"[],
   });
 
   const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
@@ -483,7 +494,10 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       </FormItem>
                     )}
                   />
-                  <FormField
+                  {(stopsElevatorAccess as unknown as ("Yes" | "No")[])[
+                    index
+                  ] === "No" && (
+                    <FormField
                       control={form.control}
                       name={`PUDStops.${index}.flightOfStairs`}
                       render={({ field }) => (
@@ -503,6 +517,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         </FormItem>
                       )}
                     />
+                  )}
                 </Row>
               </Row>
             </Row>
@@ -681,7 +696,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Major Appliances
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -695,7 +714,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   Workout Equipment
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -710,7 +733,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pianos</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -723,7 +750,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Hot Tubs</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -738,7 +769,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Pool Tables</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -751,7 +786,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Number of Boxes</FormLabel>
                 <FormControl>
-                  <Input {...field} {...InputDirectives.numbersOnly} placeholder="0" />
+                  <Input
+                    {...field}
+                    {...InputDirectives.numbersOnly}
+                    placeholder="0"
+                  />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -905,14 +944,22 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const searchParams = useSearchParams();
   const updating = searchParams.get("action") === "update";
   const { update, formData } = useBookMoveStore((state) => state);
+  const [loading, setLoading] = useState(false);
   const { isPending, getQuotes } = useGetQuotes({
     onSuccess: () => {
       router.push(
         `${Routes.bookMoveQuotes}${updating ? "?action=update" : ""}`
       );
     },
+    onError: () => {
+      setLoading(false);
+    },
   });
   const [selectAll, setSelectAll] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isPending) setLoading(true);
+  }, [isPending]);
 
   const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
     resolver: zodResolver(bookMoveSequenceStep4Schema),
@@ -1041,7 +1088,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
             Previous
           </Button>
           <Button
-            loading={isPending}
+            loading={isPending || loading}
             type="submit"
             className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
           >

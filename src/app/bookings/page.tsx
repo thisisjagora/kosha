@@ -129,6 +129,9 @@ const Page = () => {
                           12:00pm - 4:00pm
                         </QuotesTime>
                       )}
+                      <span className="border rounded-full text-xs px-2 py-1 text-grey-300">
+                        {booking.status ?? "Pending"}
+                      </span>
                     </Row>
                     <Row className="justify-between items-center">
                       <Column className="gap-1">
