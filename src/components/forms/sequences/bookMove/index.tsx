@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SERVICES, SequenceStepsProps } from "..";
 import {
   Form,
@@ -933,14 +933,22 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const searchParams = useSearchParams();
   const updating = searchParams.get("action") === "update";
   const { update, formData } = useBookMoveStore((state) => state);
+  const [loading, setLoading] = useState(false);
   const { isPending, getQuotes } = useGetQuotes({
     onSuccess: () => {
       router.push(
         `${Routes.bookMoveQuotes}${updating ? "?action=update" : ""}`
       );
     },
+    onError: () => {
+      setLoading(false);
+    },
   });
   const [selectAll, setSelectAll] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isPending) setLoading(true);
+  }, [isPending]);
 
   const form = useForm<z.infer<typeof bookMoveSequenceStep4Schema>>({
     resolver: zodResolver(bookMoveSequenceStep4Schema),
@@ -1069,7 +1077,7 @@ const Step4: FC<SequenceStepsProps> = ({ onChangeStep }) => {
             Previous
           </Button>
           <Button
-            loading={isPending}
+            loading={isPending || loading}
             type="submit"
             className="order-0 sm:order-1 flex-1 min-w-[200px] sm:max-w-[180px] bg-orange-100 rounded-3xl"
           >
