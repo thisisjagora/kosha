@@ -30,7 +30,7 @@ const useBookingStore = createSelectorFunctions(
               whiteList.includes(key)
             )
           );
-          appConfig.env === "DEV" && console.log("CURRENT STATE: ", state);
+          appConfig.env === "DEV" && console.log("BOOKING STORE: ", state);
           return currentState;
         },
       }

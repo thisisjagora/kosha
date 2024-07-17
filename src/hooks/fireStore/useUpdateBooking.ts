@@ -9,6 +9,8 @@ import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 import { updateBooking } from "@/firebase/firestore";
 import useBookingStore from "@/stores/booking.store";
 import { queryClient } from "@/lib/query";
+import useBookMoveStore from "@/stores/book-move.store";
+import useHireLabourStore from "@/stores/hire-labour.store";
 
 type MutationInput = { bookingId: string; booking: Booking };
 
@@ -21,6 +23,8 @@ export const useUpdateBooking = (
   const router = useRouter();
   const setSelectedBooking = useBookingStore.use.setSelectedBooking();
   const { reset } = useShowQuotes.getState();
+  const { reset: resetBookMove } = useBookMoveStore.getState();
+  const { reset: resetHireLabour } = useHireLabourStore.getState();
   return useMutation<Booking, unknown, MutationInput>({
     mutationFn: ({ bookingId, booking }) => updateBooking(bookingId, booking),
     retry: false,
@@ -31,6 +35,8 @@ export const useUpdateBooking = (
       localStorage.clear();
       setSelectedBooking(null);
       reset();
+      resetHireLabour();
+      resetBookMove();
       toast({
         description: SUCCESS_MESSAGE.BOOKING_UPDATED,
         variant: "success",
