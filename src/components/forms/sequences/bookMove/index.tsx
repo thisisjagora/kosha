@@ -309,6 +309,15 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     name: "PUDPickUpLocation.elevatorAccess",
   });
 
+  const stopsElevatorAccess = useWatch({
+    control: form.control,
+    name: formData.stops.map(
+      (_, index) => `PUDStops.${index}.elevatorAccess`
+    ) as "PUDStops"[],
+  });
+
+  console.log("checks: ", stopsElevatorAccess);
+
   const onSubmit = (data: z.infer<typeof bookMoveSequenceStep2Schema>) => {
     onChangeStep("generalInfo");
     update(data);
@@ -487,26 +496,30 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name={`PUDStops.${index}.flightOfStairs`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel className="text-grey-300">
-                          Flight of Stairs
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            className="h-10 rounded-lg"
-                            {...field}
-                            {...InputDirectives.numbersOnly}
-                            defaultValue={0}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-destructive" />
-                      </FormItem>
-                    )}
-                  />
+                  {(stopsElevatorAccess as unknown as ("Yes" | "No")[])[
+                    index
+                  ] === "No" && (
+                    <FormField
+                      control={form.control}
+                      name={`PUDStops.${index}.flightOfStairs`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel className="text-grey-300">
+                            Flight of Stairs
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="h-10 rounded-lg"
+                              {...field}
+                              {...InputDirectives.numbersOnly}
+                              defaultValue={0}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-destructive" />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </Row>
               </Row>
             </Row>
