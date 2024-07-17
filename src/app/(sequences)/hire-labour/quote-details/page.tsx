@@ -163,7 +163,7 @@ const Page = () => {
           selectedBooking?.status !== "Cancelled") && (
           <>
             <QuoteDetailsCharge
-              amount={formatCurrency(minimumAmount)}
+              amount={minimumAmount}
               hourlyRate={formatCurrency(hourlyRate)}
               finishing={finishing}
               updating={updating}

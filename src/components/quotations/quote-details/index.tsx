@@ -344,7 +344,7 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
   );
 };
 interface QuoteDetailsChargeProps extends HTMLAttributes<HTMLDivElement> {
-  amount: string;
+  amount: number;
   hourlyRate: string;
   finishing?: boolean;
   updating?: boolean;
@@ -460,18 +460,21 @@ const QuoteDetailsCharge: FC<QuoteDetailsChargeProps> = ({
             {amount}
           </H>
           <H className="text-3xl font-bold">
-            ${((amt: number) => {
-              const { discountType: type, clientDiscount } = gottenVoucher;
-              if (type === "Amount") {
-                return amt - clientDiscount;
-              } else {
-                return amt - (clientDiscount / 100) * amt;
-              }
-            })(Number(amount.replace(/[^\d.-]+/g, "")))}
+            {formatCurrency(
+              ((amt: number) => {
+                const { discountType: type, clientDiscount } = gottenVoucher;
+                if (type === "Amount") {
+                  return amt - clientDiscount;
+                } else {
+                  return amt - (clientDiscount / 100) * amt;
+                }
+                // })(Number(amount.replace(/[^\d.-]+/g, "")))}
+              })(amount)
+            )}
           </H>
         </div>
       ) : (
-        <H className="text-3xl font-bold">{amount}</H>
+        <H className="text-3xl font-bold">{formatCurrency(amount)}</H>
       )}
       {gottenVoucher && (
         <>
@@ -645,7 +648,7 @@ const QuoteDetailsEditRequest: FC<{ type: Booking["requestType"] }> = ({
               hotTubs: `${selectedBooking.hotTubsQuantity ?? ""}`,
               poolTables: `${selectedBooking.poolTablesQuantity ?? ""}`,
               numberOfBoxes: `${selectedBooking.estimatedNumberOfBoxes ?? ""}`,
-              instructions: selectedBooking.additionalNotes ?? '',
+              instructions: selectedBooking.additionalNotes ?? "",
               images: [],
               services: selectedBooking.serviceAddOns ?? [],
             });
