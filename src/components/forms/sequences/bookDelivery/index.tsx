@@ -21,7 +21,7 @@ import useBookDeliveryStore from "@/stores/book-delivery.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, ReceiptTextIcon, ImageIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { SequenceStepsProps } from "..";
 import { FC } from "react";
@@ -194,6 +194,15 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     },
   });
 
+  const finalDestinationElevatorAccess = useWatch({
+    control: form.control,
+    name: "PUDFinalDestination.elevatorAccess",
+  });
+  const pickUpLocationElevatorAccess = useWatch({
+    control: form.control,
+    name: "PUDPickUpLocation.elevatorAccess",
+  });
+
   const onSubmit = (data: z.infer<typeof bookDeliverySequenceStep2Schema>) => {
     onChangeStep("itu");
     update(data);
@@ -234,7 +243,11 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         <SelectContent>
                           <SelectItem value="Condo">Condo</SelectItem>
                           <SelectItem value="Apartment">Apartment</SelectItem>
-                          <SelectItem value="Penthouse">Penthouse</SelectItem>
+                          <SelectItem value="House">House</SelectItem>
+                          <SelectItem value="Office">Office</SelectItem>
+                          <SelectItem value="TownHouse">TownHouse</SelectItem>
+                          <SelectItem value="Storage">Storage</SelectItem>
+                          <SelectItem value="Store">Store</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-destructive" />
@@ -267,25 +280,27 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="PUDPickUpLocation.flightOfStairs"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 min-w-[70px]">
-                      <FormLabel className="text-grey-300">
-                        Flight of Stairs
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          className="h-10 rounded-lg"
-                          {...field}
-                          {...InputDirectives.numbersOnly}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-destructive" />
-                    </FormItem>
-                  )}
-                />
+                {pickUpLocationElevatorAccess === "No" && (
+                  <FormField
+                    control={form.control}
+                    name="PUDPickUpLocation.flightOfStairs"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 min-w-[70px]">
+                        <FormLabel className="text-grey-300">
+                          Flight of Stairs
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="h-10 rounded-lg"
+                            {...field}
+                            {...InputDirectives.numbersOnly}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-destructive" />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </Row>
             </Row>
           </Row>
@@ -326,7 +341,11 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                         <SelectContent>
                           <SelectItem value="Condo">Condo</SelectItem>
                           <SelectItem value="Apartment">Apartment</SelectItem>
-                          <SelectItem value="Penthouse">Penthouse</SelectItem>
+                          <SelectItem value="House">House</SelectItem>
+                          <SelectItem value="Office">Office</SelectItem>
+                          <SelectItem value="TownHouse">TownHouse</SelectItem>
+                          <SelectItem value="Storage">Storage</SelectItem>
+                          <SelectItem value="Store">Store</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-destructive" />
@@ -359,25 +378,27 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="PUDFinalDestination.flightOfStairs"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 min-w-[70px]">
-                      <FormLabel className="text-grey-300">
-                        Flight of Stairs
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          className="h-10 rounded-lg"
-                          {...field}
-                          {...InputDirectives.numbersOnly}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-destructive" />
-                    </FormItem>
-                  )}
-                />
+                {finalDestinationElevatorAccess === "No" && (
+                  <FormField
+                    control={form.control}
+                    name="PUDFinalDestination.flightOfStairs"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 min-w-[70px]">
+                        <FormLabel className="text-grey-300">
+                          Flight of Stairs
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="h-10 rounded-lg"
+                            {...field}
+                            {...InputDirectives.numbersOnly}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-destructive" />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </Row>
             </Row>
           </Row>
@@ -421,10 +442,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     type: "images" | "pictures" | "receipts" = "images"
   ) => {
     removeImage(index, type);
-    form.setValue(
-      type,
-      formData[type]?.filter((_, i) => i !== index) ?? []
-    ); // Update the form state
+    form.setValue(type, formData[type]?.filter((_, i) => i !== index) ?? []); // Update the form state
   };
 
   const onSubmit = (data: z.infer<typeof bookDeliverySequenceStep3Schema>) => {
