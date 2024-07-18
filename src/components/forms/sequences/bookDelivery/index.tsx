@@ -34,8 +34,8 @@ import {
 } from "@/components/select";
 import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
-import { Camera, Cancel } from "@/components/Icons";
-import useShowQuotes from "@/stores/show-quotes.store";
+import { Cancel } from "@/components/Icons";
+// import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
   const { update, formData } = useBookDeliveryStore((state) => state);
@@ -403,7 +403,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
 };
 
 const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
-  const setShowQuote = useShowQuotes((state) => state.setShowQuote);
+  // const setShowQuote = useShowQuotes((state) => state.setShowQuote);
   const { update, updateField, removeImage, formData } = useBookDeliveryStore(
     (state) => state
   );
@@ -423,7 +423,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
     removeImage(index, type);
     form.setValue(
       type,
-      formData[type].filter((_, i) => i !== index)
+      formData[type]?.filter((_, i) => i !== index) ?? []
     ); // Update the form state
   };
 
@@ -476,11 +476,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     onChange={(e) => {
                       if (e.target.files) {
                         updateField("pictures", [
-                          ...pictures,
+                          ...(pictures ?? []),
                           URL.createObjectURL(e.target.files[0]),
                         ]);
                         field.onChange([
-                          ...pictures,
+                          ...(pictures ?? []),
                           URL.createObjectURL(e.target.files[0]),
                         ]);
                       }
@@ -488,7 +488,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   />
                 </FormControl>
                 <Row className="items-center flex-wrap gap-4">
-                  {pictures.map((image, index) => (
+                  {(pictures ?? []).map((image, index) => (
                     <div
                       key={image + index}
                       className="relative flex-1 min-w-[120px] max-w-[150px] h-[99px] group"
@@ -546,11 +546,11 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                     onChange={(e) => {
                       if (e.target.files) {
                         updateField("receipts", [
-                          ...receipts,
+                          ...(receipts ?? []),
                           URL.createObjectURL(e.target.files[0]),
                         ]);
                         field.onChange([
-                          ...receipts,
+                          ...(receipts ?? []),
                           URL.createObjectURL(e.target.files[0]),
                         ]);
                       }
@@ -558,7 +558,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                   />
                 </FormControl>
                 <Row className="items-center flex-wrap gap-4">
-                  {receipts.map((image, index) => (
+                  {(receipts ?? []).map((image, index) => (
                     <div
                       key={image + index}
                       className="relative flex-1 min-w-[120px] max-w-[150px] h-[99px] group"

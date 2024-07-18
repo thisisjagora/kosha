@@ -53,7 +53,7 @@ const useBookDeliveryStore = create<Store>((set) => ({
     })),
   removeImage: (index, type: "images" | "pictures" | "receipts" = "images") =>
     set((state) => {
-      const newImages = state.formData[type].filter((_, i) => i !== index);
+      const newImages = state.formData[type]?.filter((_, i) => i !== index) ?? [];
       return {
         formData: { ...state.formData, [type]: newImages },
       };

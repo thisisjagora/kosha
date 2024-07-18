@@ -81,8 +81,8 @@ export const bookMoveSequenceStep3Schema = z.object({
   numberOfBoxes: z.string().optional(),
   instructions: z.string().optional(),
   images: z.array(z.string()),
-  pictures: z.array(z.string()),
-  receipts: z.array(z.string())
+  pictures: z.array(z.string()).optional(),
+  receipts: z.array(z.string()).optional()
 });
 
 
