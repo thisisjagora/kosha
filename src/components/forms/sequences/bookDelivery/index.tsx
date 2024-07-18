@@ -102,7 +102,7 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
               <FormItem className="flex-1">
                 <FormLabel className="text-grey-300">Time</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="time" />
                 </FormControl>
                 <FormMessage className="text-destructive" />
               </FormItem>
@@ -218,7 +218,7 @@ const Step2: FC<SequenceStepsProps> = ({ onChangeStep }) => {
                 {formData.pickUpLocation.location}
               </P>
             </Column>
-            <Row className="gap-4 w-full flex-1">
+            <Row className="gap-4 w-full flex-1 items-center">
               <div className="sm:flex items-center hidden h-full">
                 <div className="mt-8 w-[80px] border border-dotted" />
               </div>
