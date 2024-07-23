@@ -14,7 +14,7 @@ export const ChatList: FC<{ closeList: () => void }> = ({ closeList }) => {
   const type = "Book a move";
   const params = useParams();
   return (
-    <Column className="gap-0 h-full">
+    <Column className="gap-0 h-full w-full">
       {isLoading && (
         <div className="space-y-2 px-4">
           <Skeleton className="h-16" />
@@ -23,7 +23,7 @@ export const ChatList: FC<{ closeList: () => void }> = ({ closeList }) => {
         </div>
       )}
       {!isLoading && data && data.length === 0 && (
-        <Column className="justify-center items-center gap-4 h-full">
+        <Column className="justify-center items-center gap-4 h-full w-full">
           <Picture
             container={{
               className: "w-[200px] h-[150px]",
