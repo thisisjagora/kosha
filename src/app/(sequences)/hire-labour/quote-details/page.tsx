@@ -153,7 +153,7 @@ const Page = () => {
             movers={movers}
             disabled={finishing}
             workerTag="Laborers"
-            updating={updating}
+            finishing={finishing}
           />
         </Row>
         <QuoteDetailsRates

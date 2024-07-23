@@ -112,7 +112,7 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
 
 interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
   movers: number;
-  updating: boolean;
+  finishing: boolean;
   disabled?: boolean;
   workerTag?: string;
 }
@@ -120,7 +120,7 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
   movers,
   disabled,
   workerTag = "Movers",
-  updating,
+  finishing,
   ...props
 }) => {
   const { updateQuoteField } = useQuoteDetailsData();
@@ -138,8 +138,13 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
         props.className
       )}
     >
-      <Row className="justify-between items-center w-full">
-        {updating && (
+      <Row
+        className={cn(
+          "items-center w-full",
+          !finishing ? "justify-between" : "justify-center"
+        )}
+      >
+        {!finishing && (
           <Button
             disabled={disabled}
             onClick={() =>
@@ -179,7 +184,7 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
             {count} {workerTag ?? "Movers"}
           </H>
         </Column>
-        {updating && (
+        {!finishing && (
           <Button
             disabled={disabled}
             onClick={() => !disabled && setCount((prevCount) => prevCount + 1)}
@@ -189,7 +194,7 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
           </Button>
         )}
       </Row>
-      {updating && (
+      {!finishing && (
         <P className="px-12 font-dm-sans text-grey-300 text-base">
           Click on the -\+ sign to increase or reduce the number of movers
         </P>
@@ -239,12 +244,12 @@ const QuoteDetailsRates: FC<QuoteDetailsRatesProps> = ({ rates }) => {
 interface QuoteDetailsVehicleProps {
   truckType: string;
   disabled?: boolean;
-  updating: boolean;
+  finishing: boolean;
 }
 const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
   truckType,
   disabled,
-  updating,
+  finishing,
 }) => {
   const { updateQuoteField } = useQuoteDetailsData();
   //TODO: confirm the types of vehicles available
@@ -336,8 +341,8 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
                 }}
               />
             </Row>
-            <Row className="items-center gap-4">
-              {updating && (
+            {!finishing && (
+              <Row className="items-center gap-4">
                 <Button
                   disabled={disabled}
                   size="icon"
@@ -346,9 +351,7 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
                 >
                   -
                 </Button>
-              )}
-              <span>{item.quantity}</span>
-              {updating && (
+                <span>{item.quantity}</span>
                 <Button
                   disabled={disabled}
                   size="icon"
@@ -357,8 +360,8 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
                 >
                   +
                 </Button>
-              )}
-            </Row>
+              </Row>
+            )}
           </Row>
         ))}
       </Column>
