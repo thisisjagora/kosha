@@ -698,7 +698,8 @@ const QuoteDetailsServiceRequirement: FC<
   ];
   const form = useForm({
     defaultValues: {
-      services,
+      services: (JSON.parse(localStorage.getItem(StorageKeys.FORM_DATA) || "{}")
+        ?.services ?? []) as typeof services,
     },
   });
 
@@ -741,7 +742,7 @@ const QuoteDetailsServiceRequirement: FC<
                         className="data-[state=checked]:bg-orange-100 data-[state=checked]:border-orange-100"
                         id={checkboxId}
                         disabled={disabled}
-                        // checked={isChecked}
+                        checked={isChecked}
                         onCheckedChange={(checked) => {
                           if (disabled) return;
                           const updatedServices = checked
