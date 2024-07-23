@@ -5,13 +5,14 @@ import {
   PropsWithChildren,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import { Footer, NavHeader, SideNav } from "../navigation";
 import { useValidRoute } from "@/hooks/useValidRoute";
 import { Routes } from "@/core/routing";
 import { cn } from "@/lib/utils";
 import { auth } from "@/firebase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Loader } from "lucide-react";
 import { User, deleteUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -21,6 +22,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query";
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
+  const layoutMainWrapperRef = useRef<HTMLDivElement | null>(null);
   const { updateUser } = useUserStore((state) => state);
   const { isValidRoute } = useValidRoute([
     Routes.signIn,
@@ -40,6 +42,12 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    layoutMainWrapperRef.current?.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -94,6 +102,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           )}
         >
           <div
+            ref={layoutMainWrapperRef}
             className={cn(
               "max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-4 sm:p-6"
             )}
