@@ -94,14 +94,16 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
             </P>
             <P className="text-sm font-dm-sans text-grey-300">reviews</P>
           </Column>
-          <Column className="gap-0 flex-1">
-            <P className="text-primary font-bold font-dm-sans text-lg">
-              {+movesCompleted || 0}
-            </P>
-            <P className="text-sm font-dm-sans text-grey-300">
-              moves completed
-            </P>
-          </Column>
+          {movesCompleted !== "nil" && (
+            <Column className="gap-0 flex-1">
+              <P className="text-primary font-bold font-dm-sans text-lg">
+                {+movesCompleted || 0}
+              </P>
+              <P className="text-sm font-dm-sans text-grey-300">
+                moves completed
+              </P>
+            </Column>
+          )}
         </Row>
       </Column>
     </Column>
@@ -111,10 +113,12 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
 interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
   movers: number;
   disabled?: boolean;
+  workerTag?: string;
 }
 const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
   movers,
   disabled,
+  workerTag = "Movers",
   ...props
 }) => {
   const { updateQuoteField } = useQuoteDetailsData();
@@ -167,7 +171,9 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
               </div>
             ))}
           </Row>
-          <H className="text-primary font-bold text-2xl">{count} Movers</H>
+          <H className="text-primary font-bold text-2xl">
+            {count} {workerTag ?? "Movers"}
+          </H>
         </Column>
         <Button
           disabled={disabled}
