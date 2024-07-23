@@ -147,7 +147,7 @@ const Page = () => {
               movesCompleted: "nil",
             }}
           />
-          <QuoteDetailsWorkers movers={movers} disabled={finishing} />
+          <QuoteDetailsWorkers movers={movers} disabled={finishing} updating={updating} />
         </Row>
         <QuoteDetailsRates
           rates={[
@@ -222,6 +222,7 @@ const Page = () => {
         <QuoteDetailsVehicle
           truckType={movingTruck}
           disabled={finishing || selectedBooking?.status === "Cancelled"}
+          updating={updating}
         />
         {((!updating && !finishing) ||
           selectedBooking?.status !== "Cancelled") && (

@@ -112,6 +112,7 @@ const QuoteDetailsMap: FC<QuoteDetailsMapProps> = ({ data, ...props }) => {
 
 interface QuotesDetailsWorkersProps extends HTMLAttributes<HTMLDivElement> {
   movers: number;
+  updating: boolean;
   disabled?: boolean;
   workerTag?: string;
 }
@@ -119,6 +120,7 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
   movers,
   disabled,
   workerTag = "Movers",
+  updating,
   ...props
 }) => {
   const { updateQuoteField } = useQuoteDetailsData();
@@ -137,16 +139,18 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
       )}
     >
       <Row className="justify-between items-center w-full">
-        <Button
-          disabled={disabled}
-          onClick={() =>
-            !disabled &&
-            setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 1))
-          }
-          className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-        >
-          -
-        </Button>
+        {updating && (
+          <Button
+            disabled={disabled}
+            onClick={() =>
+              !disabled &&
+              setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 1))
+            }
+            className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
+          >
+            -
+          </Button>
+        )}
         <Column className="flex-1 max-w-max">
           <Row className="relative min-w-[210px]">
             {doodles.map((item, index) => (
@@ -175,17 +179,21 @@ const QuoteDetailsWorkers: FC<QuotesDetailsWorkersProps> = ({
             {count} {workerTag ?? "Movers"}
           </H>
         </Column>
-        <Button
-          disabled={disabled}
-          onClick={() => !disabled && setCount((prevCount) => prevCount + 1)}
-          className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
-        >
-          +
-        </Button>
+        {updating && (
+          <Button
+            disabled={disabled}
+            onClick={() => !disabled && setCount((prevCount) => prevCount + 1)}
+            className="flex-1 rounded-full shadow-custom max-w-[30px] max-h-[30px] p-0 text-xl font-medium bg-grey-800 text-grey-600 hover:bg-primary hover:text-white-100"
+          >
+            +
+          </Button>
+        )}
       </Row>
-      <P className="px-12 font-dm-sans text-grey-300 text-base">
-        Click on the -\+ sign to increase or reduce the number of movers
-      </P>
+      {updating && (
+        <P className="px-12 font-dm-sans text-grey-300 text-base">
+          Click on the -\+ sign to increase or reduce the number of movers
+        </P>
+      )}
     </Column>
   );
 };
@@ -231,10 +239,12 @@ const QuoteDetailsRates: FC<QuoteDetailsRatesProps> = ({ rates }) => {
 interface QuoteDetailsVehicleProps {
   truckType: string;
   disabled?: boolean;
+  updating: boolean;
 }
 const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
   truckType,
   disabled,
+  updating,
 }) => {
   const { updateQuoteField } = useQuoteDetailsData();
   //TODO: confirm the types of vehicles available
@@ -327,23 +337,27 @@ const QuoteDetailsVehicle: FC<QuoteDetailsVehicleProps> = ({
               />
             </Row>
             <Row className="items-center gap-4">
-              <Button
-                disabled={disabled}
-                size="icon"
-                className="max-w-[20px] max-h-[20px]"
-                onClick={() => handleDecrease(index)}
-              >
-                -
-              </Button>
+              {updating && (
+                <Button
+                  disabled={disabled}
+                  size="icon"
+                  className="max-w-[20px] max-h-[20px]"
+                  onClick={() => handleDecrease(index)}
+                >
+                  -
+                </Button>
+              )}
               <span>{item.quantity}</span>
-              <Button
-                disabled={disabled}
-                size="icon"
-                className="max-w-[20px] max-h-[20px]"
-                onClick={() => handleIncrease(index)}
-              >
-                +
-              </Button>
+              {updating && (
+                <Button
+                  disabled={disabled}
+                  size="icon"
+                  className="max-w-[20px] max-h-[20px]"
+                  onClick={() => handleIncrease(index)}
+                >
+                  +
+                </Button>
+              )}
             </Row>
           </Row>
         ))}

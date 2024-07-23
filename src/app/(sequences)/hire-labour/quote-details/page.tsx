@@ -149,7 +149,12 @@ const Page = () => {
               movesCompleted: "nil",
             }}
           />
-          <QuoteDetailsWorkers movers={movers} disabled={finishing} workerTag="Laborers" />
+          <QuoteDetailsWorkers
+            movers={movers}
+            disabled={finishing}
+            workerTag="Laborers"
+            updating={updating}
+          />
         </Row>
         <QuoteDetailsRates
           rates={[
