@@ -87,7 +87,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen h-screen flex">
+      <div className="min-h-screen h-screen overflow-x-hidden flex">
         {((!isValidRoute && user) || isNonAuthRoute) && (
           <div className="flex-1 max-w-[250px] hidden lg:block">
             <SideNav nonAuth={!user && isNonAuthRoute} />
@@ -104,7 +104,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
           <div
             ref={layoutMainWrapperRef}
             className={cn(
-              "max-w-[1300px] xl:max-w-[1400px] overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-4 sm:p-6"
+              "max-w-[1300px] xl:max-w-[1400px] overflow-x-hidden overflow-y-auto w-full h-full flex-1 flex flex-col gap-4 items-center justify-between p-4 sm:p-6"
             )}
           >
             {((!isValidRoute && user) || isNonAuthRoute) && (
