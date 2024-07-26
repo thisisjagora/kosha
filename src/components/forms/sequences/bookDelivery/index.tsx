@@ -35,6 +35,7 @@ import {
 import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
 import { Cancel } from "@/components/Icons";
+import { LocationInput } from "@/components/locationAutoCompleteInput";
 // import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
@@ -110,19 +111,12 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           />
         </Row>
         <Row className="gap-6 flex-col sm:flex-row">
-          <FormField
-            control={form.control}
-            name="pickUpLocation.location"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel className="text-grey-300">Pickup Location</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage className="text-destructive" />
-              </FormItem>
-            )}
-          />
+          <LocationInput
+              name="pickUpLocation.location"
+              control={form.control}
+              label="Pickup Location"
+              defaultValue={pickUpLocation.location}
+            />
           <FormField
             control={form.control}
             name="pickUpLocation.apartmentNumber"
@@ -138,21 +132,12 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           />
         </Row>
         <Row className="gap-6 flex-col sm:flex-row">
-          <FormField
-            control={form.control}
-            name="deliveryLocation.location"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel className="text-grey-300">
-                  Final Destination
-                </FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage className="text-destructive" />
-              </FormItem>
-            )}
-          />
+          <LocationInput
+              name="deliveryLocation.location"
+              control={form.control}
+              label="Final Destination"
+              defaultValue={deliveryLocation.location}
+            />
           <FormField
             control={form.control}
             name="deliveryLocation.apartmentNumber"
