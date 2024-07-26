@@ -12,6 +12,7 @@ interface Store {
     index: number,
     type?: "images" | "pictures" | "receipts"
   ) => void;
+  reset: () => void;
 }
 
 const initialState: BookDelivery = {
@@ -58,6 +59,7 @@ const useBookDeliveryStore = create<Store>((set) => ({
         formData: { ...state.formData, [type]: newImages },
       };
     }),
+    reset: () => set({ formData: initialState }),
 }));
 
 export default useBookDeliveryStore;

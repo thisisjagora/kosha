@@ -36,10 +36,13 @@ import { toast } from "@/components/toast/use-toast";
 import { Textarea } from "@/components/textarea";
 import { Cancel } from "@/components/Icons";
 import { LocationInput } from "@/components/locationAutoCompleteInput";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/core/routing";
 // import useShowQuotes from "@/stores/show-quotes.store";
 
 const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
-  const { update, formData } = useBookDeliveryStore((state) => state);
+  const router = useRouter();
+  const { update, formData, reset } = useBookDeliveryStore((state) => state);
   const { deliveryDate, time, pickUpLocation, deliveryLocation } = formData;
   const form = useForm<z.infer<typeof bookDeliverySequenceStep1Schema>>({
     resolver: zodResolver(bookDeliverySequenceStep1Schema),
@@ -153,7 +156,14 @@ const Step1: FC<SequenceStepsProps> = ({ onChangeStep }) => {
           />
         </Row>
         <Row className="items-center justify-center my-8">
-          <Button type="button" className="flex-1 max-w-[180px] rounded-3xl">
+          <Button 
+              type="button" 
+              className="flex-1 max-w-[180px] rounded-3xl"
+              onClick={()=>{
+                reset()
+                router.push(Routes.root)
+              }}
+          >
             Cancel
           </Button>
           <Button
@@ -623,7 +633,7 @@ const Step3: FC<SequenceStepsProps> = ({ onChangeStep }) => {
             type="submit"
             className="flex-1 max-w-[180px] bg-orange-100 rounded-3xl"
           >
-            Send Request
+            Get Quotes
           </Button>
         </Row>
       </form>
